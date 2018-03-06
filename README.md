@@ -1,8 +1,6 @@
 # shacl-form
 This repository contains a Python application that generates HTML + JS webforms from given [W3C](https://www.w3.org/) [Shapes Constraint Language (SHACL)](https://www.w3.org/TR/shacl/) "shapes". The intention is to allow for the auto-generation of web UIs, given only a logical expression of the required data that the UI is to facilitate the input of.
 
-Git test
-
 # License
 This work is licensed using the GPL v3 license. See [LICENSE](LICENSE) for the deed.
 
