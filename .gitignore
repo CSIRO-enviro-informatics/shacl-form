@@ -99,3 +99,9 @@ ENV/
 
 # mypy
 .mypy_cache/
+
+# Pycharm config
+.idea/
+
+# pytest cach
+.pytest_cache/
