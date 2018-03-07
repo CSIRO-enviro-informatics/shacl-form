@@ -3,10 +3,11 @@ import rdflib
 g = rdflib.Graph()
 g.parse('relatives.ttl', format='turtle')
 
-q = ''' SELECT (COUNT(*) AS ?count) 
+q = ''' SELECT DISTINCT ?s 
         WHERE {
-            ?s ?p ?o .
+            ?s rdf:type <http://example.org/relatives#Person> .
+            #?s ?p ?o .
         }'''
 
 for r in g.query(q):
-    print(int(r[0]))
+    print(r)
