@@ -5,9 +5,8 @@ g.parse('relatives.ttl', format='turtle')
 
 q = ''' SELECT DISTINCT ?s 
         WHERE {
-            ?s rdf:type <http://example.org/relatives#Person> .
-            #?s ?p ?o .
+            [] <http://example.org/relatives#hasChild> ?s .
         }'''
 
 for r in g.query(q):
-    print(r)
+    print(r.s)
