@@ -5,11 +5,11 @@ import rdflib
 g = rdflib.Graph()
 g.parse('vc-db-3.ttl', format='turtle')
 
-q = ''' 
+q = '''
         SELECT ?name
         WHERE
         {
-            { [] foaf:name ?name } UNION { [] vcard:FN ?name }
+            { ?person foaf:name ?name } UNION { ?person vcard:FN ?name }
         }
     '''
 
