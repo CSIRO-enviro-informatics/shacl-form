@@ -30,10 +30,9 @@ class RDFHandler:
         target_class_results = self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "targetClass"))
         # The target class is not always specified, I think in this case because AddressShape
         # is a node in PersonShape
-        target_class = "unspecified"
         for t in target_class_results:
-            target_class = t
-        return target_class
+            return t
+        return None
 
     def is_closed(self, shape_uri):
         # Get whether the shape is closed
@@ -47,6 +46,12 @@ class RDFHandler:
     def get_properties(self, shape_uri):
         # Get all the properties associated with the Shape. They will be blank nodes.
         return self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "property"))
+
+    def get_property_name(self, property_uri):
+        # Get the path of the property
+        results = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "path"))
+        for r in results:
+            return r
 
     def get_property_constraints(self, property_uri):
         # Get each entry associated with each property

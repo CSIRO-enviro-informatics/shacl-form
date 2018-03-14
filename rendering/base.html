@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New {{ target_class }}</title>
+</head>
+<body>
+    <h1>Create New {{ target_class }}</h1>
+    <ul>
+    {% for property in properties %}
+        <li>{{ property }}</li>
+    {% endfor %}
+    </ul>
+</body>
+</html>
