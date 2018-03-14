@@ -37,7 +37,7 @@ for s in shapes:
     #This isn't always specified but it defaults to false
     closed = False
     for c in closed_results:
-        closed = True if c == "true" else False
+        closed = True if str(c) == "true" else False
     print("Closed:", closed)
 
     #Get all the properties associated with the Shape. They will be blank nodes.
