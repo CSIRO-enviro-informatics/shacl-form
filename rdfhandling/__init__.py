@@ -3,7 +3,7 @@ from rdflib.term import URIRef
 from rdflib.util import guess_format
 
 """
-Experimental code that reads information from a SHACL Shapes file and prints it.
+Reads information from a SHACL Shapes file.
 For each shape, lists:
     Shape URI
     Target class
