@@ -12,7 +12,8 @@
         {%- if property[2] %}
         <i>{{ property[2] }}</i><br>
         {%- endif %}
-        <input type="text" name="{{ property[1] }}"><br>
+        <input type="text" name="{{ property[1] }}" {% if property[3] %} value="{{ property[3] }}" {% endif %}><br>
+        <br>
         {%- endfor %}
     </form>
 </body>

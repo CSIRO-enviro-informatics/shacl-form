@@ -19,8 +19,9 @@ for p in property_uris:
     property_name = RDF_handler.get_property_name(p)
     property_path = RDF_handler.get_property_path(p)
     property_desc = RDF_handler.get_property_desc(p)
+    property_default_value = RDF_handler.get_property_default_value(p)
     property_datatype = RDF_handler.get_property_datatype(p)
-    properties.append((property_name, property_path, property_desc, property_datatype))
+    properties.append((property_name, property_path, property_desc, property_default_value, property_datatype))
 
 # Put things into template
 with open('result.html', 'w') as f:

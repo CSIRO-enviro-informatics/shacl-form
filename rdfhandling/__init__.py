@@ -80,6 +80,13 @@ class RDFHandler:
             return d
         return None
 
+    # DefaultValue is an optional non-validating property for form-building.
+    def get_property_default_value(self, property_uri):
+        defaults = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "defaultValue"))
+        for d in defaults:
+            return d
+        return None
+
     def get_property_constraints(self, property_uri):
         # Get each entry associated with each property
         # Path is always specified, but the others are optional
