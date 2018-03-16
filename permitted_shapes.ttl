@@ -25,4 +25,5 @@ schema:PersonShape
     sh:property [
         sh:path schema:gender ;
         sh:in ( "female" "male" ) ;
+        sh:defaultValue "male" ;
     ] .
