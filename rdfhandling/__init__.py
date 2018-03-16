@@ -37,14 +37,12 @@ class RDFHandler:
         shapes = self.g.subjects(URIRef(PREFIX_RDF + "type"), URIRef(PREFIX_SHACL + "NodeShape"))
         for s in shapes:
             return s
-        return None
 
     # Node Shapes have 0-1 target classes. The target class is useful for naming the form.
     def get_target_class(self, shape_uri):
         target_class_results = self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "targetClass"))
         for t in target_class_results:
             return t
-        return None
 
     # Get all the properties associated with the Shape. They will be blank nodes.
     def get_properties(self, shape_uri):
@@ -71,21 +69,18 @@ class RDFHandler:
         datatypes = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "datatype"))
         for d in datatypes:
             return d
-        return None
 
     # Description is an optional non-validating property. It is a human-readable description of the property.
     def get_property_desc(self, property_uri):
         descs = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "description"))
         for d in descs:
             return d
-        return None
 
     # DefaultValue is an optional non-validating property for form-building.
     def get_property_default_value(self, property_uri):
         defaults = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "defaultValue"))
         for d in defaults:
             return d
-        return None
 
     def get_property_constraints(self, property_uri):
         # Get each entry associated with each property
