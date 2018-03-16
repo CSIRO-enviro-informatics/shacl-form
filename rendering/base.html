@@ -9,6 +9,9 @@
     <form>
         {%- for property in properties %}
         {{ property[0] }}:<br>
+        {%- if property[2] %}
+        <i>{{ property[2] }}</i><br>
+        {%- endif %}
         <input type="text" name="{{ property[1] }}"><br>
         {%- endfor %}
     </form>

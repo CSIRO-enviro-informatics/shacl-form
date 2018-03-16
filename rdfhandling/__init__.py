@@ -60,6 +60,7 @@ class RDFHandler:
         name = path.rsplit('/', 1)[1]
         return name
 
+    # Properties always have a path.
     def get_property_path(self, property_uri):
         paths = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "path"))
         for p in paths:
@@ -69,6 +70,13 @@ class RDFHandler:
     def get_property_datatype(self, property_uri):
         datatypes = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "datatype"))
         for d in datatypes:
+            return d
+        return None
+
+    # Description is an optional non-validating property. It is a human-readable description of the property.
+    def get_property_desc(self, property_uri):
+        descs = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "description"))
+        for d in descs:
             return d
         return None
 
