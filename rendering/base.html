@@ -6,10 +6,11 @@
 </head>
 <body>
     <h1>Create New {{ target_class }}</h1>
-    <ul>
-    {% for property in properties %}
-        <li>{{ property }}</li>
-    {% endfor %}
-    </ul>
+    <form>
+        {%- for property in properties %}
+        {{ property[0] }}:<br>
+        <input type="text" name="{{ property[1] }}"><br>
+        {%- endfor %}
+    </form>
 </body>
 </html>

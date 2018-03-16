@@ -55,11 +55,15 @@ class RDFHandler:
         names = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "name"))
         for n in names:
             return n
+        # Cutting off part of the path URI to find a more human readable name
+        path = self.get_property_path(property_uri)
+        name = path.rsplit('/', 1)[1]
+        return name
+
+    def get_property_path(self, property_uri):
         paths = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "path"))
         for p in paths:
-            # Cutting off part of the path URI to find a more human readable name
-            path = p.rsplit('/', 1)[1]
-            return path
+            return p
 
     # Properties have 0-1 datatypes, which is useful for determining input fields in the form.
     def get_property_datatype(self, property_uri):
