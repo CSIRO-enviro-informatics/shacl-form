@@ -27,6 +27,7 @@ for p in property_uris:
         property_options = property_in_constraint
     else:
         property_input_type = "text"
+        property_options = None
     properties.append((
         property_name,
         property_path,
