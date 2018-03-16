@@ -22,36 +22,48 @@ class RDFHandler:
         self.g = Graph()
         self.g.parse(file_name, format=guess_format(file_name))
 
-    def get_shape_uris(self):
-        return self.g.subjects(URIRef(PREFIX_RDF + "type"), URIRef(PREFIX_SHACL + "NodeShape"))
+    '''
+    The only shapes we are interested in are Node Shapes. They define all the properties and constraints relating
+    to a node that we want to create a form for. Property shapes are useful for defining additional constraints,
+    but are not relevant here
+    
+    Shapes which match this criteria are subjects of a triple with a predicate of rdf:type and an object of
+    sh:NodeShape
+    
+    Only supports 1 Node Shape - in the future should be able to determine the hierarchy of multiple Node Shapes
+    and find the root
+    '''
+    def get_root_shape(self):
+        shapes = self.g.subjects(URIRef(PREFIX_RDF + "type"), URIRef(PREFIX_SHACL + "NodeShape"))
+        for s in shapes:
+            return s
+        return None
 
+    '''
+    Some Node Shapes have a target class which can be useful for naming the form.
+    '''
     def get_target_class(self, shape_uri):
-        # Get the target class
         target_class_results = self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "targetClass"))
-        # The target class is not always specified, I think in this case because AddressShape
-        # is a node in PersonShape
         for t in target_class_results:
             return t
         return None
-
-    def is_closed(self, shape_uri):
-        # Get whether the shape is closed
-        closed_results = self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "closed"))
-        # This isn't always specified but it defaults to false
-        closed = False
-        for c in closed_results:
-            closed = True if str(c) == "true" else False
-        return closed
 
     def get_properties(self, shape_uri):
         # Get all the properties associated with the Shape. They will be blank nodes.
         return self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "property"))
 
+    '''
+    Use the name label if the property has one, otherwise fall back to the URI of the path.
+    '''
     def get_property_name(self, property_uri):
-        # Get the path of the property
-        results = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "path"))
-        for r in results:
-            return r
+        names = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "name"))
+        for n in names:
+            return n
+        paths = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "path"))
+        for p in paths:
+            # Cutting off part of the path URI to find a more human readable name
+            path = p.rsplit('/', 1)[1]
+            return path
 
     def get_property_constraints(self, property_uri):
         # Get each entry associated with each property
