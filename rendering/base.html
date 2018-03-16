@@ -12,7 +12,13 @@
         {%- if property[2] %}
         <i>{{ property[2] }}</i><br>
         {%- endif %}
-        <input type="text" name="{{ property[1] }}" {% if property[3] %} value="{{ property[3] }}" {% endif %}><br>
+        {%- if property[4] == "radio" %}
+        {%- for option in property[5] %}
+        <input type="radio" name="{{ property[1] }}" {% if property[3] == option %} checked {% endif %}>{{ option }}<br>
+        {% endfor %}
+        {% else %}
+        <input type="{{ property[4] }}" name="{{ property[1] }}" {% if property[3] %} value="{{ property[3] }}" {% endif %}><br>
+        {% endif %}
         <br>
         {%- endfor %}
     </form>

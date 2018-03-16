@@ -21,7 +21,21 @@ for p in property_uris:
     property_desc = RDF_handler.get_property_desc(p)
     property_default_value = RDF_handler.get_property_default_value(p)
     property_datatype = RDF_handler.get_property_datatype(p)
-    properties.append((property_name, property_path, property_desc, property_default_value, property_datatype))
+    property_in_constraint = RDF_handler.get_property_in_constraint(p)
+    if property_in_constraint:
+        property_input_type = "radio"
+        property_options = property_in_constraint
+    else:
+        property_input_type = "text"
+    properties.append((
+        property_name,
+        property_path,
+        property_desc,
+        property_default_value,
+        property_input_type,
+        property_options,
+        property_datatype
+    ))
 
 # Put things into template
 with open('result.html', 'w') as f:

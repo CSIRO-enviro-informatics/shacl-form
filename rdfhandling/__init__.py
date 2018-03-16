@@ -1,6 +1,7 @@
 from rdflib.graph import Graph
 from rdflib.term import URIRef
 from rdflib.util import guess_format
+from rdflib.collection import Collection
 
 """
 Reads information from a SHACL Shapes file.
@@ -81,6 +82,11 @@ class RDFHandler:
         defaults = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "defaultValue"))
         for d in defaults:
             return d
+
+    def get_property_in_constraint(self, property_uri):
+        collection_uri = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "in"))
+        for c_uri in collection_uri:
+            return list(Collection(self.g, c_uri))
 
     def get_property_constraints(self, property_uri):
         # Get each entry associated with each property
