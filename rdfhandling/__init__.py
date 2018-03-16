@@ -39,22 +39,18 @@ class RDFHandler:
             return s
         return None
 
-    '''
-    Some Node Shapes have a target class which can be useful for naming the form.
-    '''
+    # Node Shapes have 0-1 target classes. The target class is useful for naming the form.
     def get_target_class(self, shape_uri):
         target_class_results = self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "targetClass"))
         for t in target_class_results:
             return t
         return None
 
+    # Get all the properties associated with the Shape. They will be blank nodes.
     def get_properties(self, shape_uri):
-        # Get all the properties associated with the Shape. They will be blank nodes.
         return self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "property"))
 
-    '''
-    Use the name label if the property has one, otherwise fall back to the URI of the path.
-    '''
+    # Use the name label if the property has one, otherwise fall back to the URI of the path.
     def get_property_name(self, property_uri):
         names = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "name"))
         for n in names:
@@ -64,6 +60,13 @@ class RDFHandler:
             # Cutting off part of the path URI to find a more human readable name
             path = p.rsplit('/', 1)[1]
             return path
+
+    # Properties have 0-1 datatypes, which is useful for determining input fields in the form.
+    def get_property_datatype(self, property_uri):
+        datatypes = self.g.objects(property_uri, URIRef(PREFIX_SHACL + "datatype"))
+        for d in datatypes:
+            return d
+        return None
 
     def get_property_constraints(self, property_uri):
         # Get each entry associated with each property
