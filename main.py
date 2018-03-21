@@ -8,6 +8,7 @@ node_shape = RDF_handler.get_root_shape()
 
 # Get a name for the form
 target_class = RDF_handler.get_target_class(node_shape)
+print(target_class)
 # Cutting off part of the target class URI to find a more human readable name
 # Example: http://schema.org/Person -> Person
 form_name = target_class.rsplit('/', 1)[1] if target_class else "Entry"

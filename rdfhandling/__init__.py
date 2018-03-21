@@ -15,6 +15,7 @@ This needs further work since some of the properties end in blank nodes and need
 """
 
 PREFIX_RDF = "http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+PREFIX_RDFS = "http://www.w3.org/2000/01/rdf-schema#"
 PREFIX_SHACL = "http://www.w3.org/ns/shacl#"
 
 
@@ -40,8 +41,13 @@ class RDFHandler:
             if not (None, URIRef(PREFIX_SHACL + "node"), s) in self.g:
                 return s
 
-    # Node Shapes have 0-1 target classes. The target class is useful for naming the form.
+    '''
+    Node Shapes have 0-1 target classes. The target class is useful for naming the form.
+    Look for implicit class targets - a shape of type sh:NodeShape and rdfs:Class is a target class of itself.
+    '''
     def get_target_class(self, shape_uri):
+        if (shape_uri, URIRef(PREFIX_RDF + "type"), URIRef(PREFIX_RDFS + "Class")) in self.g:
+            return shape_uri
         return self.g.value(shape_uri, URIRef(PREFIX_SHACL + "targetClass"), None)
 
     # Get all the properties associated with the Shape. They may be URIs or blank nodes.
