@@ -26,4 +26,22 @@ schema:PersonShape
         sh:path schema:gender ;
         sh:in ( "female" "male" ) ;
         sh:defaultValue "male" ;
+    ] ;
+    sh:property [
+        sh:path schema:address ;
+        sh:node schema:AddressShape ;
+    ] .
+
+schema:AddressShape
+    a sh:NodeShape ;
+    sh:closed true ;
+    sh:property [
+        sh:path schema:streetAddress ;
+        sh:datatype xsd:string ;
+    ] ;
+    sh:property [
+        sh:path schema:postalCode ;
+        sh:or ( [ sh:datatype xsd:string ] [ sh:datatype xsd:integer ] ) ;
+        sh:minInclusive 10000 ;
+        sh:maxInclusive 99999 ;
     ] .

@@ -25,23 +25,26 @@ class RDFHandler:
 
     '''
     The only shapes we are interested in are Node Shapes. They define all the properties and constraints relating
-    to a node that we want to create a form for. Property shapes are useful for defining additional constraints,
-    but are not relevant here
+    to a node that we want to create a form for. Property shapes are useful for defining constraints, but are not 
+    relevant here
     
     Shapes which match this criteria are subjects of a triple with a predicate of rdf:type and an object of
     sh:NodeShape
     
-    Only supports 1 Node Shape - in the future should be able to determine the hierarchy of multiple Node Shapes
-    and find the root
+    Shapes and properties can reference other shapes using the sh:node predicate. Therefore, the root shape is the only
+    shape that is not the object of a triple with a predicate of sh:node.
     '''
     def get_root_shape(self):
-        return self.g.value(None, URIRef(PREFIX_RDF + "type"), URIRef(PREFIX_SHACL + "NodeShape"))
+        shapes = self.g.subjects(URIRef(PREFIX_RDF + "type"), URIRef(PREFIX_SHACL + "NodeShape"))
+        for s in shapes:
+            if not (None, URIRef(PREFIX_SHACL + "node"), s) in self.g:
+                return s
 
     # Node Shapes have 0-1 target classes. The target class is useful for naming the form.
     def get_target_class(self, shape_uri):
         return self.g.value(shape_uri, URIRef(PREFIX_SHACL + "targetClass"), None)
 
-    # Get all the properties associated with the Shape. They will be blank nodes.
+    # Get all the properties associated with the Shape. They may be URIs or blank nodes.
     def get_properties(self, shape_uri):
         return self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "property"))
 
