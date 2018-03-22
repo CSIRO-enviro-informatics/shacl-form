@@ -8,17 +8,19 @@
     <h1>Create New {{ target_class }}</h1>
     <form>
         {%- for property in properties %}
-        {{ property[0] }}:<br>
-        {%- if property[2] %}
-        <i>{{ property[2] }}</i><br>
+        {{ property["name"] }}:<br>
+        {%- if "description" in property %}
+        <i>{{ property["description"] }}</i><br>
         {%- endif %}
-        {%- if property[4] == "radio" %}
-        {%- for option in property[5] %}
-        <input type="radio" name="{{ property[1] }}" {% if property[3] == option %} checked {% endif %}>{{ option }}<br>
-        {% endfor %}
-        {% else %}
-        <input type="{{ property[4] }}" name="{{ property[1] }}" {% if property[3] %} value="{{ property[3] }}" {% endif %}><br>
-        {% endif %}
+        {%- if "in" in property %}
+        {%- for option in property["in"] %}
+        <input type="radio" name="{{ property["path"] }}"
+        {%- if "defaultValue" in property and property["defaultValue"] == option %} checked {% endif %}>{{ option }}<br>
+        {%- endfor %}
+        {%- else %}
+        <input type="text" name="{{ property["path"] }}"
+        {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}" {% endif %}><br>
+        {%- endif %}
         <br>
         {%- endfor %}
     </form>

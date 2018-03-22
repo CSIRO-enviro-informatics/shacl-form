@@ -43,7 +43,7 @@ class RDFHandler:
 
     '''
     Node Shapes have 0-1 target classes. The target class is useful for naming the form.
-    Look for implicit class targets - a shape of type sh:NodeShape and rdfs:Class is a target class of itself.
+    Looks for implicit class targets - a shape of type sh:NodeShape and rdfs:Class is a target class of itself.
     '''
     def get_target_class(self, shape_uri):
         if (shape_uri, URIRef(PREFIX_RDF + "type"), URIRef(PREFIX_RDFS + "Class")) in self.g:
@@ -54,37 +54,14 @@ class RDFHandler:
     def get_properties(self, shape_uri):
         return self.g.objects(shape_uri, URIRef(PREFIX_SHACL + "property"))
 
-    # Use the name label if the property has one, otherwise fall back to the URI of the path.
-    def get_property_name(self, property_uri):
-        name = self.g.value(property_uri, URIRef(PREFIX_SHACL + "name"), None)
-        if name:
-            return name
-        # Cutting off part of the path URI to find a more human readable name
-        path = self.get_property_path(property_uri)
-        name = path.rsplit('/', 1)[1]
-        return name
-
-    # Properties always have a path.
-    def get_property_path(self, property_uri):
-        return self.g.value(property_uri, URIRef(PREFIX_SHACL + "path"), None)
-
-    # Properties have 0-1 datatypes, which is useful for determining input fields in the form.
-    def get_property_datatype(self, property_uri):
-        return self.g.value(property_uri, URIRef(PREFIX_SHACL + "datatype"), None)
-
-    # Description is an optional non-validating property. It is a human-readable description of the property.
-    def get_property_desc(self, property_uri):
-        return self.g.value(property_uri, URIRef(PREFIX_SHACL + "description"), None)
-
-    # DefaultValue is an optional non-validating property for form-building.
-    def get_property_default_value(self, property_uri):
-        return self.g.value(property_uri, URIRef(PREFIX_SHACL + "defaultValue"), None)
-
-    def get_property_in_constraint(self, property_uri):
-        collection_uri = self.g.value(property_uri, URIRef(PREFIX_SHACL + "in"), None)
-        return list(Collection(self.g, collection_uri))
-
+    # Only supports core constraints
     def get_property_constraints(self, property_uri):
-        # Get each entry associated with each property
-        # Path is always specified, but the others are optional
-        return self.g.predicate_objects(property_uri)
+        constraints = dict()
+        for c in self.g.predicate_objects(property_uri):
+            if c[0] == URIRef(PREFIX_SHACL + "in"):
+                # Gets the list of acceptable values rather than the blank node representing it
+                value = list(Collection(self.g, c[1]))
+            else:
+                value = c[1]
+            constraints[c[0].split('#')[1]] = value
+        return constraints
