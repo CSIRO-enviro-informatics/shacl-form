@@ -1,3 +1,20 @@
+{%- macro display_property(property) %}
+    {{ property["name"] }}:<br>
+    {%- if "description" in property %}
+        <i>{{ property["description"] }}</i><br>
+    {%- endif %}
+    {%- if "in" in property %}
+        {%- for option in property["in"] %}
+            <input type="radio" name="{{ property["path"] }}"
+            {%- if "defaultValue" in property and property["defaultValue"] == option %} checked{% endif %}>
+            {{ option }}<br>
+        {%- endfor %}
+    {%- else %}
+        <input type="text" name="{{ property["path"] }}"
+        {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}" {% endif %}><br>
+    {%- endif %}
+{%- endmacro %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,39 +29,13 @@
             <legend>{{ group["name"] }}:</legend>
             {%- for property in group["properties"] %}
             <br>
-            {{ property["name"] }}:<br>
-            {%- if "description" in property %}
-            <i>{{ property["description"] }}</i><br>
-            {%- endif %}
-            {%- if "in" in property %}
-            {%- for option in property["in"] %}
-            <input type="radio" name="{{ property["path"] }}"
-            {%- if "defaultValue" in property and property["defaultValue"] == option %} checked {% endif %}>
-            {{ option }}<br>
-            {%- endfor %}
-            {%- else %}
-            <input type="text" name="{{ property["path"] }}"
-            {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}" {% endif %}><br>
-            {%- endif %}
+            {{ display_property(property) }}
             {%- endfor %}
         </fieldset>
         <br>
         {%- endfor %}
-
         {%- for property in ungrouped_properties %}
-        {{ property["name"] }}:<br>
-        {%- if "description" in property %}
-        <i>{{ property["description"] }}</i><br>
-        {%- endif %}
-        {%- if "in" in property %}
-        {%- for option in property["in"] %}
-        <input type="radio" name="{{ property["path"] }}"
-        {%- if "defaultValue" in property and property["defaultValue"] == option %} checked {% endif %}>{{ option }}<br>
-        {%- endfor %}
-        {%- else %}
-        <input type="text" name="{{ property["path"] }}"
-        {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}" {% endif %}><br>
-        {%- endif %}
+        {{ display_property(property) }}
         <br>
         {%- endfor %}
     </form>
