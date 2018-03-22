@@ -6,7 +6,7 @@ Properties - a list of tuples containing the name, path and datatype of each pro
 '''
 
 
-def render_template(target_class, properties):
+def render_template(target_class, groups, ungrouped_properties):
     template_file_path = os.path.join(os.path.dirname(__file__), 'base.html')
     t = Template(open(template_file_path, 'r').read())
-    return t.render(target_class=target_class, properties=properties)
+    return t.render(target_class=target_class, groups=groups, ungrouped_properties=ungrouped_properties)

@@ -2,9 +2,8 @@
 This repository contains a Python application that generates HTML + JS webforms from given [W3C](https://www.w3.org/) [Shapes Constraint Language (SHACL)](https://www.w3.org/TR/shacl/) "shapes". The intention is to allow for the auto-generation of web UIs, given only a logical expression of the required data that the UI is to facilitate the input of.
 
 It is assumed that:
-* The SHACL Shapes file supplied will contain only one Node Shape
-* All Property Shapes will be associated with that Node Shape
-* The Node Shape will have a target class
+* There will be at least one Node Shape with a target class
+* All Property Shapes will be associated with a Node Shape
 
 # License
 This work is licensed using the GPL v3 license. See [LICENSE](LICENSE) for the deed.

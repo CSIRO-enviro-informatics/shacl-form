@@ -16,11 +16,29 @@ schema:PersonShape
         sh:description "The first name of a person." ;
         sh:defaultValue "Steve" ;
         sh:name "Given name" ;
+        sh:group schema:NameGroup ;
+        sh:order 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:familyName ;
+        sh:datatype xsd:string ;
+        sh:description "The last name of a person." ;
+        sh:name "Family name" ;
+        sh:group schema:NameGroup ;
+        sh:order 2 ;
     ] ;
     sh:property [
         sh:path schema:birthDate ;
         sh:lessThan schema:deathDate ;
         sh:maxCount 1 ;
+        sh:group schema:DateGroup ;
+        sh:order 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:deathDate ;
+        sh:maxCount 1 ;
+        sh:group schema:DateGroup ;
+        sh:order 2 ;
     ] ;
     sh:property [
         sh:path schema:gender ;
@@ -45,3 +63,13 @@ schema:AddressShape
         sh:minInclusive 10000 ;
         sh:maxInclusive 99999 ;
     ] .
+
+schema:NameGroup
+    a sh:PropertyGroup ;
+    sh:order 0 ;
+    rdfs:label "Name" .
+
+schema:DateGroup
+    a sh:PropertyGroup ;
+    sh:order 1 ;
+    rdfs:label "Birth & Death Date" .
