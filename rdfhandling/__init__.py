@@ -68,18 +68,11 @@ class RDFHandler:
         # If the property doesn't have a name label, fall back to the URI of the path.
         if "name" not in constraints:
             constraints["name"] = constraints["path"].rsplit('/', 1)[1]
+        if "group" not in constraints:
+            constraints["group"] = None
+        else:
+            constraints["group_label"] = self.g.value(constraints["group"], URIRef(PREFIX_RDFS + "label"), None)
+            constraints["group_order"] = self.g.value(constraints["group"], URIRef(PREFIX_SHACL + "order", None))
+        if "order" not in constraints:
+            constraints["order"] = None
         return constraints
-
-    # Groups can be identified as subjects of a triple with a predicate of rdf:type and an object of sh:PropertyGroup
-    # Returns the uris of all groups
-    def get_groups(self):
-        return self.g.subjects(URIRef(PREFIX_RDF + "type"), URIRef(PREFIX_SHACL + "PropertyGroup"))
-
-    def get_properties_in_group(self, group_uri):
-        return self.g.subjects(URIRef(PREFIX_SHACL + "group"), group_uri)
-
-    def get_group_name(self, group_uri):
-        return self.g.value(group_uri, URIRef(PREFIX_RDFS + "label"), None)
-
-    def get_group_order(self, group_uri):
-        return self.g.value(group_uri, URIRef(PREFIX_SHACL + "order"), None)

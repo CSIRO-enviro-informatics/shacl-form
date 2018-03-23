@@ -1,7 +1,7 @@
-{%- macro display_property(property) %}
+{%- macro display_property(property) -%}
     {{ property["name"] }}:<br>
     {%- if "description" in property %}
-        <i>{{ property["description"] }}</i><br>
+            <i>{{ property["description"] }}</i><br>
     {%- endif %}
     {%- if "in" in property %}
         {%- for option in property["in"] %}
@@ -10,8 +10,8 @@
             {{ option }}<br>
         {%- endfor %}
     {%- else %}
-        <input type="text" name="{{ property["path"] }}"
-        {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}" {% endif %}><br>
+            <input type="text" name="{{ property["path"] }}"
+            {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}" {% endif %}><br>
     {%- endif %}
 {%- endmacro %}
 
@@ -24,20 +24,27 @@
 <body>
     <h1>Create New {{ target_class }}</h1>
     <form>
-        {%- for group in groups %}
+    {#- Grouped properties #}
+    {%- for group_uri, group in properties|rejectattr("group", "none")|groupby("group")|sort(attribute="1.0.group_order") %}
         <fieldset>
-            <legend>{{ group["name"] }}:</legend>
-            {%- for property in group["properties"] %}
+            <legend>{{ group[0]["group_label"] }}:</legend>
+            {%- for property in group|sort(attribute="order") %}
             <br>
             {{ display_property(property) }}
             {%- endfor %}
         </fieldset>
         <br>
-        {%- endfor %}
-        {%- for property in ungrouped_properties %}
-        {{ display_property(property) }}
-        <br>
-        {%- endfor %}
+    {%- endfor %}
+    {#- Ungrouped ordered properties #}
+    {%- for property in properties|selectattr("group", "none")|rejectattr("order", "none")|sort(attribute="order") %}
+    {{ display_property(property) }}
+    <br>
+    {%- endfor %}
+    {#- Ungrouped unordered properties #}
+    {%- for property in properties|selectattr("group", "none")|selectattr("order", "none") %}
+    {{ display_property(property) }}
+    <br>
+    {%- endfor %}
     </form>
 </body>
 </html>
