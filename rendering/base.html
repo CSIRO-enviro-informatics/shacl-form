@@ -4,11 +4,13 @@
             <i>{{ property["description"] }}</i><br>
     {%- endif %}
     {%- if "in" in property %}
+        <select name="{{ property["path"] }}">
         {%- for option in property["in"] %}
-            <input type="radio" name="{{ property["path"] }}"
-            {%- if "defaultValue" in property and property["defaultValue"] == option %} checked{% endif %}>
-            {{ option }}<br>
+            <option value="{{ option }}"
+            {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
+            {{- option }}</option>
         {%- endfor %}
+        </select><br>
     {%- else %}
             <input type=
             {%- if property["path"] == URI_EMAIL %}"email"{% else %}"text"{% endif %}
