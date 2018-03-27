@@ -80,4 +80,6 @@ class RDFHandler:
                 constraints["minCount"] = int(constraints["minCount"])
             except ValueError:
                 raise Exception("MinCount value must be an integer: '{value}'".format(value=constraints["minCount"]))
+        if "path" in constraints:
+            constraints["path"] = str(constraints["path"])
         return constraints

@@ -10,7 +10,9 @@
             {{ option }}<br>
         {%- endfor %}
     {%- else %}
-            <input type="text" name="{{ property["path"] }}"
+            <input type=
+            {%- if property["path"] == URI_EMAIL %}"email"{% else %}"text"{% endif %}
+            name="{{ property["path"] }}"
             {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}"{% endif %}
             {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}><br>
     {%- endif %}
