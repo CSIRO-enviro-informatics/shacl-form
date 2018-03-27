@@ -31,6 +31,7 @@ schema:PersonShape
         sh:path schema:birthDate ;
         sh:lessThan schema:deathDate ;
         sh:maxCount 1 ;
+        sh:minCount 1 ;
         sh:group schema:DateGroup ;
         sh:order 1 ;
     ] ;

@@ -58,16 +58,15 @@ class RDFHandler:
     def get_property_constraints(self, property_uri):
         constraints = dict()
         for c in self.g.predicate_objects(property_uri):
-            if c[0] == URIRef(PREFIX_SHACL + "in"):
-                # Gets the list of acceptable values rather than the blank node representing it
-                value = list(Collection(self.g, c[1]))
-            else:
-                value = c[1]
-            constraints[c[0].split('#')[1]] = value
+            constraints[c[0].split('#')[1]] = c[1]
 
+        # Gets the list of acceptable values for constraint "IN" rather than the blank node representing it
+        if "in" in constraints:
+            constraints["in"] = list(Collection(self.g, constraints["in"]))
         # If the property doesn't have a name label, fall back to the URI of the path.
         if "name" not in constraints:
             constraints["name"] = constraints["path"].rsplit('/', 1)[1]
+        # Get information about the property's group and order
         if "group" not in constraints:
             constraints["group"] = None
         else:
@@ -75,4 +74,10 @@ class RDFHandler:
             constraints["group_order"] = self.g.value(constraints["group"], URIRef(PREFIX_SHACL + "order", None))
         if "order" not in constraints:
             constraints["order"] = None
+        # Validate other input
+        if "minCount" in constraints:
+            try:
+                constraints["minCount"] = int(constraints["minCount"])
+            except ValueError:
+                raise Exception("MinCount value must be an integer: '{value}'".format(value=constraints["minCount"]))
         return constraints

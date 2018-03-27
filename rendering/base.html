@@ -11,7 +11,8 @@
         {%- endfor %}
     {%- else %}
             <input type="text" name="{{ property["path"] }}"
-            {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}" {% endif %}><br>
+            {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}"{% endif %}
+            {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}><br>
     {%- endif %}
 {%- endmacro %}
 
@@ -45,6 +46,7 @@
     {{ display_property(property) }}
     <br>
     {%- endfor %}
+        <input type="submit" value="Submit">
     </form>
 </body>
 </html>
