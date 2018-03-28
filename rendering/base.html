@@ -1,0 +1,54 @@
+{%- macro display_property(property) -%}
+    {{ property["name"] }}:<br>
+    {%- if "description" in property %}
+            <i>{{ property["description"] }}</i><br>
+    {%- endif %}
+    {%- if "in" in property %}
+        {%- for option in property["in"] %}
+            <input type="radio" name="{{ property["path"] }}"
+            {%- if "defaultValue" in property and property["defaultValue"] == option %} checked{% endif %}>
+            {{ option }}<br>
+        {%- endfor %}
+    {%- else %}
+            <input type=
+            {%- if property["path"] == URI_EMAIL %}"email"{% else %}"text"{% endif %}
+            name="{{ property["path"] }}"
+            {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}"{% endif %}
+            {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}><br>
+    {%- endif %}
+{%- endmacro %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Create New {{ target_class }}</title>
+</head>
+<body>
+    <h1>Create New {{ target_class }}</h1>
+    <form>
+    {#- Grouped properties #}
+    {%- for group_uri, group in properties|rejectattr("group", "none")|groupby("group")|sort(attribute="1.0.group_order") %}
+        <fieldset>
+            <legend>{{ group[0]["group_label"] }}:</legend>
+            {%- for property in group|sort(attribute="order") %}
+            <br>
+            {{ display_property(property) }}
+            {%- endfor %}
+        </fieldset>
+        <br>
+    {%- endfor %}
+    {#- Ungrouped ordered properties #}
+    {%- for property in properties|selectattr("group", "none")|rejectattr("order", "none")|sort(attribute="order") %}
+    {{ display_property(property) }}
+    <br>
+    {%- endfor %}
+    {#- Ungrouped unordered properties #}
+    {%- for property in properties|selectattr("group", "none")|selectattr("order", "none") %}
+    {{ display_property(property) }}
+    <br>
+    {%- endfor %}
+        <input type="submit" value="Submit">
+    </form>
+</body>
+</html>

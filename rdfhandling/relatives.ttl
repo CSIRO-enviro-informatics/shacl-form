@@ -17,13 +17,22 @@
           owl:inverseOf :hasParent .
 
 
-###  http://example.org/relatives#hasParent
-:hasParent rdf:type owl:ObjectProperty .
-
+###  http://example.org/relatives#hasGrandparent
 :hasGrandparent rdf:type owl:ObjectProperty ;
                 owl:propertyChainAxiom ( :hasParent
                                          :hasParent
                                        ) .
+
+
+###  http://example.org/relatives#hasParent
+:hasParent rdf:type owl:ObjectProperty ;
+           rdfs:subPropertyOf :hasAncestor .
+
+
+###  http://example.org/relatives/hasAncestor
+:hasAncestor rdf:type owl:ObjectProperty ,
+             owl:TransitiveProperty .
+
 
 #################################################################
 #    Classes

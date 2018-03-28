@@ -1,0 +1,83 @@
+#Borrowed from http://shacl.org/playground/ for testing purposes.
+
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+
+schema:PersonShape
+    a sh:NodeShape ;
+    sh:targetClass schema:Person ;
+    sh:property [
+        sh:path schema:givenName ;
+        sh:datatype xsd:string ;
+        sh:description "The first name of a person." ;
+        sh:defaultValue "Steve" ;
+        sh:name "Given name" ;
+        sh:group schema:NameGroup ;
+        sh:order 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:familyName ;
+        sh:datatype xsd:string ;
+        sh:description "The last name of a person." ;
+        sh:name "Family name" ;
+        sh:group schema:NameGroup ;
+        sh:order 2 ;
+    ] ;
+    sh:property [
+        sh:path schema:birthDate ;
+        sh:lessThan schema:deathDate ;
+        sh:maxCount 1 ;
+        sh:minCount 1 ;
+        sh:group schema:DateGroup ;
+        sh:order 1 ;
+    ] ;
+    sh:property [
+        sh:path schema:deathDate ;
+        sh:maxCount 1 ;
+        sh:group schema:DateGroup ;
+        sh:order 2 ;
+    ] ;
+    sh:property [
+        sh:path schema:gender ;
+        sh:in ( "female" "male" ) ;
+        sh:defaultValue "male" ;
+        sh:order 0 ;
+    ] ;
+    sh:property [
+        sh:path schema:address ;
+        sh:node schema:AddressShape ;
+        sh:order 1 ;
+    ] ;
+    sh:property [
+        sh:path foaf:mbox ;
+        sh:minCount 1 ;
+    ].
+
+schema:AddressShape
+    a sh:NodeShape ;
+    sh:closed true ;
+    sh:property [
+        sh:path schema:streetAddress ;
+        sh:datatype xsd:string ;
+    ] ;
+    sh:property [
+        sh:path schema:postalCode ;
+        sh:or ( [ sh:datatype xsd:string ] [ sh:datatype xsd:integer ] ) ;
+        sh:minInclusive 10000 ;
+        sh:maxInclusive 99999 ;
+    ] .
+
+schema:NameGroup
+    a sh:PropertyGroup ;
+    sh:order 1 ;
+    rdfs:label "Name" .
+
+schema:DateGroup
+    a sh:PropertyGroup ;
+    sh:order 2 ;
+    rdfs:label "Birth & Death Date" .
