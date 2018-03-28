@@ -4,7 +4,7 @@
             <i>{{ property["description"] }}</i><br>
     {%- endif %}
     {%- if "in" in property %}
-        <select name="{{ property["path"] }}">
+        <select name="{{ property["path"] }}"
         {%- for option in property["in"] %}
             <option value="{{ option }}"
             {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
@@ -16,7 +16,7 @@
             {%- if property["path"] == URI_EMAIL %}"email"{% else %}"text"{% endif %}
             name="{{ property["path"] }}"
             {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}"{% endif %}
-            {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}><br>
+            {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %} /><br>
     {%- endif %}
 {%- endmacro %}
 
@@ -34,23 +34,19 @@
         <fieldset>
             <legend>{{ group[0]["group_label"] }}:</legend>
             {%- for property in group|sort(attribute="order") %}
-            <br>
             {{ display_property(property) }}
             {%- endfor %}
         </fieldset>
-        <br>
     {%- endfor %}
     {#- Ungrouped ordered properties #}
     {%- for property in properties|selectattr("group", "none")|rejectattr("order", "none")|sort(attribute="order") %}
     {{ display_property(property) }}
-    <br>
     {%- endfor %}
     {#- Ungrouped unordered properties #}
     {%- for property in properties|selectattr("group", "none")|selectattr("order", "none") %}
     {{ display_property(property) }}
-    <br>
     {%- endfor %}
-        <input type="submit" value="Submit">
+        <input type="submit" value="Submit" />
     </form>
 </body>
 </html>
