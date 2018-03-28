@@ -1,5 +1,5 @@
 import rdfhandling
-import render
+from rendering import render
 
 RDF_handler = rdfhandling.RDFHandler("permitted_shapes.ttl")
 
