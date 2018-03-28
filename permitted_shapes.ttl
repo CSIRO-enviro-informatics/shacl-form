@@ -7,7 +7,7 @@
 @prefix sh: <http://www.w3.org/ns/shacl#> .
 @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
 @prefix foaf: <http://xmlns.com/foaf/0.1/> .
-@prefix : <http://example.org/ex#>
+@prefix : <http://example.org/ex#> .
 
 :PersonShape1
     a sh:NodeShape ;
