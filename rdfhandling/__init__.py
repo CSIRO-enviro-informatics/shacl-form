@@ -35,7 +35,7 @@ class RDFHandler:
         """
         shapes = self.g.subjects(URIRef(RDF.uri + "type"), URIRef(SHACL + "NodeShape"))
         for s in shapes:
-            if not (None, URIRef("sh:node"), s) in self.g:
+            if not (None, URIRef(SHACL + "node"), s) in self.g:
                 return s
 
     def get_target_class(self, shape_uri):
@@ -45,7 +45,7 @@ class RDFHandler:
         """
         if (shape_uri, URIRef(RDF.uri + "type"), URIRef(RDFS.uri + "Class")) in self.g:
             return shape_uri
-        return self.g.value(shape_uri, URIRef("sh:targetClass"), None)
+        return self.g.value(shape_uri, URIRef(SHACL + "targetClass"), None)
 
     def get_properties(self, shape_uri):
         """
