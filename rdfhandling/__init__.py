@@ -16,7 +16,6 @@ This needs further work since some of the properties end in blank nodes and need
 
 SHACL = "http://www.w3.org/ns/shacl#"
 
-
 class RDFHandler:
     def __init__(self, file_name):
         self.g = Graph()
@@ -34,9 +33,9 @@ class RDFHandler:
         Shapes and properties can reference other shapes using the sh:node predicate. Therefore, the root shape is the
         only shape that is not the object of a triple with a predicate of sh:node.
         """
-        shapes = self.g.subjects(URIRef(RDF + "type"), URIRef(SHACL + "NodeShape"))
+        shapes = self.g.subjects(URIRef(RDF.uri + "type"), URIRef(SHACL + "NodeShape"))
         for s in shapes:
-            if not (None, URIRef(SHACL + "node"), s) in self.g:
+            if not (None, URIRef("sh:node"), s) in self.g:
                 return s
 
     def get_target_class(self, shape_uri):
@@ -44,9 +43,9 @@ class RDFHandler:
         Node Shapes have 0-1 target classes. The target class is useful for naming the form.
         Looks for implicit class targets - a shape of type sh:NodeShape and rdfs:Class is a target class of itself.
         """
-        if (shape_uri, URIRef(RDF + "type"), URIRef(RDFS + "Class")) in self.g:
+        if (shape_uri, URIRef(RDF.uri + "type"), URIRef(RDFS.uri + "Class")) in self.g:
             return shape_uri
-        return self.g.value(shape_uri, URIRef(SHACL + "targetClass"), None)
+        return self.g.value(shape_uri, URIRef("sh:targetClass"), None)
 
     def get_properties(self, shape_uri):
         """
@@ -72,7 +71,7 @@ class RDFHandler:
         if "group" not in constraints:
             constraints["group"] = None
         else:
-            constraints["group_label"] = self.g.value(constraints["group"], URIRef(RDFS + "label"), None)
+            constraints["group_label"] = self.g.value(constraints["group"], URIRef(RDFS.uri + "label"), None)
             constraints["group_order"] = self.g.value(constraints["group"], URIRef(SHACL + "order", None))
         if "order" not in constraints:
             constraints["order"] = None
