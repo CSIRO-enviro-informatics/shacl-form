@@ -6,10 +6,9 @@ from rdflib import RDF, RDFS, OWL
 
 """
 Reads information from a SHACL Shapes file.
-For each shape, lists:
+For each shape, can determine:
     Shape URI
     Target class
-    Whether the shape is closed
     Properties associated with the shape
     
 This needs further work since some of the properties end in blank nodes and need to be followed up.
@@ -32,29 +31,33 @@ class RDFHandler:
         Shapes which match this criteria are subjects of a triple with a predicate of rdf:type and an object of
         sh:NodeShape
 
-        Shapes and properties can reference other shapes using the sh:node predicate. Therefore, the root shape is the only
-        shape that is not the object of a triple with a predicate of sh:node.
+        Shapes and properties can reference other shapes using the sh:node predicate. Therefore, the root shape is the
+        only shape that is not the object of a triple with a predicate of sh:node.
         """
         shapes = self.g.subjects(URIRef(RDF + "type"), URIRef(SHACL + "NodeShape"))
         for s in shapes:
             if not (None, URIRef(SHACL + "node"), s) in self.g:
                 return s
 
-    '''
-    Node Shapes have 0-1 target classes. The target class is useful for naming the form.
-    Looks for implicit class targets - a shape of type sh:NodeShape and rdfs:Class is a target class of itself.
-    '''
     def get_target_class(self, shape_uri):
+        """
+        Node Shapes have 0-1 target classes. The target class is useful for naming the form.
+        Looks for implicit class targets - a shape of type sh:NodeShape and rdfs:Class is a target class of itself.
+        """
         if (shape_uri, URIRef(RDF + "type"), URIRef(RDFS + "Class")) in self.g:
             return shape_uri
         return self.g.value(shape_uri, URIRef(SHACL + "targetClass"), None)
 
-    # Get all the properties associated with the Shape. They may be URIs or blank nodes.
     def get_properties(self, shape_uri):
+        """
+        Get all the properties associated with the Shape. They may be URIs or blank nodes.
+        """
         return self.g.objects(shape_uri, URIRef(SHACL + "property"))
 
-    # Only supports core constraints
     def get_property_constraints(self, property_uri):
+        """
+        Only supports core constraints
+        """
         constraints = dict()
         for c in self.g.predicate_objects(property_uri):
             constraints[c[0].split('#')[1]] = c[1]
