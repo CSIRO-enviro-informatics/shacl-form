@@ -1,3 +1,7 @@
+{% macro display_property(property) %}
+{%- include "property.html" %}
+{%- endmacro %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,12 +15,12 @@
         <fieldset>
             <legend>{{ group["label"] }}</legend>
             {%- for property in group["properties"] %}
-                {% include "property.html" %}
+                {{ display_property(property)|indent(16) }}
             {%- endfor %}
         </fieldset>
         {%- endfor %}
         {%- for property in shape["properties"] %}
-            {% include "property.html" %}
+            {{ display_property(property)|indent(12) }}
         {%- endfor %}
         <input type="submit" value="Submit" />
     </form>
