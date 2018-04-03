@@ -11,12 +11,12 @@
         <fieldset>
             <legend>{{ group["label"] }}</legend>
             {%- for property in group["properties"] %}
-                {% include property_template %}
+                {% include "property.html" %}
             {%- endfor %}
         </fieldset>
         {%- endfor %}
         {%- for property in shape["properties"] %}
-            {% include property_template %}
+            {% include "property.html" %}
         {%- endfor %}
         <input type="submit" value="Submit" />
     </form>
