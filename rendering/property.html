@@ -1,0 +1,17 @@
+{{ property["name"] }}:<br>
+{%- if "description" in property %}
+    <i>{{ property["description"] }}</i><br>
+{%- endif %}
+{%- if "in" in property %}
+    <select name="{{ property["path"] }}">
+    {%- for option in property["in"] %}
+        <option value="{{ option }}"
+        {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
+        {{- option }}</option>
+    {%- endfor %}
+    </select><br>
+{%- else %}
+    <input type={%- if property["path"] == URI_EMAIL %}"email"{% else %}"text"{% endif %} name="{{ property["path"] }}"
+    {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}"{% endif %}
+    {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %} /><br>
+{%- endif %}

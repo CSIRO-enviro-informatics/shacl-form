@@ -1,25 +1,3 @@
-{%- macro display_property(property) -%}
-    {{ property["name"] }}:<br>
-    {%- if "description" in property %}
-            <i>{{ property["description"] }}</i><br>
-    {%- endif %}
-    {%- if "in" in property %}
-        <select name="{{ property["path"] }}">
-        {%- for option in property["in"] %}
-            <option value="{{ option }}"
-            {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
-            {{- option }}</option>
-        {%- endfor %}
-        </select><br>
-    {%- else %}
-            <input type=
-            {%- if property["path"] == URI_EMAIL %}"email"{% else %}"text"{% endif %}
-            name="{{ property["path"] }}"
-            {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}"{% endif %}
-            {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %} /><br>
-    {%- endif %}
-{%- endmacro %}
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,12 +11,12 @@
         <fieldset>
             <legend>{{ group["label"] }}</legend>
             {%- for property in group["properties"] %}
-            {{ display_property(property) }}
+                {% include property_template %}
             {%- endfor %}
         </fieldset>
         {%- endfor %}
         {%- for property in shape["properties"] %}
-        {{ display_property(property) }}
+            {% include property_template %}
         {%- endfor %}
         <input type="submit" value="Submit" />
     </form>

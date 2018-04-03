@@ -9,6 +9,11 @@ URI_EMAIL = "http://xmlns.com/foaf/0.1/mbox"  # Don't feel comfortable pasting t
 
 
 def render_template(form_name, shape):
-    template_file_path = os.path.join(os.path.dirname(__file__), 'base.html')
-    t = Template(open(template_file_path, 'r').read())
-    return t.render(form_name=form_name, shape=shape, URI_EMAIL=URI_EMAIL)
+    base_template = Template(open(os.path.join(os.path.dirname(__file__), 'base.html'), 'r').read())
+    property_template = Template(open(os.path.join(os.path.dirname(__file__), 'property.html'), 'r').read())
+    return base_template.render(
+        form_name=form_name,
+        shape=shape,
+        URI_EMAIL=URI_EMAIL,
+        property_template=property_template
+    )
