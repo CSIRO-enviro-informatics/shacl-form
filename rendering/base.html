@@ -4,7 +4,7 @@
             <i>{{ property["description"] }}</i><br>
     {%- endif %}
     {%- if "in" in property %}
-        <select name="{{ property["path"] }}"
+        <select name="{{ property["path"] }}">
         {%- for option in property["in"] %}
             <option value="{{ option }}"
             {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
@@ -24,28 +24,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Create New {{ target_class }}</title>
+    <title>Create New {{ form_name }}</title>
 </head>
 <body>
-    <h1>Create New {{ target_class }}</h1>
+    <h1>Create New {{ form_name }}</h1>
     <form>
-    {#- Grouped properties #}
-    {%- for group_uri, group in properties|rejectattr("group", "none")|groupby("group")|sort(attribute="1.0.group_order") %}
+        {%- for group in shape["groups"] %}
         <fieldset>
-            <legend>{{ group[0]["group_label"] }}:</legend>
-            {%- for property in group|sort(attribute="order") %}
+            <legend>{{ group["label"] }}</legend>
+            {%- for property in group["properties"] %}
             {{ display_property(property) }}
             {%- endfor %}
         </fieldset>
-    {%- endfor %}
-    {#- Ungrouped ordered properties #}
-    {%- for property in properties|selectattr("group", "none")|rejectattr("order", "none")|sort(attribute="order") %}
-    {{ display_property(property) }}
-    {%- endfor %}
-    {#- Ungrouped unordered properties #}
-    {%- for property in properties|selectattr("group", "none")|selectattr("order", "none") %}
-    {{ display_property(property) }}
-    {%- endfor %}
+        {%- endfor %}
+        {%- for property in shape["properties"] %}
+        {{ display_property(property) }}
+        {%- endfor %}
         <input type="submit" value="Submit" />
     </form>
 </body>

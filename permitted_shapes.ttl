@@ -82,3 +82,7 @@
     a sh:PropertyGroup ;
     sh:order 2 ;
     rdfs:label "Birth & Death Date" .
+
+:OtherGroup1
+    a sh:PropertyGroup ;
+    rdfs:label "Other" .
