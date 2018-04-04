@@ -2,7 +2,7 @@ from rdflib.graph import Graph
 from rdflib.term import URIRef
 from rdflib.util import guess_format
 from rdflib.collection import Collection
-from rdflib import RDF, RDFS, OWL
+from rdflib import RDF, RDFS
 
 """
 Reads information from a SHACL Shapes file.
