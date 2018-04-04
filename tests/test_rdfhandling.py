@@ -3,18 +3,18 @@ import os
 import pytest
 from rdflib.term import URIRef, Literal
 sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
-import rdfhandling
+from rdfhandling import RDFHandler
 
 
 def test_empty_file():
     # Checks behaviour when an empty file is supplied
-    RDF_handler = rdfhandling.RDFHandler("inputs/empty_file.ttl")
+    RDF_handler = RDFHandler("inputs/empty_file.ttl")
     assert RDF_handler.get_shape() == None
 
 
 def test_no_target_class():
     # Checks behavior when the shape provided doesn't have a target class
-    RDF_handler = rdfhandling.RDFHandler("inputs/no_target_class.ttl")
+    RDF_handler = RDFHandler("inputs/no_target_class.ttl")
     with pytest.raises(Exception):
         RDF_handler.get_shape()
 
@@ -25,14 +25,14 @@ def test_empty_shape():
     expected_result["target_class"] = URIRef("http://schema.org/Person")
     expected_result["groups"] = list()
     expected_result["properties"] = list()
-    RDF_handler = rdfhandling.RDFHandler("inputs/empty_shape.ttl")
+    RDF_handler = RDFHandler("inputs/empty_shape.ttl")
     result = RDF_handler.get_shape()
     assert result == expected_result
 
 
 def test_no_path():
     # Checks behaviour when a property doesn't have a compulsory path constraint
-    RDF_handler = rdfhandling.RDFHandler("inputs/no_path.ttl")
+    RDF_handler = RDFHandler("inputs/no_path.ttl")
     with pytest.raises(Exception):
         RDF_handler.get_shape()
 
@@ -40,7 +40,7 @@ def test_no_path():
 def test_path():
     # Check the path is read
     expected_path = "http://schema.org/givenName"
-    RDF_handler = rdfhandling.RDFHandler("inputs/test_shape.ttl")
+    RDF_handler = RDFHandler("inputs/test_shape.ttl")
     properties = RDF_handler.get_shape()["properties"]
     assert any(str(p["path"] == expected_path for p in properties))
 
@@ -48,7 +48,7 @@ def test_path():
 def test_constraint_name():
     # Check the name is read
     expected_name = "Given name"
-    RDF_handler = rdfhandling.RDFHandler("inputs/test_shape.ttl")
+    RDF_handler = RDFHandler("inputs/test_shape.ttl")
     properties = RDF_handler.get_shape()["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
@@ -64,7 +64,7 @@ def test_constraint_name():
 def test_constraint_description():
     # Check the desc is read
     expected_desc = "The first name of a person."
-    RDF_handler = rdfhandling.RDFHandler("inputs/test_shape.ttl")
+    RDF_handler = RDFHandler("inputs/test_shape.ttl")
     properties = RDF_handler.get_shape()["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
@@ -74,7 +74,7 @@ def test_constraint_description():
 def test_constraint_defaultValue():
     # Check the default value is read
     expected_value = "Steve"
-    RDF_handler = rdfhandling.RDFHandler("inputs/test_shape.ttl")
+    RDF_handler = RDFHandler("inputs/test_shape.ttl")
     properties = RDF_handler.get_shape()["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
@@ -84,7 +84,7 @@ def test_constraint_defaultValue():
 def test_constraint_order():
     # Check the order is read
     expected_value = 1
-    RDF_handler = rdfhandling.RDFHandler("inputs/test_shape.ttl")
+    RDF_handler = RDFHandler("inputs/test_shape.ttl")
     properties = RDF_handler.get_shape()["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
@@ -94,7 +94,7 @@ def test_constraint_order():
 def test_constraint_minCount():
     # Check the minimum count is read
     expected_value = 1
-    RDF_handler = rdfhandling.RDFHandler("inputs/test_shape.ttl")
+    RDF_handler = RDFHandler("inputs/test_shape.ttl")
     properties = RDF_handler.get_shape()["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/birthDate":
@@ -104,7 +104,7 @@ def test_constraint_minCount():
 def test_constraint_in():
     # Check that the 'in' constraint options are read
     expected_value = [Literal("Steve"), Literal("Terrence")]
-    RDF_handler = rdfhandling.RDFHandler("inputs/test_shape.ttl")
+    RDF_handler = RDFHandler("inputs/test_shape.ttl")
     properties = RDF_handler.get_shape()["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
@@ -115,7 +115,7 @@ def test_group():
     # Check that groups are structured correctly
     expected_label = "Birth & Death Date"
     expected_order = 0
-    RDF_handler = rdfhandling.RDFHandler("inputs/test_shape.ttl")
+    RDF_handler = RDFHandler("inputs/test_shape.ttl")
     shape = RDF_handler.get_shape()
     groups = shape["groups"]
     # Labels, optional
