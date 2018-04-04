@@ -18,7 +18,7 @@ Senior Experimental Scientist
 CSIRO Land & Water  
 <nicholas.car@csiro.au>  
 
-# Supported constraints
+## Supported constraints
 
 These constraints are optional unless stated otherwise.
 

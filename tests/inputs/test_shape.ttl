@@ -1,0 +1,42 @@
+#Borrowed from http://shacl.org/playground/ for testing purposes.
+
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix : <http://example.org/ex#> .
+
+:PersonShape1
+    a sh:NodeShape ;
+    sh:targetClass schema:Person ;
+    sh:property [
+        sh:path schema:givenName ;
+        sh:datatype xsd:string ;
+        sh:description "The first name of a person." ;
+        sh:defaultValue "Steve" ;
+        sh:name "Given name" ;
+        sh:order 1 ;
+        sh:in ( "Steve" "Terrence" ) ;
+    ] ;
+    sh:property [
+        sh:path schema:birthDate ;
+        sh:lessThan schema:deathDate ;
+        sh:maxCount 1 ;
+        sh:minCount 1 ;
+        sh:group :DateGroup1 ;
+    ] ;
+    sh:property [
+        sh:path schema:address ;
+        sh:group :AddressGroup1 ;
+    ] .
+
+:DateGroup1
+    a sh:PropertyGroup ;
+    sh:order 0 ;
+    rdfs:label "Birth & Death Date" .
+
+:AddressGroup1
+    a sh:PropertyGroup .
