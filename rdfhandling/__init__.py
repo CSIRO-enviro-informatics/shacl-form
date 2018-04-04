@@ -17,6 +17,7 @@ Does not support additional shapes at this time.
 
 SHACL = "http://www.w3.org/ns/shacl#"
 
+
 class RDFHandler:
     def __init__(self, file_name):
         self.g = Graph()
@@ -38,6 +39,7 @@ class RDFHandler:
         only shape that is not the object of a triple with a predicate of sh:node.
         """
         shape_uris = self.g.subjects(URIRef(RDF.uri + "type"), URIRef(SHACL + "NodeShape"))
+        root_uri = None
         for s in shape_uris:
             if not (None, URIRef(SHACL + "node"), s) in self.g:
                 root_uri = s
@@ -52,6 +54,8 @@ class RDFHandler:
         if (root_uri, URIRef(RDF.uri + "type"), URIRef(RDFS.uri + "Class")) in self.g:
             return root_uri
         shape["target_class"] = self.g.value(root_uri, URIRef(SHACL + "targetClass"), None)
+        if not shape["target_class"]:
+            raise Exception("A target class must be specified for shape: " + root_uri)
 
         """
         Get the groups
@@ -98,6 +102,8 @@ class RDFHandler:
                         "MinCount value must be an integer: '{value}'".format(value=constraints["minCount"]))
             if "path" in constraints:
                 constraints["path"] = str(constraints["path"])
+            else:
+                raise Exception("Every property must have a path associated with it: " + p_uri)
 
             # Place the property in the correct place
             group_uri = self.g.value(p_uri, URIRef(SHACL + "group"), None)
