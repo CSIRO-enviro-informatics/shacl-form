@@ -2,7 +2,7 @@ from rdflib.graph import Graph
 from rdflib.term import URIRef
 from rdflib.util import guess_format
 from rdflib.collection import Collection
-from rdflib import RDF, RDFS, OWL
+from rdflib import RDF, RDFS
 
 """
 Reads information from a SHACL Shapes file.
@@ -16,6 +16,7 @@ Does not support additional shapes at this time.
 """
 
 SHACL = "http://www.w3.org/ns/shacl#"
+
 
 class RDFHandler:
     def __init__(self, file_name):
