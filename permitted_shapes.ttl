@@ -65,6 +65,9 @@
         sh:minInclusive 1 ;
         sh:maxInclusive 7 ;
         sh:datatype xsd:integer ;
+    ] ;
+    sh:property [
+        sh:path foaf:phone ;
     ] .
 
 :AddressShape1

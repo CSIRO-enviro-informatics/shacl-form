@@ -12,7 +12,8 @@ URIs = {
         "http://www.w3.org/2001/XMLSchema#double"
     ],
     "EMAIL": "http://xmlns.com/foaf/0.1/mbox",
-    "DATE": "http://www.w3.org/2001/XMLSchema#date"
+    "DATE": "http://www.w3.org/2001/XMLSchema#date",
+    "PHONE_NUMBER": "http://xmlns.com/foaf/0.1/phone"
 }
 
 def render_template(form_name, shape):

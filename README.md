@@ -70,9 +70,9 @@ No current support
 Should supply a list of options. The input field will be a dropdown containing all the options.
 
 **sh:datatype**
-If the datatype is xsd:integer, xsd:float or xsd:double, the input field will be of type 'number'.
-if the datatype is xsd:date, the input field will be of type 'date'.
-Otherwise, it will be of type 'text'.
+If the datatype is xsd:integer, xsd:float or xsd:double, the input field will be of type `number`.
+if the datatype is xsd:date, the input field will be of type `date`.
+Otherwise, it will be of type `text`.
 
 **sh:minInclusive**
 Will set the minimum accepted value of the input field, including the value provided. The user will not be able to
@@ -92,4 +92,7 @@ submit values outside the accepted range.
 
 **Other**  
 *foaf:mbox*  
-If a property requires a foaf:mbox, the corresponding input field will have input type `email`.
+If a property requires a foaf:mbox predicate, the corresponding input field will have input type `email`.
+
+*foaf:phone*
+If a property requires a foaf:phone predicate, the corresponding input field will have input teil `tel`.
