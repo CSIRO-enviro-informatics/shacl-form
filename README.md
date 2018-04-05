@@ -73,6 +73,22 @@ Should supply a list of options. The input field will be a dropdown containing a
 If the datatype is xsd:integer, xsd:float or xsd:double, the input field will be of type 'number'. Otherwise, it will be
 of type 'text'.
 
+**sh:minInclusive**
+Will set the minimum accepted value of the input field, including the value provided. The user will not be able to
+submit values outside the accepted range.
+
+**sh:maxExclusive**
+Will set the maximum accepted value of the input field, excluding the value provided. The user will not be able to
+submit values outside the accepted range.
+
+**sh:maxInclusive**
+Will set the maximum accepted value of the input field, including the value provided. The user will not be able to
+submit values outside the accepted range.
+
+**sh:minExclusive**
+Will set the minimum accepted value of the input field, excluding the value provided. The user will not be able to
+submit values outside the accepted range.
+
 **Other**  
 *foaf:mbox*  
 If a property requires a foaf:mbox, the corresponding input field will have input type `email`.

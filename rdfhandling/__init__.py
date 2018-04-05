@@ -90,23 +90,43 @@ class RDFHandler:
             # If the property doesn't have a name label, fall back to the URI of the path.
             if "name" not in constraints:
                 constraints["name"] = constraints["path"].rsplit('/', 1)[1]
-            # Get information about the property's order
+            # There must be an entry for order even if it is unordered
             if "order" not in constraints:
                 constraints["order"] = None
+            # Convert to string
+            if "datatype" in constraints:
+                constraints["datatype"] = str(constraints["datatype"])
             # Validate other input
             if "minCount" in constraints:
                 try:
                     constraints["minCount"] = int(constraints["minCount"])
                 except ValueError:
                     raise Exception(
-                        "MinCount value must be an integer: '{value}'".format(value=constraints["minCount"]))
+                        "minCount value must be an integer: '{value}'".format(value=constraints["minCount"]))
             if "path" in constraints:
                 constraints["path"] = str(constraints["path"])
             else:
                 raise Exception("Every property must have a path associated with it: " + p_uri)
-            # Convert to string
-            if "datatype" in constraints:
-                constraints["datatype"] = str(constraints["datatype"])
+            if "minInclusive" in constraints and "minExclusive" in constraints:
+                raise Exception("minInclusive and minExclusive constraints are specified for property: " + p_uri +
+                                ". Only one may be used.")
+            if "maxInclusive" in constraints and "maxExclusive" in constraints:
+                raise Exception("maxInclusive and maxExclusive constraints are specified for property: " + p_uri +
+                                ". Only one may be used.")
+
+            # Consolidate inclusive and exclusive terms
+            if "minInclusive" in constraints:
+                constraints["min"] = float(constraints["minInclusive"])
+                del constraints["minInclusive"]
+            elif "minExclusive" in constraints:
+                constraints["min"] = float(constraints["minExclusive"]) + 1
+                del constraints["minExclusive"]
+            if "maxInclusive" in constraints:
+                constraints["max"] = float(constraints["maxInclusive"])
+                del constraints["maxInclusive"]
+            elif "maxExclusive" in constraints:
+                constraints["max"] = float(constraints["maxExclusive"]) - 1
+                del constraints["maxExclusive"]
 
             # Place the property in the correct place
             group_uri = self.g.value(p_uri, URIRef(SHACL + "group"), None)

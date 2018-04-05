@@ -34,7 +34,6 @@
         sh:lessThan schema:deathDate ;
         sh:maxCount 1 ;
         sh:minCount 1 ;
-        sh:datatype xsd:integer ;
         sh:group :DateGroup1 ;
         sh:order 1 ;
     ] ;
@@ -58,6 +57,12 @@
     sh:property [
         sh:path foaf:mbox ;
         sh:minCount 1 ;
+    ] ;
+    sh:property [
+        sh:path :gpa ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 7 ;
+        sh:datatype xsd:integer ;
     ] .
 
 :AddressShape1

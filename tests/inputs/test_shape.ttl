@@ -27,11 +27,16 @@
         sh:maxCount 1 ;
         sh:minCount 1 ;
         sh:group :DateGroup1 ;
-        sh:datatype xsd:integer ;
     ] ;
     sh:property [
         sh:path schema:address ;
         sh:group :AddressGroup1 ;
+    ] ;
+    sh:property [
+        sh:path :gpa ;
+        sh:minInclusive 1 ;
+        sh:maxInclusive 7 ;
+        sh:datatype xsd:integer ;
     ] .
 
 :DateGroup1

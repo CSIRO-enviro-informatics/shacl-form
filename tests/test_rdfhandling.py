@@ -55,6 +55,8 @@ def test_shape():
     constraint_order_test(shape)
     constraint_minCount_test(shape)
     constraint_in_test(shape)
+    constraint_min_test(shape)
+    constraint_max_test(shape)
 
 
 def constraint_name_test(shape):
@@ -122,8 +124,26 @@ def constraint_datatype_test(shape):
     expected_value = "http://www.w3.org/2001/XMLSchema#integer"
     properties = shape["properties"]
     for p in properties:
-        if p["path"] == "http://schema.org/birthDate":
+        if p["path"] == "http://example.org/ex#gpa":
             assert p["datatype"] == expected_value
+
+
+def constraint_min_test(shape):
+    # Check that the min is read
+    expected_value = 1
+    properties = shape["properties"]
+    for p in properties:
+        if p["path"] == "http://example.org/ex#gpa":
+            assert p["min"] == expected_value
+
+
+def constraint_max_test(shape):
+    # Check that the min is read
+    expected_value = 7
+    properties = shape["properties"]
+    for p in properties:
+        if p["path"] == "http://example.org/ex#gpa":
+            assert p["max"] == expected_value
 
 
 def group_test(shape):
