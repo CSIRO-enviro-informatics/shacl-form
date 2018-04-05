@@ -3,6 +3,7 @@ from rdflib.term import URIRef
 from rdflib.util import guess_format
 from rdflib.collection import Collection
 from rdflib import RDF, RDFS
+import re
 
 """
 Reads information from a SHACL Shapes file.
@@ -89,7 +90,7 @@ class RDFHandler:
                 constraints["in"] = list(Collection(self.g, constraints["in"]))
             # If the property doesn't have a name label, fall back to the URI of the path.
             if "name" not in constraints:
-                constraints["name"] = constraints["path"].rsplit('/', 1)[1]
+                constraints["name"] = re.split("#|/", constraints["path"])[-1]
             # There must be an entry for order even if it is unordered
             if "order" not in constraints:
                 constraints["order"] = None
