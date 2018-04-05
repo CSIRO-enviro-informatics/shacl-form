@@ -45,11 +45,22 @@ def test_path():
     assert any(str(p["path"] == expected_path for p in properties))
 
 
-def test_constraint_name():
+def test_shape():
+    shape = RDFHandler("inputs/test_shape.ttl").get_shape()
+    # Run the following tests on the test shape
+    # They won't be automatically discovered by pytest without the test_ prefix
+    constraint_name_test(shape)
+    constraint_description_test(shape)
+    constraint_defaultValue_test(shape)
+    constraint_order_test(shape)
+    constraint_minCount_test(shape)
+    constraint_in_test(shape)
+
+
+def constraint_name_test(shape):
     # Check the name is read
     expected_name = "Given name"
-    RDF_handler = RDFHandler("inputs/test_shape.ttl")
-    properties = RDF_handler.get_shape()["properties"]
+    properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
             assert str(p["name"]) == expected_name
@@ -61,72 +72,64 @@ def test_constraint_name():
             assert str(p["name"]) == expected_name
 
 
-def test_constraint_description():
+def constraint_description_test(shape):
     # Check the desc is read
     expected_desc = "The first name of a person."
-    RDF_handler = RDFHandler("inputs/test_shape.ttl")
-    properties = RDF_handler.get_shape()["properties"]
+    properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
             assert str(p["description"]) == expected_desc
 
 
-def test_constraint_defaultValue():
+def constraint_defaultValue_test(shape):
     # Check the default value is read
     expected_value = "Steve"
-    RDF_handler = RDFHandler("inputs/test_shape.ttl")
-    properties = RDF_handler.get_shape()["properties"]
+    properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
             assert str(p["defaultValue"]) == expected_value
 
 
-def test_constraint_order():
+def constraint_order_test(shape):
     # Check the order is read
     expected_value = 1
-    RDF_handler = RDFHandler("inputs/test_shape.ttl")
-    properties = RDF_handler.get_shape()["properties"]
+    properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
             assert int(p["order"]) == expected_value
 
 
-def test_constraint_minCount():
+def constraint_minCount_test(shape):
     # Check the minimum count is read
     expected_value = 1
-    RDF_handler = RDFHandler("inputs/test_shape.ttl")
-    properties = RDF_handler.get_shape()["properties"]
+    properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/birthDate":
             assert int(p["minCount"]) == expected_value
 
 
-def test_constraint_in():
+def constraint_in_test(shape):
     # Check that the 'in' constraint options are read
     expected_value = [Literal("Steve"), Literal("Terrence")]
-    RDF_handler = RDFHandler("inputs/test_shape.ttl")
-    properties = RDF_handler.get_shape()["properties"]
+    properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
             assert p["in"] == expected_value
 
 
-def test_constraint_datatype():
+def constraint_datatype_test(shape):
     # Check that the datatype is read
     expected_value = "http://www.w3.org/2001/XMLSchema#integer"
-    RDF_handler = RDFHandler("inputs/test_shape.ttl")
-    properties = RDF_handler.get_shape()["properties"]
+    properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/birthDate":
             assert p["datatype"] == expected_value
 
 
-def test_group():
+def group_test(shape):
     # Check that groups are structured correctly
     expected_label = "Birth & Death Date"
     expected_order = 0
-    RDF_handler = RDFHandler("inputs/test_shape.ttl")
-    shape = RDF_handler.get_shape()
     groups = shape["groups"]
     # Labels, optional
     assert any(g["label"] is None for g in groups)
