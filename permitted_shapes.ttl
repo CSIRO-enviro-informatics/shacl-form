@@ -74,6 +74,10 @@
     ] ;
     sh:property [
         sh:path foaf:phone ;
+    ] ;
+    sh:property [
+        sh:path :likesCats ;
+        sh:datatype xsd:boolean ;
     ] .
 
 :AddressShape1

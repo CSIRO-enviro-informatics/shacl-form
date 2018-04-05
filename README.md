@@ -70,9 +70,15 @@ No current support
 Should supply a list of options. The input field will be a dropdown containing all the options.
 
 **sh:datatype**
-If the datatype is xsd:integer, xsd:float or xsd:double, the input field will be of type `number`.
-If the datatype is xsd:date, the input field will be of type `date`.
-If the datatype is xsd:time, the input field will be of type `time`.
+The datatype will determine the input field type.
+
+| Datatype                           | Input Type |
+|------------------------------------|------------|
+| xsd:integer, xsd:float, xsd:double | number     |
+| xsd:date                           | date       |
+| xsd:time                           | time       |
+| xsd:boolean                        | checkbox   |
+
 Otherwise, it will be of type `text`.
 
 **sh:minInclusive**
