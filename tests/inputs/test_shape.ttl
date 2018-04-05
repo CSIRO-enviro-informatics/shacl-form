@@ -27,6 +27,7 @@
         sh:maxCount 1 ;
         sh:minCount 1 ;
         sh:group :DateGroup1 ;
+        sh:datatype xsd:integer ;
     ] ;
     sh:property [
         sh:path schema:address ;

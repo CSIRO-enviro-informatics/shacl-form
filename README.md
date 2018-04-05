@@ -69,6 +69,10 @@ No current support
 **sh:in**  
 Should supply a list of options. The input field will be a dropdown containing all the options.
 
+**sh:datatype**
+If the datatype is xsd:integer, xsd:float or xsd:double, the input field will be of type 'number'. Otherwise, it will be
+of type 'text'.
+
 **Other**  
 *foaf:mbox*  
 If a property requires a foaf:mbox, the corresponding input field will have input type `email`.

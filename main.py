@@ -4,7 +4,6 @@ from rendering import render_template
 
 
 def generate_webform(filename):
-    # File name passed as command-line argument
     RDF_handler = RDFHandler(filename)
 
     # Get shape
@@ -35,4 +34,5 @@ def generate_webform(filename):
 
 
 if __name__ == "__main__":
+    # File name passed as command-line argument
     generate_webform(sys.argv[1])

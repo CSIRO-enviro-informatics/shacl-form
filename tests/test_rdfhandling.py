@@ -111,6 +111,16 @@ def test_constraint_in():
             assert p["in"] == expected_value
 
 
+def test_constraint_datatype():
+    # Check that the datatype is read
+    expected_value = "http://www.w3.org/2001/XMLSchema#integer"
+    RDF_handler = RDFHandler("inputs/test_shape.ttl")
+    properties = RDF_handler.get_shape()["properties"]
+    for p in properties:
+        if p["path"] == "http://schema.org/birthDate":
+            assert p["datatype"] == expected_value
+
+
 def test_group():
     # Check that groups are structured correctly
     expected_label = "Birth & Death Date"

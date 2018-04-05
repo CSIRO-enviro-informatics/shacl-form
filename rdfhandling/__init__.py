@@ -104,6 +104,9 @@ class RDFHandler:
                 constraints["path"] = str(constraints["path"])
             else:
                 raise Exception("Every property must have a path associated with it: " + p_uri)
+            # Convert to string
+            if "datatype" in constraints:
+                constraints["datatype"] = str(constraints["datatype"])
 
             # Place the property in the correct place
             group_uri = self.g.value(p_uri, URIRef(SHACL + "group"), None)
