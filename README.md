@@ -71,7 +71,8 @@ Should supply a list of options. The input field will be a dropdown containing a
 
 **sh:datatype**
 If the datatype is xsd:integer, xsd:float or xsd:double, the input field will be of type `number`.
-if the datatype is xsd:date, the input field will be of type `date`.
+If the datatype is xsd:date, the input field will be of type `date`.
+If the datatype is xsd:time, the input field will be of type `time`.
 Otherwise, it will be of type `text`.
 
 **sh:minInclusive**

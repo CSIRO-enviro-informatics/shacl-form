@@ -46,6 +46,12 @@
         sh:order 2 ;
     ] ;
     sh:property [
+        sh:path  :deathTime ;
+        sh:datatype xsd:time ;
+        sh:group :DateGroup1 ;
+        sh:order 3 ;
+    ] ;
+    sh:property [
         sh:path schema:gender ;
         sh:in ( "female" "male" ) ;
         sh:defaultValue "male" ;
