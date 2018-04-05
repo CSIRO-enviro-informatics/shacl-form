@@ -31,6 +31,7 @@
     ] ;
     sh:property [
         sh:path schema:birthDate ;
+        sh:datatype xsd:date ;
         sh:lessThan schema:deathDate ;
         sh:maxCount 1 ;
         sh:minCount 1 ;
@@ -39,6 +40,7 @@
     ] ;
     sh:property [
         sh:path schema:deathDate ;
+        sh:datatype xsd:date ;
         sh:maxCount 1 ;
         sh:group :DateGroup1 ;
         sh:order 2 ;

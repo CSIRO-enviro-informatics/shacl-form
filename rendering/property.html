@@ -12,9 +12,12 @@
 </select><br />
 {%- else %}
 <input id="{{ property["path"] }}" name="{{ property["path"] }}"
-{%- if property["path"] == URI_EMAIL %} type="email"
-{%- elif "datatype" in property and property["datatype"] in NUMBER_DATATYPES %} type="number"
+{%- if property["path"] == URIs["EMAIL"] %} type="email"
+{%- elif "datatype" in property %}
+{%- if property["datatype"] in URIs["NUMBER"] %} type="number"
+{% elif property["datatype"] == URIs["DATE"] %} type="date"
 {%- else %} type="text"{% endif %}
+{%- endif %}
 {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}"{% endif %}
 {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}
 {%- if "min" in property %} min="{{ property["min"] }}"{% endif %}
