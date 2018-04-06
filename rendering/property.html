@@ -19,11 +19,11 @@
 {% elif property["datatype"] == URIs["DATE"] %} type="date"
 {% elif property["datatype"] == URIs["TIME"] %} type="time"
 {% elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
-{%- else %} type="text"{% endif %}
+{%- else %} type="text"{% if "pattern" in property %} pattern="{{ property["pattern"] }}" title="Must match pattern: {{ property["pattern"] }}"{% endif %}{% endif %}
 {%- endif %}
 {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}"{% endif %}
 {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}
 {%- if "min" in property %} min="{{ property["min"] }}"{% endif %}
 {%- if "max" in property %} max="{{ property["max"] }}"{% endif %}
-{% if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %} /><br />
-{%- endif %}
+{%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %} />
+{%- endif %}<br />

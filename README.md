@@ -100,6 +100,10 @@ submit values outside the accepted range.
 **sh:maxlength**
 Will set the maximum length of the input field.
 
+**sh:pattern**
+Will set the regex pattern of the input field. Note that a blank field will still be accepted unless the field is also
+required.
+
 **Other**  
 *foaf:mbox*  
 If a property requires a foaf:mbox predicate, the corresponding input field will have input type `email`.
