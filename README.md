@@ -97,6 +97,9 @@ submit values outside the accepted range.
 Will set the minimum accepted value of the input field, excluding the value provided. The user will not be able to
 submit values outside the accepted range.
 
+**sh:maxlength**
+Will set the maximum length of the input field.
+
 **Other**  
 *foaf:mbox*  
 If a property requires a foaf:mbox predicate, the corresponding input field will have input type `email`.
