@@ -19,7 +19,10 @@
 {% elif property["datatype"] == URIs["DATE"] %} type="date"
 {% elif property["datatype"] == URIs["TIME"] %} type="time"
 {% elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
-{%- else %} type="text"{% if "pattern" in property %} pattern="{{ property["pattern"] }}" title="Must match pattern: {{ property["pattern"] }}"{% endif %}{% endif %}
+{%- else %} type="text"
+{%- if "pattern" in property %} pattern="/{{ property["pattern"] }}/
+{%- if "flags" in property %}{{ property["flags"] }}
+{%- endif %}" title="Must match pattern: {{ property["pattern"] }}"{% endif %}{% endif %}
 {%- endif %}
 {%- if "defaultValue" in property %} value="{{ property["defaultValue"] }}"{% endif %}
 {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}

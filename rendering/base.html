@@ -10,7 +10,7 @@
 </head>
 <body>
     <h1>Create New {{ form_name }}</h1>
-    <form>
+    <form id="form">
         {%- for group in shape["groups"] %}
         <fieldset>
             <legend>{{ group["label"] }}</legend>
@@ -26,3 +26,15 @@
     </form>
 </body>
 </html>
+<script src="jquery-validation/lib/jquery.js"></script>
+<script src="jquery-validation/dist/jquery.validate.js"></script>
+<script src="jquery-validation/src/additional/pattern.js"></script>
+<script>
+    $("#form").validate({});
+    {%- for property in shape["properties"] %}{% if "pattern" in property %}
+    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", { pattern: /{{ property["pattern"] }}/ })
+    {%- endif %}{%- endfor %}
+    {%- for group in shape["groups"] %} {% for property in group["properties"] %}{% if "pattern" in property %}
+    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", { pattern: /{{ property["pattern"] }}/ })
+    {%- endif %}{%- endfor %}{%- endfor %}
+</script>
