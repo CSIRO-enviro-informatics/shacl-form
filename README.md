@@ -107,12 +107,11 @@ required.
 **sh:flags**
 For use with sh:pattern. The flags set the modifier to be used with the regex expression.
 
-| Datatype                           | Input Type |
-|------------------------------------|------------|
-| xsd:integer, xsd:float, xsd:double | number     |
-| xsd:date                           | date       |
-| xsd:time                           | time       |
-| xsd:boolean                        | checkbox   |
+| Modifier | Description                                                                          |
+|----------|--------------------------------------------------------------------------------------|
+| i        | Perform case-insensitive matching                                                    |
+| g        | Perform a global match (find all matches rather than stopping after the first match) |
+| m        | Perform multiline matching                                                           |
 
 **Other**  
 *foaf:mbox*  
