@@ -32,9 +32,9 @@
 <script>
     $("#form").validate({});
     {%- for property in shape["properties"] %}{% if "pattern" in property %}
-    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", { pattern: /{{ property["pattern"] }}/ })
+    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", { pattern: /{{ property["pattern"] }}/{{ property["flags"] }} })
     {%- endif %}{%- endfor %}
     {%- for group in shape["groups"] %} {% for property in group["properties"] %}{% if "pattern" in property %}
-    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", { pattern: /{{ property["pattern"] }}/ })
+    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", { pattern: /{{ property["pattern"] }}/{{ property["flags"] }} })
     {%- endif %}{%- endfor %}{%- endfor %}
 </script>

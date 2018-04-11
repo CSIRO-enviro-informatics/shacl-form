@@ -104,9 +104,19 @@ Will set the maximum length of the input field.
 Will set the regex pattern of the input field. Note that a blank field will still be accepted unless the field is also
 required.
 
+**sh:flags**
+For use with sh:pattern. The flags set the modifier to be used with the regex expression.
+
+| Datatype                           | Input Type |
+|------------------------------------|------------|
+| xsd:integer, xsd:float, xsd:double | number     |
+| xsd:date                           | date       |
+| xsd:time                           | time       |
+| xsd:boolean                        | checkbox   |
+
 **Other**  
 *foaf:mbox*  
 If a property requires a foaf:mbox predicate, the corresponding input field will have input type `email`.
 
 *foaf:phone*
-If a property requires a foaf:phone predicate, the corresponding input field will have input teil `tel`.
+If a property requires a foaf:phone predicate, the corresponding input field will have input type `tel`.

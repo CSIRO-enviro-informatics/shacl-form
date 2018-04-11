@@ -8,8 +8,14 @@
 </head>
 <body>
     <h1>Create New Person</h1>
-    <form>
+    <form id="form">
         <input type="submit" value="Submit" />
     </form>
 </body>
 </html>
+<script src="jquery-validation/lib/jquery.js"></script>
+<script src="jquery-validation/dist/jquery.validate.js"></script>
+<script src="jquery-validation/src/additional/pattern.js"></script>
+<script>
+    $("#form").validate({});
+</script>

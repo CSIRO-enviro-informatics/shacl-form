@@ -22,6 +22,12 @@
         sh:in ( "Steve" "Terrence" ) ;
     ] ;
     sh:property [
+        sh:path schema:familyName ;
+        sh:datatype xsd:string ;
+        sh:pattern "^G" ;
+        sh:flags "i" ;
+    ] ;
+    sh:property [
         sh:path schema:birthDate ;
         sh:lessThan schema:deathDate ;
         sh:maxCount 1 ;

@@ -146,6 +146,24 @@ def constraint_max_test(shape):
             assert p["max"] == expected_value
 
 
+def constraint_pattern_test(shape):
+    # Check that the pattern is read
+    expected_value = "^G"
+    properties = shape["properties"]
+    for p in properties:
+        if p["path"] == "http://example.org/familyName":
+            assert p["pattern"] == expected_value
+
+
+def constraint_flags_test(shape):
+    # Check that the flags are read
+    expected_value = "i"
+    properties = shape["properties"]
+    for p in properties:
+        if p["path"] == "http://example.org/familyName":
+            assert p["flags"] == expected_value
+
+
 def group_test(shape):
     # Check that groups are structured correctly
     expected_label = "Birth & Death Date"
