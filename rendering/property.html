@@ -7,12 +7,16 @@
 {% for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label><br />
 {%- endif %}
 {%- if "in" in property %}
-<select name="{{ property["path"] }}" id="{{ property["path"] }}">
+<select name="{{ property["path"] }}" id="{{ property["path"] }}"
+{%- if "hasValue" in property %} disabled readonly>
+    <option value="{{ property["hasValue"] }}" selected>{{ property["hasValue"] }}</option>
+{%- else %}
 {%- for option in property["in"] %}
     <option value="{{ option }}"
     {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
     {{- option }}</option>
 {%- endfor %}
+{%- endif %}
 </select><br />
 {%- else %}
 <input id="{{ property["path"] }}" name="{{ property["path"] }}"

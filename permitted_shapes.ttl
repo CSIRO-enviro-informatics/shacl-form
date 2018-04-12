@@ -57,8 +57,8 @@
     ] ;
     sh:property [
         sh:path schema:gender ;
-        sh:in ( "female" "male" ) ;
-        sh:defaultValue "male" ;
+        sh:in ( "male"  "female" ) ;
+        sh:hasValue "male" ;
         sh:order 0 ;
     ] ;
     sh:property [
@@ -85,6 +85,7 @@
     ] ;
     sh:property [
         sh:path :likesDogs ;
+        sh:datatype xsd:boolean ;
         sh:hasValue "true" ;
     ] .
 
