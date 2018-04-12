@@ -27,7 +27,7 @@
 {%- elif property["datatype"] == URIs["DATE"] %} type="date"
 {%- elif property["datatype"] == URIs["TIME"] %} type="time"
 {%- elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
-{%- if "hasValue" in property and (property["hasValue"] == "1" or property["hasValue"] == "True") %} checked{% endif %}
+{%- if "hasValue" in property and property["hasValue"] == True %} checked{% endif %}
 {%- else %} type="text"
 {%- endif %}
 {%- endif %}
