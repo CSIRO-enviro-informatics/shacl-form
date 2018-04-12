@@ -17,5 +17,5 @@
 <script src="jquery-validation/dist/jquery.validate.js"></script>
 <script src="jquery-validation/src/additional/pattern.js"></script>
 <script>
-    $("#form").validate({});
+    $("#form").validate({ ignore: ":input[disabled]" });
 </script>

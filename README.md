@@ -113,6 +113,11 @@ For use with sh:pattern. The flags set the modifier to be used with the regex ex
 | g        | Perform a global match (find all matches rather than stopping after the first match) |
 | m        | Perform multiline matching                                                           |
 
+**sh:hasValue**
+This input field will be displayed to the user and submitted with the form, but they will be unable to change it. The
+value of this input field will be pre-filled and it will be disabled and set to readonly. This field will also be
+excluded from form validation.
+
 **Other**  
 *foaf:mbox*  
 If a property requires a foaf:mbox predicate, the corresponding input field will have input type `email`.

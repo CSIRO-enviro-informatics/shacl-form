@@ -1,0 +1,21 @@
+#Borrowed from http://shacl.org/playground/ for testing purposes.
+
+@prefix dash: <http://datashapes.org/dash#> .
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix : <http://example.org/ex#> .
+
+:PersonShape1
+    a sh:NodeShape ;
+    sh:targetClass schema:Person ;
+    sh:property [
+        sh:path :gpa ;
+        sh:minInclusive 1 ;
+        sh:minExclusive 1 ;
+        sh:maxInclusive 1 ;
+        sh:maxExclusive 1 ;
+    ] .

@@ -45,18 +45,40 @@ def test_path():
     assert any(str(p["path"] == expected_path for p in properties))
 
 
+def test_invalid_mincount():
+    # Check that a non-integer minCount raises the appropriate error
+    RDF_handler = RDFHandler("inputs/invalid_minCount.ttl")
+    with pytest.raises(Exception):
+        RDF_handler.get_shape()
+
+
+def test_inclusive_exclusive():
+    # If both minInclusive and minExclusive are present an exception should be raised
+    RDF_handler = RDFHandler("inputs/inclusive_exclusive.ttl")
+    with pytest.raises(Exception):
+        RDF_handler.get_shape()
+
+
 def test_shape():
     shape = RDFHandler("inputs/test_shape.ttl").get_shape()
-    # Run the following tests on the test shape
+    # Run the following tests on the test shape to avoid getting it every time
     # They won't be automatically discovered by pytest without the test_ prefix
+    constraint_generic_constraint_test(shape)
     constraint_name_test(shape)
-    constraint_description_test(shape)
-    constraint_defaultValue_test(shape)
     constraint_order_test(shape)
     constraint_minCount_test(shape)
     constraint_in_test(shape)
     constraint_min_test(shape)
     constraint_max_test(shape)
+
+
+def constraint_generic_constraint_test(shape):
+    # Check the desc is read
+    expected_desc = "The first name of a person."
+    properties = shape["properties"]
+    for p in properties:
+        if p["path"] == "http://schema.org/givenName":
+            assert str(p["description"]) == expected_desc
 
 
 def constraint_name_test(shape):
@@ -74,24 +96,6 @@ def constraint_name_test(shape):
             assert str(p["name"]) == expected_name
 
 
-def constraint_description_test(shape):
-    # Check the desc is read
-    expected_desc = "The first name of a person."
-    properties = shape["properties"]
-    for p in properties:
-        if p["path"] == "http://schema.org/givenName":
-            assert str(p["description"]) == expected_desc
-
-
-def constraint_defaultValue_test(shape):
-    # Check the default value is read
-    expected_value = "Steve"
-    properties = shape["properties"]
-    for p in properties:
-        if p["path"] == "http://schema.org/givenName":
-            assert str(p["defaultValue"]) == expected_value
-
-
 def constraint_order_test(shape):
     # Check the order is read
     expected_value = 1
@@ -99,6 +103,11 @@ def constraint_order_test(shape):
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
             assert int(p["order"]) == expected_value
+
+    # Check the order is correctly set to None when it isn't given
+    for p in properties:
+        if p["path"] == "http://schema.org/familyName":
+            assert p["order"] is None
 
 
 def constraint_minCount_test(shape):
@@ -119,15 +128,6 @@ def constraint_in_test(shape):
             assert p["in"] == expected_value
 
 
-def constraint_datatype_test(shape):
-    # Check that the datatype is read
-    expected_value = "http://www.w3.org/2001/XMLSchema#integer"
-    properties = shape["properties"]
-    for p in properties:
-        if p["path"] == "http://example.org/ex#gpa":
-            assert p["datatype"] == expected_value
-
-
 def constraint_min_test(shape):
     # Check that the min is read
     expected_value = 1
@@ -144,24 +144,6 @@ def constraint_max_test(shape):
     for p in properties:
         if p["path"] == "http://example.org/ex#gpa":
             assert p["max"] == expected_value
-
-
-def constraint_pattern_test(shape):
-    # Check that the pattern is read
-    expected_value = "^G"
-    properties = shape["properties"]
-    for p in properties:
-        if p["path"] == "http://example.org/familyName":
-            assert p["pattern"] == expected_value
-
-
-def constraint_flags_test(shape):
-    # Check that the flags are read
-    expected_value = "i"
-    properties = shape["properties"]
-    for p in properties:
-        if p["path"] == "http://example.org/familyName":
-            assert p["flags"] == expected_value
 
 
 def group_test(shape):
