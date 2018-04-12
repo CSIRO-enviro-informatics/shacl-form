@@ -26,9 +26,9 @@
     </form>
 </body>
 </html>
-<script src="jquery-validation/lib/jquery.js"></script>
-<script src="jquery-validation/dist/jquery.validate.js"></script>
-<script src="jquery-validation/src/additional/pattern.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.js"></script>
 <script>
     $("#form").validate({ ignore: ":input[disabled]" });
     {%- for property in shape["properties"] %}{% if "pattern" in property %}
