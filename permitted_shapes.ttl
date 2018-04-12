@@ -86,7 +86,7 @@
     sh:property [
         sh:path :likesDogs ;
         sh:datatype xsd:boolean ;
-        sh:hasValue "true" ;
+        sh:hasValue "1" ;
     ] .
 
 :AddressShape1

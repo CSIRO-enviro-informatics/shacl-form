@@ -100,6 +100,8 @@ class RDFHandler:
             # Convert to string
             if "datatype" in constraints:
                 constraints["datatype"] = str(constraints["datatype"])
+            if "hasValue" in constraints:
+                constraints["hasValue"] = str(constraints["hasValue"])
             # Validate other input
             if "minCount" in constraints:
                 try:
