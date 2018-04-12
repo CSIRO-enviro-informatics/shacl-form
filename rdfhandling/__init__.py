@@ -102,6 +102,8 @@ class RDFHandler:
                 constraints["datatype"] = str(constraints["datatype"])
             if "hasValue" in constraints:
                 constraints["hasValue"] = constraints["hasValue"].toPython()
+            if "defaultValue" in constraints:
+                constraints["defaultValue"] = constraints["defaultValue"].toPython()
             # Validate other input
             if "minCount" in constraints:
                 try:

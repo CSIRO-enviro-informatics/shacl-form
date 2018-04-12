@@ -30,11 +30,35 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.js"></script>
 <script>
+    {#- Disabled fields are not validated #}
     $("#form").validate({ ignore: ":input[disabled]" });
-    {%- for property in shape["properties"] %}{% if "pattern" in property %}
-    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", { pattern: /{{ property["pattern"] }}/{{ property["flags"] }} })
-    {%- endif %}{%- endfor %}
-    {%- for group in shape["groups"] %} {% for property in group["properties"] %}{% if "pattern" in property %}
-    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", { pattern: /{{ property["pattern"] }}/{{ property["flags"] }} })
-    {%- endif %}{%- endfor %}{%- endfor %}
+    {%- for property in shape["properties"] %}
+    {#- Add pattern rule #}
+    {%- if "pattern" in property %}
+    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
+        pattern: /{{ property["pattern"] }}/{{ property["flags"] }}
+    });
+    {%- endif %}
+    {#- Add equalTo rule #}
+    {%- if "equals" in property %}
+    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
+        equalTo: $.escapeSelector("{{ property["equals"] }}")
+    });
+    {%- endif %}
+    {%- endfor %}
+    {%- for group in shape["groups"] %} {% for property in group["properties"] %}
+    {#- Add pattern rule #}
+    {%- if "pattern" in property %}
+    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
+        pattern: /{{ property["pattern"] }}/{{ property["flags"] }}
+    });
+    {%- endif %}
+    {#- Add equalTo rule #}
+    {%- if "equals" in property %}
+    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
+        equalTo: "#" + $.escapeSelector("{{ property["equals"] }}")
+    });
+    {%- endif %}
+    {%- endfor %}
+    {%- endfor %}
 </script>

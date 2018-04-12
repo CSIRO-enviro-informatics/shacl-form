@@ -23,18 +23,20 @@
 {%- if property["path"] == URIs["EMAIL"] %} type="email"
 {%- elif property["path"] == URIs["PHONE_NUMBER"] %} type="tel"
 {%- elif "datatype" in property %}
-{%- if property["datatype"] in URIs["NUMBER"] %} type="number"
-{%- elif property["datatype"] == URIs["DATE"] %} type="date"
-{%- elif property["datatype"] == URIs["TIME"] %} type="time"
-{%- elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
-{%- if "hasValue" in property and property["hasValue"] == True %} checked{% endif %}
-{%- else %} type="text"
-{%- endif %}
+    {%- if property["datatype"] in URIs["NUMBER"] %} type="number"
+    {%- elif property["datatype"] == URIs["DATE"] %} type="date"
+    {%- elif property["datatype"] == URIs["TIME"] %} type="time"
+    {%- elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
+        {%- if "hasValue" in property and property["hasValue"] == True %} checked readonly disabled
+        {%- elif "defaultValue" in property and property["defaultValue"] == True %} checked
+        {%- endif %}
+    {%- else %} type="text"
+        {%- if "hasValue" in property %} readonly disabled value="{{ property["hasValue"] }}" title="This value cannot be changed."
+        {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
+        {%- endif %}
+    {%- endif %}
 {%- endif %}
 {%- if "pattern" in property %} title="Must match pattern: /{{ property["pattern"] }}/{{ property["flags"] }}"{% endif %}
-{%- if "hasValue" in property %} readonly disabled value="{{ property["hasValue"] }}" title="This value cannot be changed."
-{%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
-{% endif %}
 {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}
 {%- if "min" in property %} min="{{ property["min"] }}"{% endif %}
 {%- if "max" in property %} max="{{ property["max"] }}"{% endif %}
