@@ -2,6 +2,10 @@
 {%- if "description" in property %}
 <label for="{{ property["path"] }}"><i>{{ property["description"] }}</i></label><br />
 {%- endif %}
+{%- if "languageIn" in property %}
+<label for="{{ property["path"] }}"><i>Language:
+{% for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label><br />
+{%- endif %}
 {%- if "in" in property %}
 <select name="{{ property["path"] }}" id="{{ property["path"] }}">
 {%- for option in property["in"] %}
@@ -16,9 +20,9 @@
 {%- elif property["path"] == URIs["PHONE_NUMBER"] %} type="tel"
 {%- elif "datatype" in property %}
 {%- if property["datatype"] in URIs["NUMBER"] %} type="number"
-{% elif property["datatype"] == URIs["DATE"] %} type="date"
-{% elif property["datatype"] == URIs["TIME"] %} type="time"
-{% elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
+{%- elif property["datatype"] == URIs["DATE"] %} type="date"
+{%- elif property["datatype"] == URIs["TIME"] %} type="time"
+{%- elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
 {%- else %} type="text"
 {%- endif %}
 {%- endif %}

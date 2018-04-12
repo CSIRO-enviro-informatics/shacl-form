@@ -21,6 +21,7 @@
         sh:group :NameGroup1 ;
         sh:order 1 ;
         sh:maxLength 20 ;
+        sh:languageIn ("es" "en") ;
     ] ;
     sh:property [
         sh:path schema:familyName ;

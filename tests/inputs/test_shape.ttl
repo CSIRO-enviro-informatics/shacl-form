@@ -26,6 +26,7 @@
         sh:datatype xsd:string ;
         sh:pattern "^G" ;
         sh:flags "i" ;
+        sh:languageIn ("en" "es") ;
     ] ;
     sh:property [
         sh:path schema:birthDate ;

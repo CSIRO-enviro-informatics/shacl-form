@@ -88,6 +88,9 @@ class RDFHandler:
             # Gets the list of acceptable values for constraint "IN" rather than the blank node representing it
             if "in" in constraints:
                 constraints["in"] = list(Collection(self.g, constraints["in"]))
+            # Gets the list of acceptable values for constraint "languageIn" rather than the blank node representing it
+            if "languageIn" in constraints:
+                constraints["languageIn"] = [str(l) for l in list(Collection(self.g, constraints["languageIn"]))]
             # If the property doesn't have a name label, fall back to the URI of the path.
             if "name" not in constraints:
                 constraints["name"] = re.split("#|/", constraints["path"])[-1]

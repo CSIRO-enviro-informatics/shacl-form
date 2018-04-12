@@ -68,6 +68,7 @@ def test_shape():
     constraint_order_test(shape)
     constraint_minCount_test(shape)
     constraint_in_test(shape)
+    constraint_languagein_test(shape)
     constraint_min_test(shape)
     constraint_max_test(shape)
 
@@ -126,6 +127,15 @@ def constraint_in_test(shape):
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
             assert p["in"] == expected_value
+
+
+def constraint_languagein_test(shape):
+    # Check that the 'languageIn' constraint options are read
+    expected_value = ["en", "es"]
+    properties = shape["properties"]
+    for p in properties:
+        if p["path"] == "http://schema.org/familyName":
+            assert p["languageIn"] == expected_value
 
 
 def constraint_min_test(shape):
