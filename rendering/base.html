@@ -1,6 +1,6 @@
-{% macro display_property(property) %}
+{%- macro display_property(property) %}
 {%- include "property.html" %}
-{%- endmacro %}
+{%- endmacro -%}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -30,10 +30,22 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.js"></script>
 <script>
+    {#- Custom method for using equals with checkboxes #}
+    $.validator.addMethod("equalToCheckbox", function(value, element, params) {
+        if ($(params).is(":checked") == $(element).is(":checked"))
+            return true;
+        return false;
+    }, "Message" );
+
     {#- Disabled fields are not validated #}
-    $("#form").validate({ ignore: ":input[disabled]", equalTo: ":input[equalTo]" });
-    {%- for property in shape["properties"] %}
+    $("#form").validate({
+        ignore: ":input[disabled]",
+        equalTo: ":input[equalTo]",
+        equalToCheckbox: ":input[equalToCheckbox]"
+    });
+
     {#- Add pattern rule #}
+    {%- for property in shape["properties"] %}
     {%- if "pattern" in property %}
     $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
         pattern: /{{ property["pattern"] }}/{{ property["flags"] }}
@@ -41,7 +53,6 @@
     {%- endif %}
     {%- endfor %}
     {%- for group in shape["groups"] %} {% for property in group["properties"] %}
-    {#- Add pattern rule #}
     {%- if "pattern" in property %}
     $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
         pattern: /{{ property["pattern"] }}/{{ property["flags"] }}

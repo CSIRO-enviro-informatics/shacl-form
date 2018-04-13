@@ -20,6 +20,7 @@
         sh:name "Given name" ;
         sh:order 1 ;
         sh:in ( "Steve" "Terrence" ) ;
+        sh:equals schema:familyName ;
     ] ;
     sh:property [
         sh:path schema:familyName ;

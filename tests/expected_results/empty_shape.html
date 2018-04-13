@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -17,5 +15,14 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.js"></script>
 <script>
-    $("#form").validate({ ignore: ":input[disabled]" });
+    $.validator.addMethod("equalToCheckbox", function(value, element, params) {
+        if ($(params).is(":checked") == $(element).is(":checked"))
+            return true;
+        return false;
+    }, "Message" );
+    $("#form").validate({
+        ignore: ":input[disabled]",
+        equalTo: ":input[equalTo]",
+        equalToCheckbox: ":input[equalToCheckbox]"
+    });
 </script>

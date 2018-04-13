@@ -82,6 +82,7 @@
     sh:property [
         sh:path :likesCats ;
         sh:datatype xsd:boolean ;
+        sh:equals :likesDogs ;
     ] ;
     sh:property [
         sh:path :likesDogs ;

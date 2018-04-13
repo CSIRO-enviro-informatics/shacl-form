@@ -24,22 +24,23 @@
 {%- elif property["path"] == URIs["PHONE_NUMBER"] %} type="tel"
 {%- elif "datatype" in property %}
     {%- if property["datatype"] in URIs["NUMBER"] %} type="number"
+        {%- if "min" in property %} min="{{ property["min"] }}"{% endif %}
+        {%- if "max" in property %} max="{{ property["max"] }}"{% endif %}
     {%- elif property["datatype"] == URIs["DATE"] %} type="date"
     {%- elif property["datatype"] == URIs["TIME"] %} type="time"
     {%- elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
         {%- if "hasValue" in property and property["hasValue"] == True %} checked readonly disabled
-        {%- elif "defaultValue" in property and property["defaultValue"] == True %} checked
-        {%- endif %}
+        {%- elif "defaultValue" in property and property["defaultValue"] == True %} checked{%- endif %}
+        {%- if "equals_id" in property %} equalToCheckbox="#{{ property["equals_id"] }}"{% endif %}
     {%- else %} type="text"
         {%- if "hasValue" in property %} readonly disabled value="{{ property["hasValue"] }}" title="This value cannot be changed."
         {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
         {%- endif %}
+        {%- if "equals_id" in property %} equalTo="#{{ property["equals_id"] }}"{% endif %}
     {%- endif %}
 {%- endif %}
+{#- Stuff that applies no matter the type of input #}
 {%- if "pattern" in property %} title="Must match pattern: /{{ property["pattern"] }}/{{ property["flags"] }}"{% endif %}
 {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}
-{%- if "min" in property %} min="{{ property["min"] }}"{% endif %}
-{%- if "max" in property %} max="{{ property["max"] }}"{% endif %}
-{%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %}
-{%- if "equals_id" in property %} equalTo="{{ property["equals_id"] }}"{% endif %} />
+{%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %} />
 {%- endif %}<br />
