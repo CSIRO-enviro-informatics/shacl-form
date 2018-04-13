@@ -31,18 +31,12 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.js"></script>
 <script>
     {#- Disabled fields are not validated #}
-    $("#form").validate({ ignore: ":input[disabled]" });
+    $("#form").validate({ ignore: ":input[disabled]", equalTo: ":input[equalTo]" });
     {%- for property in shape["properties"] %}
     {#- Add pattern rule #}
     {%- if "pattern" in property %}
     $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
         pattern: /{{ property["pattern"] }}/{{ property["flags"] }}
-    });
-    {%- endif %}
-    {#- Add equalTo rule #}
-    {%- if "equals" in property %}
-    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
-        equalTo: $.escapeSelector("{{ property["equals"] }}")
     });
     {%- endif %}
     {%- endfor %}
@@ -51,12 +45,6 @@
     {%- if "pattern" in property %}
     $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
         pattern: /{{ property["pattern"] }}/{{ property["flags"] }}
-    });
-    {%- endif %}
-    {#- Add equalTo rule #}
-    {%- if "equals" in property %}
-    $("#" + $.escapeSelector("{{ property["path"] }}")).rules("add", {
-        equalTo: "#" + $.escapeSelector("{{ property["equals"] }}")
     });
     {%- endif %}
     {%- endfor %}

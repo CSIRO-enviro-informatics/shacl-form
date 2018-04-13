@@ -40,5 +40,6 @@
 {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}
 {%- if "min" in property %} min="{{ property["min"] }}"{% endif %}
 {%- if "max" in property %} max="{{ property["max"] }}"{% endif %}
-{%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %}/>
+{%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %}
+{%- if "equals_id" in property %} equalTo="{{ property["equals_id"] }}"{% endif %} />
 {%- endif %}<br />
