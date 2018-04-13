@@ -19,7 +19,7 @@
 {%- endif %}
 </select><br />
 {%- else %}
-<input id="{{ property["path"] }}" name="{{ property["path"] }}"
+<input id="{{ property["path"] }}" name="{{ property["path"] }}" label="{{ property["name"] }}"
 {%- if property["path"] == URIs["EMAIL"] %} type="email"
 {%- elif property["path"] == URIs["PHONE_NUMBER"] %} type="tel"
 {%- elif "datatype" in property %}

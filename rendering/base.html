@@ -60,4 +60,20 @@
     {%- endif %}
     {%- endfor %}
     {%- endfor %}
+
+    {#- Sets the message for equalTo validation #}
+    $(":input[equalTo]").each(function(index) {
+        $(this).rules("add", {
+            messages: { equalTo: $.validator.format("Must be equal to {0}",$($(this).attr("equalTo")).attr("label")) }
+        });
+    });
+
+    {#- Sets the message for equalToCheckbox validation #}
+    $(":input[equalToCheckbox]").each(function(index) {
+        $(this).rules("add", {
+            messages: {
+                equalToCheckbox: $.validator.format("Must be equal to {0}",$($(this).attr("equalToCheckbox")).attr("label"))
+            }
+        });
+    });
 </script>
