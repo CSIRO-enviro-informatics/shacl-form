@@ -45,6 +45,11 @@
         sh:minInclusive 1 ;
         sh:maxInclusive 7 ;
         sh:datatype xsd:integer ;
+        sh:lessThanOrEquals :goalGpa ;
+    ] ;
+    sh:property [
+        sh:path :goalGpa ;
+        sh:datatype xsd:integer ;
     ] ;
     sh:property [
         sh:path :likesCats ;

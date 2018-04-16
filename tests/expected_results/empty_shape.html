@@ -33,7 +33,8 @@
         equalTo: ":input[equalTo]",
         equalToCheckbox: ":input[equalToCheckbox]",
         notEqualTo: ":input[notEqualTo]",
-        lessThan: ":input[lessThan]"
+        lessThan: ":input[lessThan]",
+        lessThanEqual: ":input[lessThanEqual]"
     });
     $(":input[equalTo]").each(function(index) {
         $(this).rules("add", {
@@ -58,6 +59,13 @@
         $(this).rules("add", {
             messages: {
                 lessThan: $.validator.format("Must be less than {0}",$($(this).attr("lessThan")).attr("label"))
+            }
+        });
+    });
+    $(":input[lessThanEqual]").each(function(index) {
+        $(this).rules("add", {
+            messages: {
+                lessThan: $.validator.format("Must be less than or equal to {0}",$($(this).attr("lessThanEqual")).attr("label"))
             }
         });
     });

@@ -143,6 +143,8 @@ class RDFHandler:
                 constraints["disjoint"] = re.escape(constraints["disjoint"])
             if "lessThan" in constraints:
                 constraints["lessThan"] = re.escape(constraints["lessThan"])
+            if "lessThanOrEquals" in constraints:
+                constraints["lessThanOrEquals"] = re.escape(constraints["lessThanOrEquals"])
 
             # Place the property in the correct place
             group_uri = self.g.value(p_uri, URIRef(SHACL + "group"), None)
