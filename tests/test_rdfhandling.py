@@ -73,6 +73,7 @@ def test_shape():
     constraint_max_test(shape)
     constraint_equals_test(shape)
     constraint_disjoint_test(shape)
+    constraint_lessthan_test(shape)
 
 
 def constraint_generic_constraint_test(shape):
@@ -172,8 +173,17 @@ def constraint_disjoint_test(shape):
     expected_value = "http\:\/\/example\.org\/ex\#likesDogs"
     properties = shape["properties"]
     for p in properties:
-        if p["path"] == "#http://example.org/ex#likesCats":
+        if p["path"] == "http://example.org/ex#likesCats":
             assert p["disjoint"] == expected_value
+
+
+def constraint_lessthan_test(shape):
+    # Check that the disjoint is correctly escaped
+    expected_value = "http\:\/\/example\.org\/ex\#deathDate"
+    properties = shape["properties"]
+    for p in properties:
+        if p["path"] == "http://example.org/ex#birthDate":
+            assert p["lessThan"] == expected_value
 
 
 def group_test(shape):

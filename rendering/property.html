@@ -44,5 +44,6 @@
 {%- if "pattern" in property %} title="Must match pattern: /{{ property["pattern"] }}/{{ property["flags"] }}"{% endif %}
 {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}
 {%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %}
-{%- if "disjoint" in property %} notEqualTo="#{{ property["disjoint"] }}"{% endif %} />
+{%- if "disjoint" in property %} notEqualTo="#{{ property["disjoint"] }}"{% endif %}
+{%- if "lessThan" in property %} lessThan="#{{ property["lessThan"] }}"{% endif %} />
 {%- endif %}<br />

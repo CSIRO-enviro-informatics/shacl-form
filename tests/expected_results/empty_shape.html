@@ -12,8 +12,8 @@
 </body>
 </html>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/jquery.validate.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.js"></script>
+<script src="jquery-validation/jquery.validate.js"></script>
+<script src="jquery-validation/additional-methods.js"></script>
 <script>
     $.validator.addMethod("equalToCheckbox", function(value, element, params) {
         if ($(element).is(":checked") == $(params).is(":checked"))
@@ -32,7 +32,8 @@
         ignore: ":input[disabled]",
         equalTo: ":input[equalTo]",
         equalToCheckbox: ":input[equalToCheckbox]",
-        notEqualTo: ":input[notEqualTo]"
+        notEqualTo: ":input[notEqualTo]",
+        lessThan: ":input[lessThan]"
     });
     $(":input[equalTo]").each(function(index) {
         $(this).rules("add", {
@@ -50,6 +51,13 @@
         $(this).rules("add", {
             messages: {
                 notEqualTo: $.validator.format("Must not be equal to {0}",$($(this).attr("notEqualTo")).attr("label"))
+            }
+        });
+    });
+    $(":input[lessThan]").each(function(index) {
+        $(this).rules("add", {
+            messages: {
+                lessThan: $.validator.format("Must be less than {0}",$($(this).attr("lessThan")).attr("label"))
             }
         });
     });

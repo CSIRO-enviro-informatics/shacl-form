@@ -136,11 +136,13 @@ class RDFHandler:
                 constraints["max"] = float(constraints["maxExclusive"]) - 1
                 del constraints["maxExclusive"]
 
-            # Get name and id with escaped special characters for the equals and disjoint constraints
+            # Get name and id with escaped special characters for the pair constraints
             if "equals" in constraints:
                 constraints["equals"] = re.escape(constraints["equals"])
             if "disjoint" in constraints:
                 constraints["disjoint"] = re.escape(constraints["disjoint"])
+            if "lessThan" in constraints:
+                constraints["lessThan"] = re.escape(constraints["lessThan"])
 
             # Place the property in the correct place
             group_uri = self.g.value(p_uri, URIRef(SHACL + "group"), None)

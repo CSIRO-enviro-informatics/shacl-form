@@ -123,8 +123,10 @@ This input field will be required to equal the referenced property. Note that un
 field will be valid.
 
 **sh:disjoint**
-This input field will not be permitted to equal the referenced property. Note that unless the field is required, an
-empty field will be valid.
+This input field will not be permitted to equal the referenced property.
+
+**sh:lessThan**
+This input field must have a value that is less than the referenced property.
 
 **Other**  
 *foaf:mbox*  
