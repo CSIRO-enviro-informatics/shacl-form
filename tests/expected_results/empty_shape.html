@@ -16,13 +16,41 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery-validation@1.17.0/dist/additional-methods.js"></script>
 <script>
     $.validator.addMethod("equalToCheckbox", function(value, element, params) {
-        if ($(params).is(":checked") == $(element).is(":checked"))
+        if ($(element).is(":checked") == $(params).is(":checked"))
             return true;
         return false;
+    }, "Message" );
+    $.validator.addMethod("notEqualTo", function(value, element, params) {
+        if (this.optional(element) == true)
+            return true;
+        if ($(element).attr("type") == "checkbox")
+            return $(element).is(":checked") == $(params).is(":checked") ? false : true;
+        else
+            return $(element).val() == $(params).val() ? false : true;
     }, "Message" );
     $("#form").validate({
         ignore: ":input[disabled]",
         equalTo: ":input[equalTo]",
-        equalToCheckbox: ":input[equalToCheckbox]"
+        equalToCheckbox: ":input[equalToCheckbox]",
+        notEqualTo: ":input[notEqualTo]"
+    });
+    $(":input[equalTo]").each(function(index) {
+        $(this).rules("add", {
+            messages: { equalTo: $.validator.format("Must be equal to {0}",$($(this).attr("equalTo")).attr("label")) }
+        });
+    });
+    $(":input[equalToCheckbox]").each(function(index) {
+        $(this).rules("add", {
+            messages: {
+                equalToCheckbox: $.validator.format("Must be equal to {0}",$($(this).attr("equalToCheckbox")).attr("label"))
+            }
+        });
+    });
+    $(":input[notEqualTo]").each(function(index) {
+        $(this).rules("add", {
+            messages: {
+                notEqualTo: $.validator.format("Must not be equal to {0}",$($(this).attr("notEqualTo")).attr("label"))
+            }
+        });
     });
 </script>

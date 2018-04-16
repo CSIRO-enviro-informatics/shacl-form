@@ -45,6 +45,10 @@
         sh:minInclusive 1 ;
         sh:maxInclusive 7 ;
         sh:datatype xsd:integer ;
+    ] ;
+    sh:property [
+        sh:path :likesCats ;
+        sh:disjoint :likesDogs ;
     ] .
 
 :DateGroup1

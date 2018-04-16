@@ -21,7 +21,7 @@
         sh:group :NameGroup1 ;
         sh:order 1 ;
         sh:maxLength 20 ;
-        sh:equals schema:familyName ;
+        sh:disjoint schema:familyName ;
     ] ;
     sh:property [
         sh:path schema:familyName ;

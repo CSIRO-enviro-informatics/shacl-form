@@ -118,6 +118,14 @@ This input field will be displayed to the user and submitted with the form, but 
 value of this input field will be pre-filled and it will be disabled and set to readonly. This field will also be
 excluded from form validation.
 
+**sh:equals**
+This input field will be required to equal the referenced property. Note that unless the field is required, an empty
+field will be valid.
+
+**sh:disjoint**
+This input field will not be permitted to equal the referenced property. Note that unless the field is required, an
+empty field will be valid.
+
 **Other**  
 *foaf:mbox*  
 If a property requires a foaf:mbox predicate, the corresponding input field will have input type `email`.

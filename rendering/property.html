@@ -31,16 +31,18 @@
     {%- elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
         {%- if "hasValue" in property and property["hasValue"] == True %} checked readonly disabled
         {%- elif "defaultValue" in property and property["defaultValue"] == True %} checked{%- endif %}
-        {%- if "equals_id" in property %} equalToCheckbox="#{{ property["equals_id"] }}"{% endif %}
+        {%- if "equals" in property %} equalToCheckbox="#{{ property["equals"] }}"{% endif %}
     {%- else %} type="text"
         {%- if "hasValue" in property %} readonly disabled value="{{ property["hasValue"] }}" title="This value cannot be changed."
         {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
+        {%- else %} value=""
         {%- endif %}
-        {%- if "equals_id" in property %} equalTo="#{{ property["equals_id"] }}"{% endif %}
+        {%- if "equals" in property %} equalTo="#{{ property["equals"] }}"{% endif %}
     {%- endif %}
 {%- endif %}
 {#- Stuff that applies no matter the type of input #}
 {%- if "pattern" in property %} title="Must match pattern: /{{ property["pattern"] }}/{{ property["flags"] }}"{% endif %}
 {%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}
-{%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %} />
+{%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %}
+{%- if "disjoint" in property %} notEqualTo="#{{ property["disjoint"] }}"{% endif %} />
 {%- endif %}<br />

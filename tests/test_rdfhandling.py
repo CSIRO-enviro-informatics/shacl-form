@@ -72,6 +72,7 @@ def test_shape():
     constraint_min_test(shape)
     constraint_max_test(shape)
     constraint_equals_test(shape)
+    constraint_disjoint_test(shape)
 
 
 def constraint_generic_constraint_test(shape):
@@ -158,12 +159,21 @@ def constraint_max_test(shape):
 
 
 def constraint_equals_test(shape):
-    # Check that the equals_id is correctly escaped
+    # Check that the equals is correctly escaped
     expected_value = "http\:\/\/schema\.org\/familyName"
     properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":
-            assert p["equals_id"] == expected_value
+            assert p["equals"] == expected_value
+
+
+def constraint_disjoint_test(shape):
+    # Check that the disjoint is correctly escaped
+    expected_value = "http\:\/\/example\.org\/ex\#likesDogs"
+    properties = shape["properties"]
+    for p in properties:
+        if p["path"] == "#http://example.org/ex#likesCats":
+            assert p["disjoint"] == expected_value
 
 
 def group_test(shape):
