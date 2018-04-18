@@ -196,15 +196,6 @@ def constraint_lessthanorequals_test(shape):
             assert p["lessThanOrEquals"] == expected_value
 
 
-def constraint_greaterthan_test(shape):
-    # Check that the lessthan uri is correctly escaped
-    expected_value = "http\:\/\/example\.org\/ex\#birthDate"
-    properties = shape["properties"]
-    for p in properties:
-        if p["path"] == "http://example.org/ex#deathDate":
-            assert p["greaterThan"] == expected_value
-
-
 def group_test(shape):
     # Check that groups are structured correctly
     expected_label = "Birth & Death Date"

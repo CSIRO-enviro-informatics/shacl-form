@@ -46,6 +46,5 @@
 {%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %}
 {%- if "disjoint" in property %} notEqualTo="#{{ property["disjoint"] }}"{% endif %}
 {%- if "lessThan" in property %} lessThan="#{{ property["lessThan"] }}"{% endif %}
-{%- if "lessThanOrEquals" in property %} lessThanEqual="#{{ property["lessThanOrEquals"] }}"{% endif %}
-{%- if "greaterThan" in property %} greaterThan="#{{ property["greaterThan"] }}"{% endif %} />
+{%- if "lessThanOrEquals" in property %} lessThanEqual="#{{ property["lessThanOrEquals"] }}"{% endif %} />
 {%- endif %}<br />

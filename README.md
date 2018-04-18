@@ -131,9 +131,6 @@ This input field must have a value that is less than the referenced property.
 **sh:lessThanOrEquals**
 This input field must have a value that is less than or equal to the referenced property.
 
-**sh:greaterThan**
-This input field must have a value that is greater than the referenced property.
-
 **Other**  
 *foaf:mbox*  
 If a property requires a foaf:mbox predicate, the corresponding input field will have input type `email`.

@@ -54,8 +54,7 @@
         equalToCheckbox: ":input[equalToCheckbox]",
         notEqualTo: ":input[notEqualTo]",
         lessThan: ":input[lessThan]",
-        lessThanEqual: ":input[lessThanEqual]",
-        greaterThan: ":input[greaterThan]"
+        lessThanEqual: ":input[lessThanEqual]"
     });
 
     {#- Add pattern rule #}
@@ -113,16 +112,7 @@
     $(":input[lessThanEqual]").each(function(index) {
         $(this).rules("add", {
             messages: {
-                lessThanEqual: $.validator.format("Must be less than or equal to {0}",$($(this).attr("lessThanEqual")).attr("label"))
-            }
-        });
-    });
-
-    {#- Sets the message for greaterThan validation #}
-    $(":input[greaterThan]").each(function(index) {
-        $(this).rules("add", {
-            messages: {
-                greaterThan: $.validator.format("Must be greater than {0}",$($(this).attr("greaterThan")).attr("label"))
+                lessThan: $.validator.format("Must be less than or equal to {0}",$($(this).attr("lessThanEqual")).attr("label"))
             }
         });
     });
