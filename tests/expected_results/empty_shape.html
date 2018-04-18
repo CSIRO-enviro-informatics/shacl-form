@@ -35,8 +35,7 @@
         notEqualTo: ":input[notEqualTo]",
         lessThan: ":input[lessThan]",
         lessThanEqual: ":input[lessThanEqual]",
-        greaterThan: ":input[greaterThan]",
-        greaterThanEqual: ":input[greaterThanEqual]"
+        greaterThan: ":input[greaterThan]"
     });
     $(":input[equalTo]").each(function(index) {
         $(this).rules("add", {
@@ -75,13 +74,6 @@
         $(this).rules("add", {
             messages: {
                 greaterThan: $.validator.format("Must be greater than {0}",$($(this).attr("greaterThan")).attr("label"))
-            }
-        });
-    });
-    $(":input[greaterThanEqual]").each(function(index) {
-        $(this).rules("add", {
-            messages: {
-                greaterThanEqual: $.validator.format("Must be greater than or equal to {0}",$($(this).attr("greaterThanEqual")).attr("label"))
             }
         });
     });

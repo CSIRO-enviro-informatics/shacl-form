@@ -37,10 +37,6 @@
         sh:group :DateGroup1 ;
     ] ;
     sh:property [
-        sh:path schema:deathDate ;
-        sh:greaterThan schema:birthDate ;
-    ] ;
-    sh:property [
         sh:path schema:address ;
         sh:group :AddressGroup1 ;
     ] ;
@@ -54,7 +50,6 @@
     sh:property [
         sh:path :goalGpa ;
         sh:datatype xsd:integer ;
-        sh:greaterThanOrEquals :gpa ;
     ] ;
     sh:property [
         sh:path :likesCats ;
