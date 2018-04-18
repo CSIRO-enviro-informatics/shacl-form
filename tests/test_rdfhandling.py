@@ -75,6 +75,8 @@ def test_shape():
     constraint_disjoint_test(shape)
     constraint_lessthan_test(shape)
     constraint_lessthanorequals_test(shape)
+    constraint_greaterthan_test(shape)
+    constraint_greaterthanorequals_test(shape)
 
 
 def constraint_generic_constraint_test(shape):
@@ -197,12 +199,21 @@ def constraint_lessthanorequals_test(shape):
 
 
 def constraint_greaterthan_test(shape):
-    # Check that the lessthan uri is correctly escaped
+    # Check that the greaterthan uri is correctly escaped
     expected_value = "http\:\/\/example\.org\/ex\#birthDate"
     properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://example.org/ex#deathDate":
             assert p["greaterThan"] == expected_value
+
+
+def constraint_greaterthanorequals_test(shape):
+    # Check that the greaterthanorequals uri is correctly escaped
+    expected_value = "http\:\/\/example\.org\/ex\#gpa"
+    properties = shape["properties"]
+    for p in properties:
+        if p["path"] == "http://example.org/ex#goalGpa":
+            assert p["greaterThanOrEquals"] == expected_value
 
 
 def group_test(shape):

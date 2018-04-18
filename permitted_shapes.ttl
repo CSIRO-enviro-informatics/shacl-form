@@ -44,7 +44,7 @@
     ] ;
     sh:property [
         sh:path schema:deathDate ;
-        sh:greaterThan schema:birthDate ;
+        sh:greaterThanOrEquals schema:birthDate ;
         sh:datatype xsd:date ;
         sh:maxCount 1 ;
         sh:group :DateGroup1 ;
