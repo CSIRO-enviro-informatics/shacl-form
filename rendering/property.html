@@ -1,21 +1,23 @@
+{%- if "property" in property %}
+{%- include "composite_property.html" %}
+{%- else -%}
 <label for="{{ property["path"] }}">{{ property["name"] }}:</label><br />
 {%- if "description" in property %}
 <label for="{{ property["path"] }}"><i>{{ property["description"] }}</i></label><br />
 {%- endif %}
-{%- if "languageIn" in property %}
-<label for="{{ property["path"] }}"><i>Language:
-{% for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label><br />
+{%- if "languageIn" in property %}<label for="{{ property["path"] }}"><i>Language:
+    {% for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label><br />
 {%- endif %}
 {%- if "in" in property %}
 <select name="{{ property["path"] }}" id="{{ property["path"] }}">
-{%- if "hasValue" in property %} disabled readonly>
+    {%- if "hasValue" in property %} disabled readonly>
     <option value="{{ property["hasValue"] }}" selected>{{ property["hasValue"] }}</option>
-{%- else %}
-{%- for option in property["in"] %}
+    {%- else %}
+    {%- for option in property["in"] %}
     <option value="{{ option }}"
-    {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
+        {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
     {{- option }}</option>
-{%- endfor %}
+    {%- endfor %}
 {%- endif %}
 </select><br />
 {%- else %}
@@ -47,4 +49,5 @@
 {%- if "disjoint" in property %} notEqualTo="#{{ property["disjoint"] }}"{% endif %}
 {%- if "lessThan" in property %} lessThan="#{{ property["lessThan"] }}"{% endif %}
 {%- if "lessThanOrEquals" in property %} lessThanEqual="#{{ property["lessThanOrEquals"] }}"{% endif %} />
+{%- endif %}
 {%- endif %}<br />

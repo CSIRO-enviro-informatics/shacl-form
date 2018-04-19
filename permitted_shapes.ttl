@@ -63,13 +63,14 @@
     sh:property [
         sh:path schema:address ;
         sh:closed true ;
+        sh:description "This is the address." ;
         sh:property [
             sh:path schema:streetAddress ;
             sh:datatype xsd:string ;
         ] ;
         sh:property [
             sh:path schema:postalCode ;
-            sh:or ( [sh:datatype xsd:string ] [ sh:datatype xsd:integer ] ) ;
+            sh:datatype xsd:integer ;
             sh:minInclusive 10000 ;
             sh:maxInclusive 99999 ;
         ] ;

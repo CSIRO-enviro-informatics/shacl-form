@@ -1,0 +1,13 @@
+{%- macro display_property(property) %}
+{%- include "property.html" %}
+{%- endmacro -%}
+
+<fieldset id="{{ property["path"] }}">
+    <legend>{{ property["name"] }}</legend>
+    {%- if "description" in property %}
+    <label for="{{ property["path"] }}"><i>{{ property["description"] }}</i></label><br />
+    {%- endif %}
+    {%- for property in property["property"] %}
+    {{ display_property(property)|indent(4) }}
+    {%- endfor %}
+</fieldset>

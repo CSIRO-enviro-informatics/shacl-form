@@ -38,7 +38,12 @@
     ] ;
     sh:property [
         sh:path schema:address ;
-        sh:group :AddressGroup1 ;
+        sh:property [
+            sh:path schema:streetAddress ;
+        ] ;
+        sh:property [
+            sh:path schema:postalCode ;
+        ] ;
     ] ;
     sh:property [
         sh:path :gpa ;
@@ -60,6 +65,3 @@
     a sh:PropertyGroup ;
     sh:order 0 ;
     rdfs:label "Birth & Death Date" .
-
-:AddressGroup1
-    a sh:PropertyGroup .

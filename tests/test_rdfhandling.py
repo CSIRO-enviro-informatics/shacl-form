@@ -73,8 +73,7 @@ def test_shape():
 def constraint_generic_constraint_test(shape):
     # Check the desc is read
     expected_desc = "The first name of a person."
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://schema.org/givenName":
             assert str(p["description"]) == expected_desc
 
@@ -111,8 +110,7 @@ def constraint_order_test(shape):
 def constraint_minCount_test(shape):
     # Check the minimum count is read
     expected_value = 1
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://schema.org/birthDate":
             assert int(p["minCount"]) == expected_value
 
@@ -120,8 +118,7 @@ def constraint_minCount_test(shape):
 def constraint_in_test(shape):
     # Check that the 'in' constraint options are read
     expected_value = ["Steve", "Terrence"]
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://schema.org/givenName":
             assert p["in"] == expected_value
 
@@ -129,8 +126,7 @@ def constraint_in_test(shape):
 def constraint_languagein_test(shape):
     # Check that the 'languageIn' constraint options are read
     expected_value = ["en", "es"]
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://schema.org/familyName":
             assert p["languageIn"] == expected_value
 
@@ -138,8 +134,7 @@ def constraint_languagein_test(shape):
 def constraint_min_test(shape):
     # Check that the min is read
     expected_value = 1
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://example.org/ex#gpa":
             assert p["min"] == expected_value
 
@@ -147,8 +142,7 @@ def constraint_min_test(shape):
 def constraint_max_test(shape):
     # Check that the min is read
     expected_value = 7
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://example.org/ex#gpa":
             assert p["max"] == expected_value
 
@@ -156,8 +150,7 @@ def constraint_max_test(shape):
 def constraint_equals_test(shape):
     # Check that the equals is correctly escaped
     expected_value = "http\:\/\/schema\.org\/familyName"
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://schema.org/givenName":
             assert p["equals"] == expected_value
 
@@ -165,8 +158,7 @@ def constraint_equals_test(shape):
 def constraint_disjoint_test(shape):
     # Check that the disjoint is correctly escaped
     expected_value = "http\:\/\/example\.org\/ex\#likesDogs"
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://example.org/ex#likesCats":
             assert p["disjoint"] == expected_value
 
@@ -174,8 +166,7 @@ def constraint_disjoint_test(shape):
 def constraint_lessthan_test(shape):
     # Check that the lessthan uri is correctly escaped
     expected_value = "http\:\/\/example\.org\/ex\#deathDate"
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://example.org/ex#birthDate":
             assert p["lessThan"] == expected_value
 
@@ -183,10 +174,18 @@ def constraint_lessthan_test(shape):
 def constraint_lessthanorequals_test(shape):
     # Check that the lessthanorequals uri is correctly escaped
     expected_value = "http\:\/\/example\.org\/ex\#goalGpa"
-    properties = shape["properties"]
-    for p in properties:
+    for p in shape["properties"]:
         if p["path"] == "http://example.org/ex#gpa":
             assert p["lessThanOrEquals"] == expected_value
+
+
+def recursive_properties_test(shape):
+    # Check that properties within properties are correctly read
+    expected_value = [{'path': 'http://schema.org/streetAddress', 'name': 'streetAddress', 'order': None},
+                      {'path': 'http://schema.org/postalCode', 'name': 'postalCode', 'order': None}]
+    for p in shape["properties"]:
+        if p["path"] == "http://schema.org/address":
+            assert p["property"] == expected_value
 
 
 def group_test(shape):

@@ -102,7 +102,7 @@ class RDFHandler:
         return shape
 
     def get_property(self, uri):
-        constraints = dict()
+        property = dict()
         # Go through each constraint and convert/validate them as necessary
         for c_uri in self.g.predicate_objects(uri):
             name = c_uri[0].split('#')[1]
@@ -147,22 +147,32 @@ class RDFHandler:
             if name in ["equals", "disjoint", "lessThan", "lessThanOrEquals"]:
                 value = re.escape(value)
 
-            constraints[name] = value
+            # Some properties are made up of other properties
+            # Handle this with recursion
+            if name == "property":
+                if "property" in property:
+                    properties = property["property"]
+                    properties.append(self.get_property(value))
+                    value = properties
+                else:
+                    value = [self.get_property(value)]
+
+            property[name] = value
 
         # Validate property as a whole
         # Property must have one and only one path
-        if "path" in constraints:
-            constraints["path"] = str(constraints["path"])
+        if "path" in property:
+            property["path"] = str(property["path"])
         else:
             raise Exception("Every property must have a path associated with it: " + uri)
 
         # Must have a name
         # If the property doesn't have a name label, fall back to the URI of the path.
-        if "name" not in constraints:
-            constraints["name"] = re.split("#|/", constraints["path"])[-1]
+        if "name" not in property:
+            property["name"] = re.split("#|/", property["path"])[-1]
 
         # There must be an entry for order even if it is unordered
-        if "order" not in constraints:
-            constraints["order"] = None
+        if "order" not in property:
+            property["order"] = None
 
-        return constraints
+        return property
