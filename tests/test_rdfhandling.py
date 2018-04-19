@@ -52,13 +52,6 @@ def test_invalid_mincount():
         RDF_handler.get_shape()
 
 
-def test_inclusive_exclusive():
-    # If both minInclusive and minExclusive are present an exception should be raised
-    RDF_handler = RDFHandler("inputs/inclusive_exclusive.ttl")
-    with pytest.raises(Exception):
-        RDF_handler.get_shape()
-
-
 def test_shape():
     shape = RDFHandler("inputs/test_shape.ttl").get_shape()
     # Run the following tests on the test shape to avoid getting it every time
@@ -126,7 +119,7 @@ def constraint_minCount_test(shape):
 
 def constraint_in_test(shape):
     # Check that the 'in' constraint options are read
-    expected_value = [Literal("Steve"), Literal("Terrence")]
+    expected_value = ["Steve", "Terrence"]
     properties = shape["properties"]
     for p in properties:
         if p["path"] == "http://schema.org/givenName":

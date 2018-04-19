@@ -58,13 +58,21 @@
     sh:property [
         sh:path schema:gender ;
         sh:in ( "male"  "female" ) ;
-        sh:hasValue "male" ;
         sh:order 0 ;
     ] ;
     sh:property [
         sh:path schema:address ;
-        sh:node :AddressShape1 ;
-        sh:order 1 ;
+        sh:closed true ;
+        sh:property [
+            sh:path schema:streetAddress ;
+            sh:datatype xsd:string ;
+        ] ;
+        sh:property [
+            sh:path schema:postalCode ;
+            sh:or ( [sh:datatype xsd:string ] [ sh:datatype xsd:integer ] ) ;
+            sh:minInclusive 10000 ;
+            sh:maxInclusive 99999 ;
+        ] ;
     ] ;
     sh:property [
         sh:path foaf:mbox ;
@@ -88,20 +96,6 @@
         sh:path :likesDogs ;
         sh:datatype xsd:boolean ;
         sh:hasValue true ;
-    ] .
-
-:AddressShape1
-    a sh:NodeShape ;
-    sh:closed true ;
-    sh:property [
-        sh:path schema:streetAddress ;
-        sh:datatype xsd:string ;
-    ] ;
-    sh:property [
-        sh:path schema:postalCode ;
-        sh:or ( [ sh:datatype xsd:string ] [ sh:datatype xsd:integer ] ) ;
-        sh:minInclusive 10000 ;
-        sh:maxInclusive 99999 ;
     ] .
 
 :NameGroup1

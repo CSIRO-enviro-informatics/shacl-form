@@ -74,78 +74,13 @@ class RDFHandler:
 
         """
         Get all the properties associated with the Shape. They may be URIs or blank nodes.
-        Go through each property
         If it belongs to a group, place it in the list of properties associated with the group
         Otherwise, place it in the list of ungrouped properties
         """
         shape["properties"] = list()
         property_uris = self.g.objects(root_uri, URIRef(SHACL + "property"))
         for p_uri in property_uris:
-            constraints = dict()
-            for c in self.g.predicate_objects(p_uri):
-                constraints[c[0].split('#')[1]] = c[1]
-
-            # Gets the list of acceptable values for constraint "IN" rather than the blank node representing it
-            if "in" in constraints:
-                constraints["in"] = list(Collection(self.g, constraints["in"]))
-            # Gets the list of acceptable values for constraint "languageIn" rather than the blank node representing it
-            if "languageIn" in constraints:
-                constraints["languageIn"] = [str(l) for l in list(Collection(self.g, constraints["languageIn"]))]
-            # If the property doesn't have a name label, fall back to the URI of the path.
-            if "name" not in constraints:
-                constraints["name"] = re.split("#|/", constraints["path"])[-1]
-            # There must be an entry for order even if it is unordered
-            if "order" not in constraints:
-                constraints["order"] = None
-            # Convert to string
-            if "datatype" in constraints:
-                constraints["datatype"] = str(constraints["datatype"])
-            if "hasValue" in constraints:
-                constraints["hasValue"] = constraints["hasValue"].toPython()
-            if "defaultValue" in constraints:
-                constraints["defaultValue"] = constraints["defaultValue"].toPython()
-            # Validate other input
-            if "minCount" in constraints:
-                try:
-                    constraints["minCount"] = int(constraints["minCount"])
-                except ValueError:
-                    raise Exception(
-                        "minCount value must be an integer: '{value}'".format(value=constraints["minCount"]))
-            if "path" in constraints:
-                constraints["path"] = str(constraints["path"])
-            else:
-                raise Exception("Every property must have a path associated with it: " + p_uri)
-            if "minInclusive" in constraints and "minExclusive" in constraints:
-                raise Exception("minInclusive and minExclusive constraints are specified for property: " + p_uri +
-                                ". Only one may be used.")
-            if "maxInclusive" in constraints and "maxExclusive" in constraints:
-                raise Exception("maxInclusive and maxExclusive constraints are specified for property: " + p_uri +
-                                ". Only one may be used.")
-
-            # Consolidate inclusive and exclusive terms
-            if "minInclusive" in constraints:
-                constraints["min"] = float(constraints["minInclusive"])
-                del constraints["minInclusive"]
-            elif "minExclusive" in constraints:
-                constraints["min"] = float(constraints["minExclusive"]) + 1
-                del constraints["minExclusive"]
-            if "maxInclusive" in constraints:
-                constraints["max"] = float(constraints["maxInclusive"])
-                del constraints["maxInclusive"]
-            elif "maxExclusive" in constraints:
-                constraints["max"] = float(constraints["maxExclusive"]) - 1
-                del constraints["maxExclusive"]
-
-            # Get name and id with escaped special characters for the pair constraints
-            if "equals" in constraints:
-                constraints["equals"] = re.escape(constraints["equals"])
-            if "disjoint" in constraints:
-                constraints["disjoint"] = re.escape(constraints["disjoint"])
-            if "lessThan" in constraints:
-                constraints["lessThan"] = re.escape(constraints["lessThan"])
-            if "lessThanOrEquals" in constraints:
-                constraints["lessThanOrEquals"] = re.escape(constraints["lessThanOrEquals"])
-
+            property = self.get_property(p_uri)
             # Place the property in the correct place
             group_uri = self.g.value(p_uri, URIRef(SHACL + "group"), None)
             # Belongs to group
@@ -156,12 +91,78 @@ class RDFHandler:
                     if g["uri"] == group_uri:
                         existing_group = g
                 if existing_group:
-                    existing_group["properties"].append(constraints)
+                    existing_group["properties"].append(property)
                 else:
                     raise Exception("Property " + p_uri + " references PropertyGroup " + group_uri
                                     + " which does not exist.")
             # Does not belong to a group
             else:
-                shape["properties"].append(constraints)
+                shape["properties"].append(property)
 
         return shape
+
+    def get_property(self, uri):
+        constraints = dict()
+        # Go through each constraint and convert/validate them as necessary
+        for c_uri in self.g.predicate_objects(uri):
+            name = c_uri[0].split('#')[1]
+            value = c_uri[1]
+
+            # Gets acceptable values for constraints which supply a list
+            if name in ["in", "languageIn"]:
+                value = [str(l) for l in list(Collection(self.g, value))]
+
+            # Convert constraints which must be given as an int
+            if name == "minCount":
+                try:
+                    value = int(value)
+                except ValueError:
+                    raise Exception(
+                        "minCount value must be an integer: '{value}'".format(value=value))
+
+            # Convert constraints which must be given in string format
+            if name in ["datatype", "path"]:
+                value = str(value)
+
+            # Convert constraints which must be converted from an rdf literal
+            if name in ["hasValue", "defaultValue"]:
+                value = value.toPython()
+
+            # Consolidate constraints which may be supplied in different ways
+            # minInclusive and minExclusive can be simplified down to one attribute
+            if name == "minInclusive":
+                name = "min"
+                value = float(value)
+            elif name == "minExclusive":
+                name = "min"
+                value = float(value) + 1
+            if name == "maxInclusive":
+                name = "max"
+                value = float(value)
+            elif name == "maxExclusive":
+                name = "max"
+                value = float(value) - 1
+
+            # Convert constraints which must be escaped for jQuery validate
+            if name in ["equals", "disjoint", "lessThan", "lessThanOrEquals"]:
+                value = re.escape(value)
+
+            constraints[name] = value
+
+        # Validate property as a whole
+        # Property must have one and only one path
+        if "path" in constraints:
+            constraints["path"] = str(constraints["path"])
+        else:
+            raise Exception("Every property must have a path associated with it: " + uri)
+
+        # Must have a name
+        # If the property doesn't have a name label, fall back to the URI of the path.
+        if "name" not in constraints:
+            constraints["name"] = re.split("#|/", constraints["path"])[-1]
+
+        # There must be an entry for order even if it is unordered
+        if "order" not in constraints:
+            constraints["order"] = None
+
+        return constraints
