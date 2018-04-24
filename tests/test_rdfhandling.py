@@ -4,12 +4,16 @@ import pytest
 from rdflib.term import URIRef, Literal
 sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 from rdfhandling import RDFHandler
+import unittest
+
+# Show full diff in unittest
+unittest.util._MAX_LENGTH=2000
 
 
 def test_empty_file():
     # Checks behaviour when an empty file is supplied
     RDF_handler = RDFHandler("inputs/empty_file.ttl")
-    assert RDF_handler.get_shape() == None
+    assert RDF_handler.get_shape() is None
 
 
 def test_no_target_class():
@@ -59,7 +63,7 @@ def test_shape():
     constraint_generic_constraint_test(shape)
     constraint_name_test(shape)
     constraint_order_test(shape)
-    constraint_minCount_test(shape)
+    constraint_mincount_test(shape)
     constraint_in_test(shape)
     constraint_languagein_test(shape)
     constraint_min_test(shape)
@@ -68,6 +72,8 @@ def test_shape():
     constraint_disjoint_test(shape)
     constraint_lessthan_test(shape)
     constraint_lessthanorequals_test(shape)
+    recursive_properties_test(shape)
+    node_test(shape)
 
 
 def constraint_generic_constraint_test(shape):
@@ -107,7 +113,7 @@ def constraint_order_test(shape):
             assert p["order"] is None
 
 
-def constraint_minCount_test(shape):
+def constraint_mincount_test(shape):
     # Check the minimum count is read
     expected_value = 1
     for p in shape["properties"]:
@@ -181,11 +187,20 @@ def constraint_lessthanorequals_test(shape):
 
 def recursive_properties_test(shape):
     # Check that properties within properties are correctly read
-    expected_value = [{'path': 'http://schema.org/streetAddress', 'name': 'streetAddress', 'order': None},
-                      {'path': 'http://schema.org/postalCode', 'name': 'postalCode', 'order': None}]
+    expected_value = [{'path': 'http://schema.org/streetAddress', 'name': 'streetAddress', 'order': None}]
     for p in shape["properties"]:
         if p["path"] == "http://schema.org/address":
             assert p["property"] == expected_value
+
+
+def node_test(shape):
+    # Check that nodes are properly linked within properties
+    expected_value = "http://example.org/ex#likesDogs"
+    assert any(p["path"] == expected_value for p in shape["properties"])
+
+    # Check that nodes are properly linked outside of properties
+    expected_value = "http://example.org/ex#likesBirds"
+    assert any(p["path"] == expected_value for p in shape["properties"])
 
 
 def group_test(shape):

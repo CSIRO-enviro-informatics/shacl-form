@@ -60,21 +60,7 @@
         sh:in ( "male"  "female" ) ;
         sh:order 0 ;
     ] ;
-    sh:property [
-        sh:path schema:address ;
-        sh:closed true ;
-        sh:description "This is the address." ;
-        sh:property [
-            sh:path schema:streetAddress ;
-            sh:datatype xsd:string ;
-        ] ;
-        sh:property [
-            sh:path schema:postalCode ;
-            sh:datatype xsd:integer ;
-            sh:minInclusive 10000 ;
-            sh:maxInclusive 99999 ;
-        ] ;
-    ] ;
+    sh:node :AddressShape ;
     sh:property [
         sh:path foaf:mbox ;
         sh:minCount 1 ;
@@ -112,3 +98,20 @@
 :OtherGroup1
     a sh:PropertyGroup ;
     rdfs:label "Other" .
+
+:AddressShape
+    a sh:NodeShape ;
+    sh:closed true ;
+    sh:property [
+        sh:path schema:address ;
+        sh:property [
+            sh:path schema:streetAddress ;
+            sh:datatype xsd:string ;
+        ] ;
+        sh:property [
+            sh:path schema:postalCode ;
+            sh:datatype xsd:integer ;
+            sh:minInclusive 10000 ;
+            sh:maxInclusive 99999 ;
+        ] ;
+    ] .

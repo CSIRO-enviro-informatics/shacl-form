@@ -41,9 +41,6 @@
         sh:property [
             sh:path schema:streetAddress ;
         ] ;
-        sh:property [
-            sh:path schema:postalCode ;
-        ] ;
     ] ;
     sh:property [
         sh:path :gpa ;
@@ -59,9 +56,23 @@
     sh:property [
         sh:path :likesCats ;
         sh:disjoint :likesDogs ;
-    ] .
+    ] ;
+    sh:property [
+        sh:node :LikesDogsShape ;
+    ] ;
+    sh:node :LikesBirdsShape .
 
 :DateGroup1
     a sh:PropertyGroup ;
     sh:order 0 ;
     rdfs:label "Birth & Death Date" .
+
+:LikesDogsShape
+    a sh:NodeShape ;
+    sh:path :likesDogs .
+
+:LikesBirdsShape
+    a sh:NodeShape ;
+    sh:property [
+        sh:path :likesBirds ;
+    ] .

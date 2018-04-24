@@ -42,10 +42,22 @@ class RDFHandler:
         shape_uris = self.g.subjects(URIRef(RDF.uri + "type"), URIRef(SHACL + "NodeShape"))
         root_uri = None
         for s in shape_uris:
-            if not (None, URIRef(SHACL + "node"), s) in self.g:
+            if (None, URIRef(SHACL + "node"), s) not in self.g:
                 root_uri = s
+                break
         if not root_uri:
             return None
+
+        """
+        Link any nodes which may be attached to this root shape.
+        Does this by grabbing everything in that node and adding it to the root shape.
+        Nodes inside properties are handled in get_property
+        """
+        nodes = self.g.objects(root_uri, URIRef(SHACL + "node"))
+        for n in nodes:
+            predicate_objects = self.g.predicate_objects(n)
+            for (p, o) in predicate_objects:
+                self.g.add((root_uri, p, o))
 
         """
         Get the target class
@@ -53,8 +65,9 @@ class RDFHandler:
         Looks for implicit class targets - a shape of type sh:NodeShape and rdfs:Class is a target class of itself.
         """
         if (root_uri, URIRef(RDF.uri + "type"), URIRef(RDFS.uri + "Class")) in self.g:
-            return root_uri
-        shape["target_class"] = self.g.value(root_uri, URIRef(SHACL + "targetClass"), None)
+            shape["target_class"] = root_uri
+        else:
+            shape["target_class"] = self.g.value(root_uri, URIRef(SHACL + "targetClass"), None)
         if not shape["target_class"]:
             raise Exception("A target class must be specified for shape: " + root_uri)
 
@@ -73,12 +86,13 @@ class RDFHandler:
             shape["groups"].append(group)
 
         """
-        Get all the properties associated with the Shape. They may be URIs or blank nodes.
+        Get all the properties associated with the Shape. They may be URIs or blank nodes. Additional shapes may be 
+        linked as a node.
         If it belongs to a group, place it in the list of properties associated with the group
         Otherwise, place it in the list of ungrouped properties
         """
         shape["properties"] = list()
-        property_uris = self.g.objects(root_uri, URIRef(SHACL + "property"))
+        property_uris = list(self.g.objects(root_uri, URIRef(SHACL + "property")))
         for p_uri in property_uris:
             property = self.get_property(p_uri)
             # Place the property in the correct place
@@ -98,14 +112,20 @@ class RDFHandler:
             # Does not belong to a group
             else:
                 shape["properties"].append(property)
-
         return shape
 
-    def get_property(self, uri):
+    def get_property(self, uri, path_required=True):
         property = dict()
+        c_uris = list(self.g.predicate_objects(uri))
+
+        # Link nodes
+        for c_uri in tuple(c_uris):
+            if re.split("#|/", c_uri[0])[-1] == "node":
+                c_uris.extend(self.g.predicate_objects(c_uri[1]))
+
         # Go through each constraint and convert/validate them as necessary
-        for c_uri in self.g.predicate_objects(uri):
-            name = c_uri[0].split('#')[1]
+        for c_uri in c_uris:
+            name = re.split("#|/", c_uri[0])[-1]
             value = c_uri[1]
 
             # Gets acceptable values for constraints which supply a list
@@ -163,12 +183,12 @@ class RDFHandler:
         # Property must have one and only one path
         if "path" in property:
             property["path"] = str(property["path"])
-        else:
+        elif path_required:
             raise Exception("Every property must have a path associated with it: " + uri)
 
         # Must have a name
         # If the property doesn't have a name label, fall back to the URI of the path.
-        if "name" not in property:
+        if "name" not in property and "path" in property:
             property["name"] = re.split("#|/", property["path"])[-1]
 
         # There must be an entry for order even if it is unordered
