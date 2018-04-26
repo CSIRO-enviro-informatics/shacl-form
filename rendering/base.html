@@ -119,11 +119,26 @@
 
     {#- Script for adding multiple fields for a property #}
     $('body').on('click', '.add-entry', function() {
-        var template = $(this).parent().children('.template').clone()
-        template.children().children().removeAttr("disabled")
-        $(this).parent().children('.entries').append(template.html())
+	    var template = $(this).parent().children('.template').clone()
+        var entries = $(this).parent().children('.entries');
+	    var max_entries = template.attr('data-max-entries');
+        var num_entries = entries.children().length;
+
+        if (num_entries >= max_entries) return;
+        $(this).parent().children('.remove-entry').removeAttr('disabled');
+        template.children().children().removeAttr('disabled');
+        $(this).parent().children('.entries').append(template.html());
+        if (num_entries + 1 == max_entries) $(this).attr('disabled', 'disabled');
     });
     $('body').on('click', '.remove-entry', function() {
-	    $(this).parent().children('.entries').children().last().remove()
-	});
+	    var template = $(this).parent().children('.template').clone()
+        var entries = $(this).parent().children('.entries');
+	    var min_entries = template.attr('data-min-entries');
+        var num_entries = entries.children().length;
+
+        if (num_entries <= min_entries) return;
+        $(this).parent().children('.add-entry').removeAttr('disabled');
+	    $(this).parent().children('.entries').children().last().remove();
+        if (num_entries - 1 == min_entries || num_entries - 1 <= 0) $(this).attr('disabled', 'disabled');
+    });
 </script>

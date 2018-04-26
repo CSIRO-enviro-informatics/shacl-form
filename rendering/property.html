@@ -13,13 +13,15 @@
     {% for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label><br />
 {%- endif %}
 <div>
-  <div class='template' hidden>
+  <div class='template' hidden data-max-entries=
+  {%- if "maxCount" in property %}"{{ property["maxCount"] }}"{% endif %} data-min-entries=
+  {%- if "minCount" in property %}"{{ property["minCount"] }}"{% endif %}>
     <div>
       {{- input_field(property)|indent(8) }}
     </div>
   </div>
   <div class='entries'></div>
-  <button type="button" class='add-entry'>Add</button> <button type="button" class='remove-entry'>Remove</button>
+  <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
 </div>
 {%- endif %}
 <br />

@@ -22,6 +22,8 @@
         sh:order 1 ;
         sh:maxLength 20 ;
         sh:disjoint schema:familyName ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
     ] ;
     sh:property [
         sh:path schema:familyName ;

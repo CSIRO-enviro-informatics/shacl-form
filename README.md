@@ -60,11 +60,10 @@ groups appear. The order is as follows:
 4. All ungrouped unordered properties
 
 **sh:minCount**
-minCount >= 1: The input field will be a required field.
-minCount < 1 or no minCount constraint: The input field will be optional.
+Determines the minimum number of input fields that may be present for each property.
 
 **sh:maxCount**
-No current support
+Determines the maximum number of input fields that may be present for each property.
 
 **sh:in**  
 Should supply a list of options. The input field will be a dropdown containing all the options.
