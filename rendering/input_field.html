@@ -1,0 +1,42 @@
+{%- if "in" in property %}
+<select name="{{ property["path"] }}" id="{{ property["path"] }}">
+    {%- if "hasValue" in property %} disabled readonly>
+    <option value="{{ property["hasValue"] }}" selected>{{ property["hasValue"] }}</option>
+    {%- else %}
+    {%- for option in property["in"] %}
+    <option value="{{ option }}"
+        {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
+    {{- option }}</option>
+    {%- endfor %}
+{%- endif %}
+</select><br />
+{%- else %}
+<input id="{{ property["path"] }}" name="{{ property["path"] }}" label="{{ property["name"] }}"
+{%- if property["path"] == URIs["EMAIL"] %} type="email"
+{%- elif property["path"] == URIs["PHONE_NUMBER"] %} type="tel"
+{%- elif "datatype" in property %}
+    {%- if property["datatype"] in URIs["NUMBER"] %} type="number"
+        {%- if "min" in property %} min="{{ property["min"] }}"{% endif %}
+        {%- if "max" in property %} max="{{ property["max"] }}"{% endif %}
+    {%- elif property["datatype"] == URIs["DATE"] %} type="date"
+    {%- elif property["datatype"] == URIs["TIME"] %} type="time"
+    {%- elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
+        {%- if "hasValue" in property and property["hasValue"] == True %} checked readonly disabled
+        {%- elif "defaultValue" in property and property["defaultValue"] == True %} checked{%- endif %}
+        {%- if "equals" in property %} equalToCheckbox="input[name={{ property["equals"] }}]"{% endif %}
+    {%- else %} type="text"
+        {%- if "hasValue" in property %} readonly disabled value="{{ property["hasValue"] }}" title="This value cannot be changed."
+        {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
+        {%- else %} value=""
+        {%- endif %}
+        {%- if "equals" in property %} equalTo="input[name={{ property["equals"] }}]"{% endif %}
+    {%- endif %}
+{%- endif %}
+{#- Stuff that applies no matter the type of input #}
+{%- if "pattern" in property %} title="Must match pattern: /{{ property["pattern"] }}/{{ property["flags"] }}"{% endif %}
+{%- if "minCount" in property and property["minCount"]|int > 0 %} required{% endif %}
+{%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %}
+{%- if "disjoint" in property %} notEqualTo="input[name={{ property["disjoint"] }}]"{% endif %}
+{%- if "lessThan" in property %} lessThan="input[name={{ property["lessThan"] }}]"{% endif %}
+{%- if "lessThanOrEquals" in property %} lessThanEqual="input[name={{ property["lessThanOrEquals"] }}]"{% endif %} />
+{%- endif %}

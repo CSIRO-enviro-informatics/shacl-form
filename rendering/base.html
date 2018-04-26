@@ -116,4 +116,12 @@
             }
         });
     });
+
+    {#- Script for adding multiple fields for a property #}
+    $('body').on('click', '.add-entry', function() {
+        $(this).parent().children('.entries').append($(this).parent().children('.template').clone().html())
+    });
+    $('body').on('click', '.remove-entry', function() {
+	    $(this).parent().children('.entries').children().last().remove()
+    });
 </script>

@@ -1,10 +1,6 @@
 import os
 from jinja2 import FileSystemLoader, Environment
 
-'''
-Properties - a list of tuples containing the name, path and datatype of each property.
-'''
-
 URIs = {
     "NUMBER": [
         "http://www.w3.org/2001/XMLSchema#integer",
