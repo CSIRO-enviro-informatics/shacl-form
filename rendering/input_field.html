@@ -1,5 +1,5 @@
 {%- if "in" in property %}
-<select name="{{ property["path"] }}" id="{{ property["path"] }}">
+<select disabled name="{{ property["path"] }}" id="{{ property["path"] }}">
     {%- if "hasValue" in property %} disabled readonly>
     <option value="{{ property["hasValue"] }}" selected>{{ property["hasValue"] }}</option>
     {%- else %}
@@ -11,7 +11,7 @@
 {%- endif %}
 </select><br />
 {%- else %}
-<input id="{{ property["path"] }}" name="{{ property["path"] }}" label="{{ property["name"] }}"
+<input disabled id="{{ property["path"] }}" name="{{ property["path"] }}" label="{{ property["name"] }}"
 {%- if property["path"] == URIs["EMAIL"] %} type="email"
 {%- elif property["path"] == URIs["PHONE_NUMBER"] %} type="tel"
 {%- elif "datatype" in property %}
@@ -25,7 +25,7 @@
         {%- elif "defaultValue" in property and property["defaultValue"] == True %} checked{%- endif %}
         {%- if "equals" in property %} equalToCheckbox="input[name={{ property["equals"] }}]"{% endif %}
     {%- else %} type="text"
-        {%- if "hasValue" in property %} readonly disabled value="{{ property["hasValue"] }}" title="This value cannot be changed."
+        {%- if "hasValue" in property %} readonly value="{{ property["hasValue"] }}" title="This value cannot be changed."
         {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
         {%- else %} value=""
         {%- endif %}

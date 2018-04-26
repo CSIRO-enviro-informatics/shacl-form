@@ -10,7 +10,7 @@
 </head>
 <body>
     <h1>Create New {{ form_name }}</h1>
-    <form id="form">
+    <form method="POST" id="form">
         {%- for group in shape["groups"] %}
         <fieldset>
             <legend>{{ group["label"] }}</legend>
@@ -119,9 +119,11 @@
 
     {#- Script for adding multiple fields for a property #}
     $('body').on('click', '.add-entry', function() {
-        $(this).parent().children('.entries').append($(this).parent().children('.template').clone().html())
+        var template = $(this).parent().children('.template').clone()
+        template.children().children().removeAttr("disabled")
+        $(this).parent().children('.entries').append(template.html())
     });
     $('body').on('click', '.remove-entry', function() {
 	    $(this).parent().children('.entries').children().last().remove()
-    });
+	});
 </script>
