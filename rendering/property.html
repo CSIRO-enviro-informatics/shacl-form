@@ -1,4 +1,4 @@
-{%- macro input_field(property) %}
+{%- macro input_field(property, required=False, disabled=False) %}
 {%- include "input_field.html" %}
 {%- endmacro -%}
 
@@ -13,14 +13,20 @@
     {% for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label><br />
 {%- endif %}
 <div>
-  <div class='template' hidden data-max-entries=
-  {%- if "maxCount" in property %}"{{ property["maxCount"] }}"{% endif %} data-min-entries=
-  {%- if "minCount" in property %}"{{ property["minCount"] }}"{% endif %}>
+    <div class='template' hidden data-max-entries=
+    {%- if "maxCount" in property %}"{{ property["maxCount"] }}"{% endif %} data-min-entries=
+    {%- if "minCount" in property %}"{{ property["minCount"] }}"{% endif %}>
     <div>
-      {{- input_field(property)|indent(8) }}
+        {{- input_field(property, disabled=True)|indent(8) }}
     </div>
-  </div>
-  <div class='entries'></div>
+</div>
+<div class='entries'>
+    {%- if "minCount" in property %}
+        {%- for i in range(property["minCount"]) %}
+            {{- input_field(property, required=True)|indent(4) }}
+        {%- endfor %}
+    {%- endif %}
+</div>
   <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
 </div>
 {%- endif %}
