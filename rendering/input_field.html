@@ -1,16 +1,13 @@
-{%- if "in" in property %}
-<select name="{{ property["path"] }}" id="{{ property["path"] }}"
-{%- if disabled==True %} disabled{% endif %}>
-    {%- if "hasValue" in property %} disabled readonly>
-    <option value="{{ property["hasValue"] }}" selected>{{ property["hasValue"] }}</option>
+{%- if "hasValue" in property %}{{ property["hasValue"] }}{% endif %}
+{%- if "in" in property %}<select name="{{ property["path"] }}" id="{{ property["path"] }}"
+    {%- if disabled==True %} disabled{% endif %}>
+    {%- if "hasValue" in property %} hidden><option value="{{ property["hasValue"] }}" selected>{{ property["hasValue"] }}</option>
     {%- else %}
-    {%- for option in property["in"] %}
-    <option value="{{ option }}"
-        {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
-    {{- option }}</option>
-    {%- endfor %}
-{%- endif %}
-</select><br />
+        {%- for option in property["in"] %}<option value="{{ option }}"
+            {%- if "defaultValue" in property and property["defaultValue"] == option %} selected{% endif %}>
+            {{- option }}</option>
+        {%- endfor %}
+    {%- endif %}</select><br />
 {%- else %}
 <input id="{{ property["path"] }}" name="{{ property["path"] }}" label="{{ property["name"] }}"
 {%- if property["path"] == URIs["EMAIL"] %} type="email"
@@ -22,11 +19,11 @@
     {%- elif property["datatype"] == URIs["DATE"] %} type="date"
     {%- elif property["datatype"] == URIs["TIME"] %} type="time"
     {%- elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
-        {%- if "hasValue" in property and property["hasValue"] == True %} checked readonly disabled
+        {%- if "hasValue" in property and property["hasValue"] == True %} checked hidden
         {%- elif "defaultValue" in property and property["defaultValue"] == True %} checked{%- endif %}
         {%- if "equals" in property %} equalToCheckbox="input[name={{ property["equals"] }}]"{% endif %}
     {%- else %} type="text"
-        {%- if "hasValue" in property %} readonly value="{{ property["hasValue"] }}" title="This value cannot be changed."
+        {%- if "hasValue" in property %} hidden value="{{ property["hasValue"] }}"
         {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
         {%- else %} value=""
         {%- endif %}
