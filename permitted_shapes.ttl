@@ -106,14 +106,18 @@
     sh:closed true ;
     sh:property [
         sh:path schema:address ;
-        sh:property [
-            sh:path schema:streetAddress ;
-            sh:datatype xsd:string ;
-        ] ;
+        sh:node :StreetAddressShape ;
         sh:property [
             sh:path schema:postalCode ;
             sh:datatype xsd:integer ;
             sh:minInclusive 10000 ;
             sh:maxInclusive 99999 ;
         ] ;
+    ] .
+
+:StreetAddressShape
+    a sh:NodeShape ;
+    sh:property [
+        sh:path schema:streetAddress ;
+        sh:datatype xsd:string ;
     ] .

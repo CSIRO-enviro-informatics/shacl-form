@@ -133,12 +133,12 @@ class RDFHandler:
                 value = [str(l) for l in list(Collection(self.g, value))]
 
             # Convert constraints which must be given as an int
-            if name == "minCount":
+            if name in ["minCount", "maxCount"]:
                 try:
                     value = int(value)
                 except ValueError:
                     raise Exception(
-                        "minCount value must be an integer: '{value}'".format(value=value))
+                        name + " value must be an integer: '{value}'".format(value=value))
 
             # Convert constraints which must be given in string format
             if name in ["datatype", "path"]:
