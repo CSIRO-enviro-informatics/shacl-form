@@ -5,6 +5,7 @@
 {%- if "property" in property %}
 {%- include "composite_property.html" %}
 {%- else -%}
+{%- if "maxCount" not in property or property["maxCount"] > 0 %}
 <label for="{{ property["path"] }}">{{ property["name"] }}:</label><br />
 {%- if "description" in property %}
 <label for="{{ property["path"] }}"><i>{{ property["description"] }}</i></label><br />
@@ -35,3 +36,4 @@
 {%- endif %}
 {%- endif %}
 <br />
+{%- endif %}
