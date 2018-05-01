@@ -49,15 +49,14 @@ class RDFHandler:
             return None
 
         """
-        Link any nodes which may be attached to this root shape.
+        Add any nodes which may be attached to this root shape.
         Does this by grabbing everything in that node and adding it to the root shape.
         Nodes inside properties are handled in get_property
         """
         nodes = self.g.objects(root_uri, URIRef(SHACL + "node"))
         for n in nodes:
-            predicate_objects = self.g.predicate_objects(n)
-            for (p, o) in predicate_objects:
-                self.g.add((root_uri, p, o))
+            for (p, o) in self.g.predicate_objects(n):
+                self.add_node(root_uri, p, o)
 
         """
         Get the target class
@@ -196,3 +195,11 @@ class RDFHandler:
             property["order"] = None
 
         return property
+
+    def add_node(self, root_uri, predicate, object):
+        # Adds the contents of the node to the root shape
+        # If the node contains a link to another node, use recursion to add nodes at all depths
+        if str(predicate) == SHACL + "node":
+            for (p, o) in self.g.predicate_objects(object):
+                self.add_node(root_uri, p, o)
+        self.g.add((root_uri, predicate, object))
