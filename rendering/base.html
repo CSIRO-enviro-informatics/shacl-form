@@ -15,12 +15,12 @@
         <fieldset>
             <legend>{{ group["label"] }}</legend>
             {%- for property in group["properties"] %}
-            {{ display_property(property)|indent(12) }}
+            {{- display_property(property)|indent(12) }}
             {%- endfor %}
         </fieldset>
         {%- endfor %}
         {%- for property in shape["properties"] %}
-        {{ display_property(property)|indent(8) }}
+        {{- display_property(property)|indent(8) }}
         {%- endfor %}
         <input type="submit" value="Submit" />
     </form>
@@ -30,21 +30,58 @@
 <script src="jquery-validation/jquery.validate.js"></script>
 <script src="jquery-validation/additional-methods.js"></script>
 <script>
-    {#- Custom method for using equals with checkboxes #}
-    $.validator.addMethod("equalToCheckbox", function(value, element, params) {
-        if ($(element).is(":checked") == $(params).is(":checked"))
-            return true;
-        return false;
-    }, "Message" );
-
-    {#- Custom method notEqualTo #}
-    $.validator.addMethod("notEqualTo", function(value, element, params) {
-        if (this.optional(element) == true)
-            return true;
+    {#- Custom rules that can be used with any input type #}
+    $.validator.addMethod("equalTo", function(value, element, params) {
+        var subject_value;
+        var object_value;
         if ($(element).attr("type") == "checkbox")
-            return $(element).is(":checked") == $(params).is(":checked") ? false : true;
+            subject_value = $(element).is(":checked");
         else
-            return $(element).val() == $(params).val() ? false : true;
+            subject_value = $(element).val();
+        if ($(params).attr("type") == "checkbox")
+            object_value = $(params + ":enabled").is(":checked");
+        else
+            object_value = $(params + ":enabled").val();
+        return this.optional(element) || subject_value == object_value;
+    }, "Message" );
+    $.validator.addMethod("notEqualTo", function(value, element, params) {
+        var subject_value;
+        var object_value;
+        if ($(element).attr("type") == "checkbox")
+            subject_value = $(element).is(":checked");
+        else
+            subject_value = $(element).val();
+        if ($(params).attr("type") == "checkbox")
+            object_value = $(params + ":enabled").is(":checked");
+        else
+            object_value = $(params + ":enabled").val();
+        return this.optional(element) || subject_value != object_value;
+    }, "Message" );
+    $.validator.addMethod("lessThan", function(value, element, params) {
+        var subject_value;
+        var object_value;
+        if ($(element).attr("type") == "checkbox")
+            subject_value = $(element).is(":checked");
+        else
+            subject_value = $(element).val();
+        if ($(params).attr("type") == "checkbox")
+            object_value = $(params + ":enabled").is(":checked");
+        else
+            object_value = $(params + ":enabled").val();
+        return this.optional(element) || subject_value < object_value;
+    }, "Message" );
+    $.validator.addMethod("lessThanEqual", function(value, element, params) {
+        var subject_value;
+        var object_value;
+        if ($(element).attr("type") == "checkbox")
+            subject_value = $(element).is(":checked");
+        else
+            subject_value = $(element).val();
+        if ($(params).attr("type") == "checkbox")
+            object_value = $(params + ":enabled").is(":checked");
+        else
+            object_value = $(params + ":enabled").val();
+        return this.optional(element) || subject_value <= object_value;
     }, "Message" );
 
     {#- Used to automatically add custom rules to relevant elements. Disabled fields are not validated #}
