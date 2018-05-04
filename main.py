@@ -32,9 +32,11 @@ def generate_webform(filename):
     next_id = 0
     for g in shape["groups"]:
         for property in g["properties"]:
-            next_id = assign_id(property, next_id)
+            assign_id(property, next_id)
+            next_id += 1
     for property in shape["properties"]:
-        next_id = assign_id(property, next_id)
+        assign_id(property, next_id)
+        next_id += 1
 
     # Link pair property constraints by ID
     for g in shape["groups"]:
@@ -55,11 +57,11 @@ def assign_id(property, next_id):
     # Additionally, assigns an ID to any property within this property
     # Keeps track of the current next_id by returning it when finished
     property["id"] = next_id
-    next_id += 1
     if "property" in property:
+        next_internal_id = 0
         for p in property["property"]:
-            next_id = assign_id(p, next_id)
-    return next_id
+            assign_id(p, next_internal_id)
+            next_internal_id += 1
 
 
 def find_paired_properties(shape, property, constraint):
