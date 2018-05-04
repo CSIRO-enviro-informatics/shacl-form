@@ -107,11 +107,13 @@
     sh:property [
         sh:path schema:address ;
         sh:node :StreetAddressShape ;
+        sh:minCount 1 ;
         sh:property [
             sh:path schema:postalCode ;
             sh:datatype xsd:integer ;
             sh:minInclusive 10000 ;
             sh:maxInclusive 99999 ;
+            sh:maxCount 1;
         ] ;
     ] .
 
@@ -120,4 +122,5 @@
     sh:property [
         sh:path schema:streetAddress ;
         sh:datatype xsd:string ;
+        sh:maxCount 1;
     ] .

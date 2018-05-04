@@ -29,7 +29,6 @@ def generate_webform(filename):
     shape["properties"].sort(key=lambda x: (x["order"] is None, x["order"]))
 
     # Assign every property a unique ID
-    # ID will also depend on whether the property is a part of another property e.g. "3-2"
     next_id = 0
     for g in shape["groups"]:
         for property in g["properties"]:
@@ -52,6 +51,9 @@ def generate_webform(filename):
 
 
 def assign_id(property, next_id):
+    # Assigns the property an ID
+    # Additionally, assigns an ID to any property within this property
+    # Keeps track of the current next_id by returning it when finished
     property["id"] = next_id
     next_id += 1
     if "property" in property:
@@ -61,6 +63,9 @@ def assign_id(property, next_id):
 
 
 def find_paired_properties(shape, property, constraint):
+    # If the constraint is a pair property constraint, iterates through all the properties looking for the one that
+    # matches
+    # Additionally, looks for pair property constraints in the properties contained in this property using recursion
     if constraint == "property":
         for p in property[constraint]:
             for c in p:
@@ -80,6 +85,8 @@ def find_paired_properties(shape, property, constraint):
 
 
 def check_property(property, path):
+    # If the property path matches the path being searched for, return the property id
+    # Also searches the properties inside this property using recursion
     if str(property["path"]) == path:
         return property["id"]
     if "property" in property:

@@ -1,0 +1,5 @@
+{%- if "property" in property %}
+{% include "composite_property.html" %}
+{%- else %}
+    {{- input_field(property, disabled=disabled, required=required) }}
+{%- endif %}

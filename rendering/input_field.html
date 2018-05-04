@@ -1,7 +1,8 @@
 {%- if "hasValue" in property %}
 {{ property["hasValue"] }}
 {%- endif %}
-{%- if "in" in property %}<select name="{{ property["id"] }}" id="{{ property["id"] }}"
+{%- if "in" in property %}
+<select name="{{ property["id"] }}" id="{{ property["id"] }}"
     {%- if disabled==True %} disabled{% endif %}
     {%- if "equals" in property %} equalTo="input[name={{ property["equals"] }}]"{% endif %}
     {%- if "disjoint" in property %} notEqualTo="input[name={{ property["disjoint"] }}]"{% endif %}

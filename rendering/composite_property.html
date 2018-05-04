@@ -3,7 +3,6 @@
 {%- endmacro -%}
 
 <fieldset id="{{ property["id"] }}">
-    <legend>{{ property["name"] }}</legend>
     {%- if "description" in property %}
     <label for="{{ property["id"] }}"><i>{{ property["description"] }}</i></label><br />
     {%- endif %}
