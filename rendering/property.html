@@ -3,12 +3,12 @@
 {%- endmacro -%}
 
 {%- if "property" in property %}
-{%- include "composite_property.html" %}
+{% include "composite_property.html" %}
 {%- else -%}
 {%- if "maxCount" not in property or property["maxCount"] > 0 %}
-<label for="{{ property["path"] }}">{{ property["name"] }}:</label><br />
+<label for="{{ property["id"] }}">{{ property["name"] }}:</label><br />
 {%- if "description" in property %}
-<label for="{{ property["path"] }}"><i>{{ property["description"] }}</i></label><br />
+<label for="{{ property["id"] }}"><i>{{ property["description"] }}</i></label><br />
 {%- endif %}
 {%- if "languageIn" in property %}<label for="{{ property["path"] }}"><i>Language:
     {% for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label><br />
@@ -31,7 +31,7 @@
         {%- endfor %}
     {%- endif %}
 </div>
-  <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+    <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
 </div>
 {%- endif %}
 {%- endif %}

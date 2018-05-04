@@ -68,10 +68,6 @@ def test_shape():
     constraint_languagein_test(shape)
     constraint_min_test(shape)
     constraint_max_test(shape)
-    constraint_equals_test(shape)
-    constraint_disjoint_test(shape)
-    constraint_lessthan_test(shape)
-    constraint_lessthanorequals_test(shape)
     recursive_properties_test(shape)
     node_test(shape)
 
@@ -151,38 +147,6 @@ def constraint_max_test(shape):
     for p in shape["properties"]:
         if p["path"] == "http://example.org/ex#gpa":
             assert p["max"] == expected_value
-
-
-def constraint_equals_test(shape):
-    # Check that the equals is correctly escaped
-    expected_value = "http\:\/\/schema\.org\/familyName"
-    for p in shape["properties"]:
-        if p["path"] == "http://schema.org/givenName":
-            assert p["equals"] == expected_value
-
-
-def constraint_disjoint_test(shape):
-    # Check that the disjoint is correctly escaped
-    expected_value = "http\:\/\/example\.org\/ex\#likesDogs"
-    for p in shape["properties"]:
-        if p["path"] == "http://example.org/ex#likesCats":
-            assert p["disjoint"] == expected_value
-
-
-def constraint_lessthan_test(shape):
-    # Check that the lessthan uri is correctly escaped
-    expected_value = "http\:\/\/example\.org\/ex\#deathDate"
-    for p in shape["properties"]:
-        if p["path"] == "http://example.org/ex#birthDate":
-            assert p["lessThan"] == expected_value
-
-
-def constraint_lessthanorequals_test(shape):
-    # Check that the lessthanorequals uri is correctly escaped
-    expected_value = "http\:\/\/example\.org\/ex\#goalGpa"
-    for p in shape["properties"]:
-        if p["path"] == "http://example.org/ex#gpa":
-            assert p["lessThanOrEquals"] == expected_value
 
 
 def recursive_properties_test(shape):

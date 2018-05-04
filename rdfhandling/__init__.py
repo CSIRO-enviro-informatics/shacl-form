@@ -162,10 +162,6 @@ class RDFHandler:
                 name = "max"
                 value = float(value) - 1
 
-            # Convert constraints which must be escaped for jQuery validate
-            if name in ["equals", "disjoint", "lessThan", "lessThanOrEquals"]:
-                value = re.escape(value)
-
             # Some properties are made up of other properties
             # Handle this with recursion
             if name == "property":

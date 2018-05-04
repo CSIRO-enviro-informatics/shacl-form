@@ -28,9 +28,65 @@ def generate_webform(filename):
     # Sort ungrouped properties
     shape["properties"].sort(key=lambda x: (x["order"] is None, x["order"]))
 
+    # Assign every property a unique ID
+    # ID will also depend on whether the property is a part of another property e.g. "3-2"
+    next_id = 0
+    for g in shape["groups"]:
+        for property in g["properties"]:
+            next_id = assign_id(property, next_id)
+    for property in shape["properties"]:
+        next_id = assign_id(property, next_id)
+
+    # Link pair property constraints by ID
+    for g in shape["groups"]:
+        for property in g["properties"]:
+            for constraint in property:
+                find_paired_properties(shape, property, constraint)
+    for property in shape["properties"]:
+        for constraint in property:
+            find_paired_properties(shape, property, constraint)
+
     # Put things into template
     with open('result.html', 'w') as f:
         f.write(render_template(form_name, shape))
+
+
+def assign_id(property, next_id):
+    property["id"] = next_id
+    next_id += 1
+    if "property" in property:
+        for p in property["property"]:
+            next_id = assign_id(p, next_id)
+    return next_id
+
+
+def find_paired_properties(shape, property, constraint):
+    if constraint == "property":
+        for p in property[constraint]:
+            for c in p:
+                find_paired_properties(shape, p, c)
+    if constraint in ["equals", "disjoint", "lessThan", "lessThanOrEquals"]:
+        for g in shape["groups"]:
+            for p in g["properties"]:
+                result = check_property(p, str(property[constraint]))
+                if result:
+                    property[constraint] = result
+                    return
+        for p in shape["properties"]:
+            result = check_property(p, str(property[constraint]))
+            if result:
+                property[constraint] = result
+                return
+
+
+def check_property(property, path):
+    if str(property["path"]) == path:
+        return property["id"]
+    if "property" in property:
+        for p in property["property"]:
+            result = check_property(p, path)
+            if result:
+                return result
 
 
 if __name__ == "__main__":
