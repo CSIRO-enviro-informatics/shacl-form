@@ -1,5 +1,8 @@
+{%- macro composite_property(property, copy=0) %}
+{%- include "composite_property.html" %}
+{%- endmacro -%}
 {%- if "property" in property %}
-{% include "composite_property.html" %}
+{{ composite_property(property, copy=copy) }}
 {%- else %}
-    {{- input_field(property, disabled=disabled, required=required) }}
+    {{- input_field(property, disabled=disabled, required=required, copy=copy) }}
 {%- endif %}

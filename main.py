@@ -52,15 +52,17 @@ def generate_webform(filename):
         f.write(render_template(form_name, shape))
 
 
-def assign_id(property, next_id):
+def assign_id(property, next_id, parent_id=""):
     # Assigns the property an ID
     # Additionally, assigns an ID to any property within this property
-    # Keeps track of the current next_id by returning it when finished
-    property["id"] = next_id
+    if parent_id:
+        property["id"] = str(parent_id) + ":" + str(next_id)
+    else:
+        property["id"] = next_id
     if "property" in property:
         next_internal_id = 0
         for p in property["property"]:
-            assign_id(p, next_internal_id)
+            assign_id(p, next_internal_id, parent_id=property["id"])
             next_internal_id += 1
 
 

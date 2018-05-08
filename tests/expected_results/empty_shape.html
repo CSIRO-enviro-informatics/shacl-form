@@ -70,7 +70,6 @@
     $("#form").validate({
         ignore: ":input[disabled]",
         equalTo: ":input[equalTo]",
-        equalToCheckbox: ":input[equalToCheckbox]",
         notEqualTo: ":input[notEqualTo]",
         lessThan: ":input[lessThan]",
         lessThanEqual: ":input[lessThanEqual]"
@@ -78,13 +77,6 @@
     $(":input[equalTo]").each(function(index) {
         $(this).rules("add", {
             messages: { equalTo: $.validator.format("Must be equal to {0}",$($(this).attr("equalTo")).attr("label")) }
-        });
-    });
-    $(":input[equalToCheckbox]").each(function(index) {
-        $(this).rules("add", {
-            messages: {
-                equalToCheckbox: $.validator.format("Must be equal to {0}",$($(this).attr("equalToCheckbox")).attr("label"))
-            }
         });
     });
     $(":input[notEqualTo]").each(function(index) {
@@ -109,26 +101,38 @@
         });
     });
     $('body').on('click', '.add-entry', function() {
-	    var template = $(this).parent().children('.template').clone()
-        var entries = $(this).parent().children('.entries');
-	    var max_entries = template.attr('data-max-entries');
-        var num_entries = entries.children().length;
-
-        if (num_entries >= max_entries) return;
-        $(this).parent().children('.remove-entry').removeAttr('disabled');
-        template.children().children().removeAttr('disabled');
-        $(this).parent().children('.entries').append(template.html());
-        if (num_entries + 1 == max_entries) $(this).attr('disabled', 'disabled');
+        addEntry($(this).parent().children('.template').first())
     });
     $('body').on('click', '.remove-entry', function() {
-	    var template = $(this).parent().children('.template').clone()
-        var entries = $(this).parent().children('.entries');
-	    var min_entries = template.attr('data-min-entries');
+        removeEntry($(this).parent().children('.template').first())
+    });
+    var addEntry = function($template) {
+	    var template_copy = $template.clone()
+        var entries = $template.parent().children('.entries');
+	    var max_entries = template_copy.attr('data-max-entries');
+        var num_entries = entries.children().length;
+        var root_id = $template.children().children().attr('name');
+        var id = root_id + "-" + entries.children().length;
+
+        if (max_entries && num_entries >= max_entries) return;
+        $template.parent().children('.remove-entry').removeAttr('disabled');
+        template_copy.children().children().removeAttr('disabled');
+        template_copy.children().children().attr('name', id);
+        template_copy.children().children().find('[name]').each(function(){
+            $(this).attr('name', $(this).attr('name').replace(root_id, id));
+        });
+        entries.append(template_copy.html());
+        if (num_entries + 1 == max_entries) $template.parent().children('.add-entry').attr('disabled', 'disabled');
+    };
+    var removeEntry = function($template) {
+	    var template_copy = $template.clone()
+        var entries = $template.parent().children('.entries');
+	    var min_entries = template_copy.attr('data-min-entries');
         var num_entries = entries.children().length;
 
-        if (num_entries <= min_entries) return;
-        $(this).parent().children('.add-entry').removeAttr('disabled');
-	    $(this).parent().children('.entries').children().last().remove();
-        if (num_entries - 1 == min_entries || num_entries - 1 <= 0) $(this).attr('disabled', 'disabled');
-    });
+        if (num_entries && num_entries <= min_entries) return;
+        $template.parent().children('.add-entry').removeAttr('disabled');
+	    entries.children().last().remove();
+        if (num_entries - 1 == min_entries || num_entries - 1 <= 0) $template.parent().children('.remove-entry').attr('disabled', 'disabled');
+    };
 </script>
