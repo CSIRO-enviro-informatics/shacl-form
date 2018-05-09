@@ -17,22 +17,14 @@
     {{- entry(property, required=True, copy=0) }}
 {%- else %}
 <div>
-    <div class='template' hidden data-max-entries="
-    {%- if "maxCount" in property %}{{ property["maxCount"] }}{% endif %}" data-min-entries="
-    {%- if "minCount" in property %}{{ property["minCount"] }}{% endif %}">
+    <div class='template' hidden
+    {%- if "maxCount" in property %} data-max-entries="{{ property["maxCount"] }}"{% endif %}
+    {%- if "minCount" in property %} data-min-entries="{{ property["minCount"] }}"{% endif %}>
         <div>
             {{- entry(property, disabled=True)|indent(12) }}
         </div>
     </div>
-    <div class='entries'>
-    {%- if "minCount" in property %}
-        {%- for i in range(property["minCount"]) %}
-        <div>
-            {{- entry(property, required=True, copy=i)|indent(12) }}
-        </div>
-        {%- endfor %}
-    {%- endif %}
-    </div>
+    <div class='entries'></div>
     <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
 </div>
 {%- endif %}

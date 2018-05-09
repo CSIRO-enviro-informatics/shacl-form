@@ -114,6 +114,7 @@
             sh:minInclusive 10000 ;
             sh:maxInclusive 99999 ;
             sh:minCount 1 ;
+            sh:maxCount 1 ;
         ] ;
     ] .
 

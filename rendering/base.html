@@ -155,19 +155,23 @@
 	    var template_copy = $template.clone()
         var entries = $template.parent().children('.entries');
 	    var max_entries = template_copy.attr('data-max-entries');
+	    var min_entries = template_copy.attr('data-min-entries');
         var num_entries = entries.children().length;
         var root_id = $template.children().children().attr('name');
         var id = root_id + "-" + entries.children().length;
 
         if (max_entries && num_entries >= max_entries) return;
-        $template.parent().children('.remove-entry').removeAttr('disabled');
         template_copy.children().children().removeAttr('disabled');
         template_copy.children().children().attr('name', id);
         template_copy.children().children().find('[name]').each(function(){
             $(this).attr('name', $(this).attr('name').replace(root_id, id));
         });
         entries.append(template_copy.html());
-        if (num_entries + 1 == max_entries) $template.parent().children('.add-entry').attr('disabled', 'disabled');
+        num_entries++;
+        console.log(num_entries);
+        console.log(min_entries);
+        if (num_entries > 0 && (min_entries == undefined || num_entries > min_entries)) $template.parent().children('.remove-entry').removeAttr('disabled');
+        if (max_entries !== undefined && num_entries >= max_entries) $template.parent().children('.add-entry').attr('disabled', 'disabled');
     };
     var removeEntry = function($template) {
 	    var template_copy = $template.clone()
@@ -180,4 +184,12 @@
 	    entries.children().last().remove();
         if (num_entries - 1 == min_entries || num_entries - 1 <= 0) $template.parent().children('.remove-entry').attr('disabled', 'disabled');
     };
+
+    {#- Adds minimum number of fields when form is loaded #}
+    $('.template').each(function(){
+        var min_entries = $(this).attr('data-min-entries');
+        for (i = 0; i < min_entries; i++) {
+            addEntry($(this));
+        }
+    });
 </script>
