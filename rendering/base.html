@@ -30,7 +30,7 @@
 <script src="jquery-validation/jquery.validate.js"></script>
 <script src="jquery-validation/additional-methods.js"></script>
 <script>
-    {#- Custom rules that can be used with any input type #}
+    //Custom rules that can be used with any input type
     $.validator.addMethod("data-equalTo", function(value, element, params) {
         var subject_value;
         var object_value;
@@ -92,7 +92,7 @@
         return this.optional(element) || subject_value <= object_value;
     }, "Message" );
 
-    {#- Used to automatically add custom rules to relevant elements. Disabled fields are not validated #}
+    // Used to automatically add custom rules to relevant elements. Disabled fields are not validated
     $("#form").validate({
         ignore: ":input[disabled]",
         "data-equalTo": ":input[data-equalTo]",
@@ -102,7 +102,7 @@
         pattern: ":input[pattern]"
     });
 
-    {#- Sets the message for equalTo validation #}
+    // Sets the message for equalTo validation
     $(":input[data-equalTo]").each(function(index) {
         $(this).rules("add", {
             messages: {
@@ -114,7 +114,7 @@
         });
     });
 
-    {#- Sets the message for notEqualTo validation #}
+    // Sets the message for notEqualTo validation
     $(":input[data-notEqualTo]").each(function(index) {
         $(this).rules("add", {
             messages: {
@@ -126,7 +126,7 @@
         });
     });
 
-    {#- Sets the message for lessThan validation #}
+    // Sets the message for lessThan validation
     $(":input[lessThan]").each(function(index) {
         $(this).rules("add", {
             messages: {
@@ -150,13 +150,14 @@
         });
     });
 
-    {#- Script for adding multiple fields for a property #}
+    // Script for adding multiple entries for a property
     $('body').on('click', '.add-entry', function() {
         addEntry($(this).parent().children('.template').first())
     });
     $('body').on('click', '.remove-entry', function() {
         removeEntry($(this).parent().children('.template').first())
     });
+    // Handles everything about adding an entry for a property
     var addEntry = function($template) {
 	    var template_copy = $template.clone()
         var entries = $template.parent().children('.entries');
@@ -166,32 +167,49 @@
         var root_id = $template.children().children().attr('name');
         var id = root_id + "-" + entries.children().length;
 
-        if (max_entries && num_entries >= max_entries) return;
+        if (max_entries && num_entries >= max_entries) return; // Return if maximum entries is already reached
+        // Enable input fields in this entry. Input fields are disabled when copied from the template
         template_copy.children().children().removeAttr('disabled');
+        // Assign the new ID for this entry
         template_copy.children().children().attr('name', id);
+        // Update the ID through all children of this property
         template_copy.children().children().find('[name]').each(function(){
             $(this).attr('name', $(this).attr('name').replace(root_id, id));
         });
+        // All entries below or at the minimum number of entries must be required
         if (min_entries != undefined && num_entries <= min_entries)
             template_copy.children().children().attr('required', 'required');
+        // Recursion for populating properties contained in this entry
+        var children = template_copy.find('.template');
+        for (var i = 0; i < children.length; i++)
+            for (i2 = 0; i2 < $(children[i]).attr('data-min-entries'); i2++)
+                addEntry($(children[i]));
+        // Append our prepared copy of the template to the entries
         entries.append(template_copy.html());
         num_entries++;
+        // Control Add and Remove buttons
         if (num_entries > 0 && (min_entries == undefined || num_entries > min_entries)) $template.parent().children('.remove-entry').removeAttr('disabled');
         if (max_entries !== undefined && num_entries >= max_entries) $template.parent().children('.add-entry').attr('disabled', 'disabled');
     };
+    // Handles everything about removing an entry for a property
     var removeEntry = function($template) {
 	    var template_copy = $template.clone()
         var entries = $template.parent().children('.entries');
 	    var min_entries = template_copy.attr('data-min-entries');
         var num_entries = entries.children().length;
 
-        if (num_entries && num_entries <= min_entries) return;
+        // Return if minimum entries is already reached
+        if ((!min_entries && num_entries == 0) || num_entries <= min_entries) return;
+        // Removing a property means that the Add button can be enabled again
         $template.parent().children('.add-entry').removeAttr('disabled');
+        // Remove the last entry
 	    entries.children().last().remove();
-        if (num_entries - 1 == min_entries || num_entries - 1 <= 0) $template.parent().children('.remove-entry').attr('disabled', 'disabled');
+	    num_entries--;
+	    // Disable Remove button if we reach the minimum number of entries
+        if (num_entries <= min_entries || num_entries <= 0) $template.parent().children('.remove-entry').attr('disabled', 'disabled');
     };
 
-    {#- Adds minimum number of fields when form is loaded #}
+    // Adds minimum number of fields when form is loaded
     $('.template').each(function(){
         var min_entries = $(this).attr('data-min-entries');
         for (i = 0; i < min_entries; i++) {
