@@ -14,7 +14,7 @@
     {% for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label><br />
 {%- endif %}
 {%- if "maxCount" in property and property["maxCount"] == 1 and "minCount" in property and property["minCount"] == 1 %}
-    {{- entry(property, required=True, copy=0) }}
+    {{- entry(property, disabled=disabled, required=True, copy=0) }}
 {%- else %}
 <div>
     <div class='template' hidden

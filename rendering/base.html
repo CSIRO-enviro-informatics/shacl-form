@@ -169,7 +169,10 @@
 
         if (max_entries && num_entries >= max_entries) return; // Return if maximum entries is already reached
         // Enable input fields in this entry. Input fields are disabled when copied from the template
-        template_copy.children().children().removeAttr('disabled');
+        template_copy.children().children("input, select").removeAttr('disabled');
+        template_copy.children().children('fieldset').children('input, select').removeAttr('disabled');
+        template_copy.children().children().children().children('.entries').children().children('input, select').removeAttr('disabled');
+        // Assign the new ID for this entry
         // Assign the new ID for this entry
         template_copy.children().children().attr('name', id);
         // Update the ID through all children of this property

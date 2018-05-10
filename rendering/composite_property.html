@@ -1,4 +1,4 @@
-{%- macro display_property(property) %}
+{%- macro display_property(property, disabled=False) %}
 {%- include "property.html" %}
 {%- endmacro -%}
 
@@ -7,6 +7,6 @@
     <label for="{{ property["id"] }}"><i>{{ property["description"] }}</i></label><br />
     {%- endif %}
     {%- for property in property["property"] %}
-        {{- display_property(property)|indent(4) }}
+        {{- display_property(property, disabled=disabled)|indent(4) }}
     {%- endfor %}
 </fieldset>
