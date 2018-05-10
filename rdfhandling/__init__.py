@@ -4,7 +4,6 @@ from rdflib.util import guess_format
 from rdflib.collection import Collection
 from rdflib.namespace import RDF, RDFS
 import re
-import uuid
 
 SHACL = "http://www.w3.org/ns/shacl#"
 

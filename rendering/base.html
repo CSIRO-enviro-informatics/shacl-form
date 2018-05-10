@@ -34,53 +34,61 @@
     $.validator.addMethod("equalTo", function(value, element, params) {
         var subject_value;
         var object_value;
+        var object = $("[id=" + params + "]:not([disabled])");
+        if (object.length == 0) return true;
         if ($(element).attr("type") == "checkbox")
             subject_value = $(element).is(":checked");
         else
             subject_value = $(element).val();
-        if ($(params).attr("type") == "checkbox")
-            object_value = $(params + ":enabled").is(":checked");
+        if (object.attr("type") == "checkbox")
+            object_value = object.is(":checked");
         else
-            object_value = $(params + ":enabled").val();
+            object_value = object.val();
         return this.optional(element) || subject_value == object_value;
     }, "Message" );
     $.validator.addMethod("notEqualTo", function(value, element, params) {
         var subject_value;
         var object_value;
+        var object = $("[id=" + params + "]:not([disabled])");
+        if (object.length == 0) return true;
         if ($(element).attr("type") == "checkbox")
             subject_value = $(element).is(":checked");
         else
             subject_value = $(element).val();
-        if ($(params).attr("type") == "checkbox")
-            object_value = $(params + ":enabled").is(":checked");
+        if (object.attr("type") == "checkbox")
+            object_value = object.is(":checked");
         else
-            object_value = $(params + ":enabled").val();
+            object_value = object.val();
         return this.optional(element) || subject_value != object_value;
     }, "Message" );
     $.validator.addMethod("lessThan", function(value, element, params) {
         var subject_value;
         var object_value;
+        var object = $("[id=" + params + "]:not([disabled])");
+        if (object.length == 0) return true;
         if ($(element).attr("type") == "checkbox")
             subject_value = $(element).is(":checked");
         else
             subject_value = $(element).val();
-        if ($(params).attr("type") == "checkbox")
-            object_value = $(params + ":enabled").is(":checked");
+        if (object.attr("type") == "checkbox")
+            object_value = object.is(":checked");
         else
-            object_value = $(params + ":enabled").val();
+            object_value = object.val();
         return this.optional(element) || subject_value < object_value;
     }, "Message" );
     $.validator.addMethod("lessThanEqual", function(value, element, params) {
         var subject_value;
         var object_value;
+        var object = $("[id=" + params + "]:not([disabled])");
+        if (object.length == 0) return true;
         if ($(element).attr("type") == "checkbox")
             subject_value = $(element).is(":checked");
         else
             subject_value = $(element).val();
-        if ($(params).attr("type") == "checkbox")
-            object_value = $(params + ":enabled").is(":checked");
+        if (object.attr("type") == "checkbox")
+            object_value = object.is(":checked");
         else
-            object_value = $(params + ":enabled").val();
+            object_value = object.val();
         return this.optional(element) || subject_value <= object_value;
     }, "Message" );
 
@@ -113,7 +121,12 @@
     {#- Sets the message for equalTo validation #}
     $(":input[equalTo]").each(function(index) {
         $(this).rules("add", {
-            messages: { equalTo: $.validator.format("Must be equal to {0}",$($(this).attr("equalTo")).attr("label")) }
+            messages: {
+                equalTo: $.validator.format(
+                    "Must be equal to {0}",
+                    $("[id=" + $(this).attr("equalTo") + "]").attr("label")
+                )
+            }
         });
     });
 
@@ -121,7 +134,10 @@
     $(":input[notEqualTo]").each(function(index) {
         $(this).rules("add", {
             messages: {
-                notEqualTo: $.validator.format("Must not be equal to {0}",$($(this).attr("notEqualTo")).attr("label"))
+                notEqualTo: $.validator.format(
+                    "Must not be equal to {0}",
+                    $("[id=" + $(this).attr("notEqualTo") + "]").attr("label")
+                )
             }
         });
     });
@@ -130,7 +146,10 @@
     $(":input[lessThan]").each(function(index) {
         $(this).rules("add", {
             messages: {
-                lessThan: $.validator.format("Must be less than {0}",$($(this).attr("lessThan")).attr("label"))
+                lessThan: $.validator.format(
+                    "Must be less than {0}",
+                    $("[id=" + $(this).attr("lessThan") + "]").attr("label")
+                )
             }
         });
     });
@@ -139,7 +158,10 @@
     $(":input[lessThanEqual]").each(function(index) {
         $(this).rules("add", {
             messages: {
-                lessThanEqual: $.validator.format("Must be less than or equal to {0}",$($(this).attr("lessThanEqual")).attr("label"))
+                lessThanEqual: $.validator.format(
+                    "Must be less than or equal to {0}",
+                    $("[id=" + $(this).attr("lessThanEqual") + "]").attr("label")
+                )
             }
         });
     });
@@ -166,10 +188,10 @@
         template_copy.children().children().find('[name]').each(function(){
             $(this).attr('name', $(this).attr('name').replace(root_id, id));
         });
+        if (min_entries != undefined && num_entries <= min_entries)
+            template_copy.children().children().attr('required', 'required');
         entries.append(template_copy.html());
         num_entries++;
-        console.log(num_entries);
-        console.log(min_entries);
         if (num_entries > 0 && (min_entries == undefined || num_entries > min_entries)) $template.parent().children('.remove-entry').removeAttr('disabled');
         if (max_entries !== undefined && num_entries >= max_entries) $template.parent().children('.add-entry').attr('disabled', 'disabled');
     };
@@ -184,6 +206,12 @@
 	    entries.children().last().remove();
         if (num_entries - 1 == min_entries || num_entries - 1 <= 0) $template.parent().children('.remove-entry').attr('disabled', 'disabled');
     };
+    $('.template').each(function(){
+        var min_entries = $(this).attr('data-min-entries');
+        for (i = 0; i < min_entries; i++) {
+            addEntry($(this));
+        }
+    });
 
     {#- Adds minimum number of fields when form is loaded #}
     $('.template').each(function(){
