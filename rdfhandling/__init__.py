@@ -1,25 +1,22 @@
 from rdflib.graph import Graph
-from rdflib.term import URIRef
+from rdflib.term import URIRef, Literal, BNode
 from rdflib.util import guess_format
 from rdflib.collection import Collection
-from rdflib import RDF, RDFS
+from rdflib.namespace import RDF, RDFS
 import re
-
-"""
-Reads information from a SHACL Shapes file.
-For each shape, can determine:
-    Shape URI
-    Target class
-    Properties associated with the shape
-    
-This needs further work since some of the properties end in blank nodes and need to be followed up.
-Does not support additional shapes at this time.
-"""
+import uuid
 
 SHACL = "http://www.w3.org/ns/shacl#"
 
 
 class RDFHandler:
+    """
+    Reads information from a SHACL Shapes file.
+    For each shape, can determine:
+        Shape URI
+        Target class
+        Properties associated with the shape
+    """
     def __init__(self, file_name):
         self.g = Graph()
         self.g.parse(file_name, format=guess_format(file_name))
@@ -199,3 +196,28 @@ class RDFHandler:
             for (p, o) in self.g.predicate_objects(object):
                 self.add_node(root_uri, p, o)
         self.g.add((root_uri, predicate, object))
+
+    def create_rdf_map(self, shape):
+        g = Graph()
+        g.namespace_manager = self.g.namespace_manager
+        g.bind('sh', SHACL)
+        # Create the node associated with all the data entered
+        g.add((Literal('placeholder:node_uri'), RDF.type, shape['target_class']))
+        # Go through each property and add it
+        for group in shape["groups"]:
+            for property in group["properties"]:
+                self.add_property_to_map(g, property, Literal('placeholder:node_uri'))
+        for property in shape["properties"]:
+            self.add_property_to_map(g, property, Literal('placeholder:node_uri'))
+        g.serialize(destination='map.ttl', format='turtle')
+
+    def add_property_to_map(self, graph, property, root):
+        # Create a template for the property
+        # Recursion may be required
+        if 'property' in property:
+            node = BNode()
+            graph.add((root, URIRef(property['path']), node))
+            for p in property['property']:
+                self.add_property_to_map(graph, p, node)
+        else:
+            graph.add((root, URIRef(property['path']), Literal('placeholder:' + str(property['id']))))

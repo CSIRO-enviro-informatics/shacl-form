@@ -51,6 +51,9 @@ def generate_webform(filename):
     with open('result.html', 'w') as f:
         f.write(render_template(form_name, shape))
 
+    # Create map for converting submitted data into RDF
+    RDF_handler.create_rdf_map(shape)
+
 
 def assign_id(property, next_id, parent_id=""):
     # Assigns the property an ID
