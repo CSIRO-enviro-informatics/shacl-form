@@ -103,15 +103,6 @@ Will set the maximum length of the input field.
 Will set the regex pattern of the input field. Note that a blank field will still be accepted unless the field is also
 required.
 
-**sh:flags**
-For use with sh:pattern. The flags set the modifier to be used with the regex expression.
-
-| Modifier | Description                                                                          |
-|----------|--------------------------------------------------------------------------------------|
-| i        | Perform case-insensitive matching                                                    |
-| g        | Perform a global match (find all matches rather than stopping after the first match) |
-| m        | Perform multiline matching                                                           |
-
 **sh:hasValue**
 This input field will be displayed to the user and submitted with the form, but they will be unable to change it. The
 value of this input field will be pre-filled and it will be disabled and set to readonly. This field will also be

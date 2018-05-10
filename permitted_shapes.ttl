@@ -33,7 +33,6 @@
         sh:group :NameGroup1 ;
         sh:order 2 ;
         sh:pattern "^G" ;
-        sh:flags "i" ;
     ] ;
     sh:property [
         sh:path schema:birthDate ;

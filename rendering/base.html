@@ -98,25 +98,9 @@
         equalTo: ":input[equalTo]",
         notEqualTo: ":input[notEqualTo]",
         lessThan: ":input[lessThan]",
-        lessThanEqual: ":input[lessThanEqual]"
+        lessThanEqual: ":input[lessThanEqual]",
+        pattern: ":input[pattern]"
     });
-
-    {#- Add pattern rule #}
-    {%- for property in shape["properties"] %}
-    {%- if "pattern" in property %}
-    $("#{{ property["id"] }}").rules("add", {
-        pattern: /{{ property["pattern"] }}/{{ property["flags"] }}
-    });
-    {%- endif %}
-    {%- endfor %}
-    {%- for group in shape["groups"] %} {% for property in group["properties"] %}
-    {%- if "pattern" in property %}
-    $("#{{ property["id"] }}").rules("add", {
-        pattern: /{{ property["pattern"] }}/{{ property["flags"] }}
-    });
-    {%- endif %}
-    {%- endfor %}
-    {%- endfor %}
 
     {#- Sets the message for equalTo validation #}
     $(":input[equalTo]").each(function(index) {
