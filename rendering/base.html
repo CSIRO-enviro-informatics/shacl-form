@@ -190,12 +190,6 @@
 	    entries.children().last().remove();
         if (num_entries - 1 == min_entries || num_entries - 1 <= 0) $template.parent().children('.remove-entry').attr('disabled', 'disabled');
     };
-    $('.template').each(function(){
-        var min_entries = $(this).attr('data-min-entries');
-        for (i = 0; i < min_entries; i++) {
-            addEntry($(this));
-        }
-    });
 
     {#- Adds minimum number of fields when form is loaded #}
     $('.template').each(function(){
