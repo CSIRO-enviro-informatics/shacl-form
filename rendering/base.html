@@ -182,11 +182,6 @@
         // All entries below or at the minimum number of entries must be required
         if (min_entries != undefined && num_entries <= min_entries)
             template_copy.children().children().attr('required', 'required');
-        // Recursion for populating properties contained in this entry
-        var children = template_copy.find('.template');
-        for (var i = 0; i < children.length; i++)
-            for (i2 = 0; i2 < $(children[i]).attr('data-min-entries'); i2++)
-                addEntry($(children[i]));
         // Append our prepared copy of the template to the entries
         entries.append(template_copy.html());
         num_entries++;
@@ -213,7 +208,7 @@
     };
 
     // Adds minimum number of fields when form is loaded
-    $('.template').each(function(){
+    $($('.template').get().reverse()).each(function(){
         var min_entries = $(this).attr('data-min-entries');
         for (i = 0; i < min_entries; i++) {
             addEntry($(this));
