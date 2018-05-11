@@ -1,0 +1,10 @@
+{% extends "layout.html" %}
+{% block content %}
+
+<h1>Form</h1>
+<form action="{{ url_for('controller.post') }}" method="POST">
+    <input type="text" name="laura" />
+    <input type="submit" value="Submit!" />
+</form>
+
+{% endblock %}
