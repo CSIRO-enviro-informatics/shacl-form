@@ -1,10 +1,15 @@
 {% extends "layout.html" %}
+{% block title %}{% include "form_heading.html" %}{% endblock %}
 {% block content %}
-
-<h1>Form</h1>
-<form action="{{ url_for('controller.post') }}" method="POST">
-    <input type="text" name="laura" />
-    <input type="submit" value="Submit!" />
+<h1>{% block heading %}{% include "form_heading.html" %}{% endblock %}</h1>
+<form id="form" action="{{ url_for('controller.post') }}" method="POST">
+    {% include "form_contents.html" %}
+    <input type="submit" value="Submit" />
 </form>
-
+{% endblock %}
+{% block scripts %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="{{url_for('static', filename='scripts/jquery-validation/jquery.validate.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/jquery-validation/additional-methods.js')}}"></script>
+<script src="{{url_for('static', filename='scripts/webform.js')}}"></script>
 {% endblock %}

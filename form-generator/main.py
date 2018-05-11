@@ -3,7 +3,10 @@ import sys
 from rendering import render_template
 
 
-def generate_webform(filename):
+def generate_webform(filename, destination):
+    if not destination:
+        destination = '../miniflask/view/templates/'
+
     RDF_handler = RDFHandler(filename)
 
     # Get shape
@@ -48,8 +51,12 @@ def generate_webform(filename):
             find_paired_properties(shape, property, constraint)
 
     # Put things into template
-    with open('result.html', 'w') as f:
+    with open(destination + 'form_contents.html', 'w') as f:
         f.write(render_template(form_name, shape))
+
+    # Put form heading into template
+    with open(destination + 'form_heading.html', 'w') as f:
+        f.write("Create New " + form_name)
 
     # Create map for converting submitted data into RDF
     RDF_handler.create_rdf_map(shape)
@@ -105,4 +112,4 @@ def check_property(property, path):
 
 if __name__ == "__main__":
     # File name passed as command-line argument
-    generate_webform(sys.argv[1])
+    generate_webform(sys.argv[1], sys.argv[2] if len(sys.argv) >= 3 else None)

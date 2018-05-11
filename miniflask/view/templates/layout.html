@@ -2,15 +2,11 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Minimal Flask App</title>
-
+    <title>{% block title %}{% endblock %}</title>
     <link rel="stylesheet" href="{{url_for('static', filename='css/simple.css')}}" />
 </head>
 <body>
     {% block content %}{% endblock %}
-    <hr />
-    <div>
-        <span style="font-size: smaller;">Test Footer</span>
-    </div>
 </body>
 </html>
+{% block scripts %}{% endblock %}

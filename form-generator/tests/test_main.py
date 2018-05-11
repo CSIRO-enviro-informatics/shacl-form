@@ -6,10 +6,10 @@ import main
 
 def test_empty_file():
     with pytest.raises(Exception):
-        main.generate_webform("inputs/empty_file.ttl")
+        main.generate_webform("inputs/empty_file.ttl", "results/")
 
 def test_empty_shape():
-    main.generate_webform("inputs/empty_shape.ttl")
-    result = open("result.html", 'r').read()
-    expected_result = open("expected_results/empty_shape.html").read()
-    assert result == expected_result
+    main.generate_webform("inputs/empty_shape.ttl", "results/")
+    assert os.path.exists("results/form_contents.html")
+    assert os.path.getsize("results/form_contents.html") == 0
+    assert open("results/form_heading.html", 'r').read() == 'Create New Person'
