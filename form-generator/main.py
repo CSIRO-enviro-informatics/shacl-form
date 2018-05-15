@@ -4,6 +4,8 @@ from rendering import render_template
 
 
 def generate_webform(filename, destination):
+    if not filename:
+        raise Exception('Usage - python main.py <SHACL filename> <optional: result destination>')
     if not destination:
         destination = '../miniflask/view/templates/'
 
@@ -112,4 +114,4 @@ def check_property(property, path):
 
 if __name__ == "__main__":
     # File name passed as command-line argument
-    generate_webform(sys.argv[1], sys.argv[2] if len(sys.argv) >= 3 else None)
+    generate_webform(sys.argv[1] if len(sys.argv) >= 2 else None, sys.argv[2] if len(sys.argv) >= 3 else None)
