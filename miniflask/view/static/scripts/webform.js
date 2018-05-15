@@ -147,7 +147,6 @@ var addEntry = function($template) {
     entries.append(template_copy.html());
     num_entries++;
     // Enable input fields. Input fields are disabled when copied from the template
-    console.log("stuff");
     if ($template.parents('.template').length == 0){
         entries.find('input, select').each(function(){
             if ($(this).parents('.template').length == 0)
