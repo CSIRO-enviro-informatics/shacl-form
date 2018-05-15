@@ -134,11 +134,6 @@ var addEntry = function($template) {
     var id = root_id + "-" + entries.children().length;
 
     if (max_entries && num_entries >= max_entries) return; // Return if maximum entries is already reached
-    // Enable input fields in this entry. Input fields are disabled when copied from the template
-    template_copy.children().children("input, select").removeAttr('disabled');
-    template_copy.children().children('fieldset').children('input, select').removeAttr('disabled');
-    template_copy.children().children().children().children('.entries').children().children('input, select').removeAttr('disabled');
-    // Assign the new ID for this entry
     // Assign the new ID for this entry
     template_copy.children().children().attr('name', id);
     // Update the ID through all children of this property
@@ -151,6 +146,14 @@ var addEntry = function($template) {
     // Append our prepared copy of the template to the entries
     entries.append(template_copy.html());
     num_entries++;
+    // Enable input fields. Input fields are disabled when copied from the template
+    console.log("stuff");
+    if ($template.parents('.template').length == 0){
+        entries.find('input, select').each(function(){
+            if ($(this).parents('.template').length == 0)
+                $(this).removeAttr('disabled');
+        });
+    }
     // Control Add and Remove buttons
     if (num_entries > 0 && (min_entries == undefined || num_entries > min_entries)) $template.parent().children('.remove-entry').removeAttr('disabled');
     if (max_entries !== undefined && num_entries >= max_entries) $template.parent().children('.add-entry').attr('disabled', 'disabled');
