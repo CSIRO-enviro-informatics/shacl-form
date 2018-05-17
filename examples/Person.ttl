@@ -48,6 +48,7 @@
     ] ;
     sh:property [
         sh:path schema:gender ;
+        sh:name "Gender" ;
         sh:in ( "male"  "female" ) ;
         sh:order 0 ;
         sh:minCount 1 ;
@@ -64,6 +65,7 @@
     ] ;
     sh:property [
         sh:path :gpa ;
+        sh:name "GPA" ;
         sh:description "A number between 1 and 7." ;
         sh:minInclusive 1 ;
         sh:maxInclusive 7 ;
@@ -72,15 +74,18 @@
     ] ;
     sh:property [
         sh:path foaf:phone ;
+        sh:name "Phone Number" ;
     ] ;
     sh:property [
         sh:path :likesCats ;
+        sh:name "Do you like cats?" ;
         sh:datatype xsd:boolean ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
     ] ;
     sh:property [
         sh:path :likesDogs ;
+        sh:name "Do you like dogs?" ;
         sh:datatype xsd:boolean ;
         sh:hasValue true ;
         sh:minCount 1 ;
@@ -100,8 +105,10 @@
 :AddressShape
     a sh:NodeShape ;
     sh:path schema:address ;
+    sh:name "Address" ;
     sh:property [
         sh:path schema:postalCode ;
+        sh:name "Postcode" ;
         sh:datatype xsd:integer ;
         sh:minInclusive 10000 ;
         sh:maxInclusive 99999 ;
@@ -111,6 +118,7 @@
     ] ;
     sh:property [
         sh:path schema:streetAddress ;
+        sh:name "Street Address" ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
         sh:maxCount 1 ;

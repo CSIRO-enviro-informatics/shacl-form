@@ -6,7 +6,7 @@
 {%- endmacro -%}
 
 {%- if "maxCount" not in property or property["maxCount"] > 0 %}
-<label>{{ property["name"] }}:</label><br />
+<label>{{ property["name"] }}</label><br />
 {%- if "description" in property %}
 <label><i>{{ property["description"] }}</i></label><br />
 {%- endif %}

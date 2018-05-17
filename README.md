@@ -33,7 +33,7 @@ Usage:
 **3. Start Flask**  
 Run app.py in the 'miniflask' directory
 
-Your webform can now be accessed at `localhost:5000/form` in your browser. Any information entered into the form will be stored in `miniflask/result.ttl`.
+Your webform can now be accessed at `localhost:5000/form` in your browser. Any information entered into the form will be stored in the 'entries' directory.
 
 ## Supported constraints
 

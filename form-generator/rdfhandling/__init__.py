@@ -37,12 +37,14 @@ class RDFHandler:
         """
         shape_uris = self.g.subjects(URIRef(RDF.uri + "type"), URIRef(SHACL + "NodeShape"))
         root_uri = None
+        if not shape_uris:
+            return None
         for s in shape_uris:
             if (None, URIRef(SHACL + "node"), s) not in self.g:
                 root_uri = s
                 break
         if not root_uri:
-            return None
+            raise Exception('Recursion not allowed.')
 
         """
         Add any nodes which may be attached to this root shape.
