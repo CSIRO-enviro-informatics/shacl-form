@@ -57,24 +57,35 @@ def insert_entries(map, result, node_uri, predicate, object, root_id=None):
         if not root_id:
             root_id = object.split(':')[-1]
         copy_id = 0
+        found_entry = False
         while True:
             full_id = root_id + '-' + str(copy_id)
             entry = request.form.get(full_id)
             if entry:
                 result.add((node_uri, predicate, Literal(entry)))
+                found_entry = True
                 copy_id += 1
             else:
                 break
+        return found_entry
     else:
         # Composite properties
-        node = BNode()
-        result.add((node_uri, predicate, node))
         included_properties = list(map.predicate_objects(object))
         if not root_id:
-            root_id = included_properties[0][1].split(':')[-2]
+            if len(included_properties) > 0:
+                root_id = included_properties[0][1].split(':')[-2]
+            else:
+                return False
         copy_id = 0
-        for p in included_properties:
-            full_id = root_id + '-' + str(copy_id) + ':' + p[1].split(':')[-1]
-            insert_entries(map, result, node, p[0], p[1], full_id)
+        while True:
+            node = BNode()
+            for p in included_properties:
+                full_id = root_id + '-' + str(copy_id) + ':' + p[1].split(':')[-1]
+                found_entry = insert_entries(map, result, node, p[0], p[1], full_id)
+            copy_id += 1
+            if found_entry:
+                result.add((node_uri, predicate, node))
+            else:
+                break
 
 

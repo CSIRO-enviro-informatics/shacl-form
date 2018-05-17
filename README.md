@@ -20,17 +20,17 @@ CSIRO Land & Water
 
 ## How to use
 
-**1. Supplying a SHACL shapes file**
+**1. Supplying a SHACL shapes file**  
 A SHACL shapes file must be supplied to define the data that the form accommodates. While optional, it is ideal to use the SHACL constraints sh:name, sh:description and sh:order. These are non-validating SHACL properties that will improve the appearance of the form. Examples can be found in the 'examples' directory.
 
-**2. Generating the webform**
+**2. Generating the webform**  
 Run main.py in the 'form-generator' directory to generate the webform. The path to a SHACL shapes file must be supplied. The files generated will be automatically placed in Flask ready to work, but an alternate destination can optionally be provided.
 
 Usage:
 
     python main.py <SHACL file path> <optional: destination>
 
-**3. Start Flask**
+**3. Start Flask**  
 Run app.py in the 'miniflask' directory
 
 Your webform can now be accessed at `localhost:5000/form` in your browser. Any information entered into the form will be stored in `miniflask/result.ttl`.
