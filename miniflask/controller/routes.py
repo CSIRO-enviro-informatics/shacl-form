@@ -10,16 +10,12 @@ routes = Blueprint('controller', __name__)
 
 @routes.route('/')
 def index():
-    return render_template(
-        'index.html'
-    )
+    return render_template('index.html')
 
 
 @routes.route('/form')
 def form():
-    return render_template(
-        'form.html'
-    )
+    return render_template('form.html')
 
 
 @routes.route('/post', methods=['POST'])
@@ -40,7 +36,7 @@ def post():
             insert_entries(map, result, node_uri, predicate, object)
 
     result.serialize(destination='../entries/' + entry_uuid + '.ttl', format='turtle')
-    return Response('test', status=201, mimetype='text/plain')
+    return render_template('post.html')
 
 
 def insert_entries(map, result, node_uri, predicate, object, root_id=None):
