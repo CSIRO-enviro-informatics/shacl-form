@@ -16,7 +16,24 @@ Griffith University Industrial Placement Student at CSIRO Land & Water
 *Product Owner*  
 Senior Experimental Scientist  
 CSIRO Land & Water  
-<nicholas.car@csiro.au>  
+<nicholas.car@csiro.au>
+
+## How to use
+
+**1. Supplying a SHACL shapes file**
+A SHACL shapes file must be supplied to define the data that the form accommodates. While optional, it is ideal to use the SHACL constraints sh:name, sh:description and sh:order. These are non-validating SHACL properties that will improve the appearance of the form. Examples can be found in the 'examples' directory.
+
+**2. Generating the webform**
+Run main.py in the 'form-generator' directory to generate the webform. The path to a SHACL shapes file must be supplied. The files generated will be automatically placed in Flask ready to work, but an alternate destination can optionally be provided.
+
+Usage:
+
+    python main.py <SHACL file path> <optional: destination>
+
+**3. Start Flask**
+Run app.py in the 'miniflask' directory
+
+Your webform can now be accessed at `localhost:5000/form` in your browser. Any information entered into the form will be stored in `miniflask/result.ttl`.
 
 ## Supported constraints
 
@@ -101,7 +118,7 @@ Will set the maximum length of the input field.
 
 **sh:pattern**
 Will set the regex pattern of the input field. Note that a blank field will still be accepted unless the field is also
-required.
+required. ^ and $ are assumed to encapsulate the pattern.
 
 **sh:hasValue**
 This input field will be displayed to the user and submitted with the form, but they will be unable to change it. The
