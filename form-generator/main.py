@@ -16,30 +16,36 @@ def generate_webform(filename, destination):
 
     # Check that the file contained a shape
     if not shape:
-        raise Exception("No shape provided in: " + filename)
+        raise Exception('No shape provided in: ' + filename)
 
     # Get a name for the form by cutting off part of the target class URI to find a more human readable name
     # Example: http://schema.org/Person -> Person
-    form_name = shape["target_class"].rsplit('/', 1)[1] if "target_class" in shape else "Entry"
+    form_name = shape['target_class'].rsplit('/', 1)[1] if 'target_class' in shape else 'Entry'
     """
     Sort the groups
     This lambda expression uses a tuple to sort items with an order before unordered items. Tuples are compared by their
     first element first, then the second, etc. False sorts before True, so all None values will be sorted to the end
     """
-    shape["groups"].sort(key=lambda x: (x["order"] is None, x["order"]))
+    shape['groups'].sort(key=lambda x: (x['order'] is None, x['order']))
     # Sort properties in groups
-    for g in shape["groups"]:
-        g["properties"].sort(key=lambda x: (x["order"] is None, x["order"]))
+    for g in shape['groups']:
+        g['properties'].sort(key=lambda x: (x['order'] is None, x['order']))
     # Sort ungrouped properties
-    shape["properties"].sort(key=lambda x: (x["order"] is None, x["order"]))
+    shape['properties'].sort(key=lambda x: (x['order'] is None, x['order']))
+    # Sort within composite properties
+    for g in shape['groups']:
+        for property in g['properties']:
+            sort_composite_property(property)
+    for property in shape['properties']:
+        sort_composite_property(property)
 
     # Assign every property a unique ID
     next_id = 0
-    for g in shape["groups"]:
-        for property in g["properties"]:
+    for g in shape['groups']:
+        for property in g['properties']:
             assign_id(property, next_id)
             next_id += 1
-    for property in shape["properties"]:
+    for property in shape['properties']:
         assign_id(property, next_id)
         next_id += 1
 
@@ -62,6 +68,13 @@ def generate_webform(filename, destination):
 
     # Create map for converting submitted data into RDF
     RDF_handler.create_rdf_map(shape, destination)
+
+
+def sort_composite_property(property):
+    if 'property' in property:
+        property['property'].sort(key=lambda x: (x['order'] is None, x['order']))
+        for p in property['property']:
+            sort_composite_property(p)
 
 
 def assign_id(property, next_id, parent_id=""):
