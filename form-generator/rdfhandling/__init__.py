@@ -196,7 +196,7 @@ class RDFHandler:
                 self.add_node(root_uri, p, o)
         self.g.add((root_uri, predicate, object))
 
-    def create_rdf_map(self, shape):
+    def create_rdf_map(self, shape, destination):
         g = Graph()
         g.namespace_manager = self.g.namespace_manager
         g.bind('sh', SHACL)
@@ -208,7 +208,7 @@ class RDFHandler:
                 self.add_property_to_map(g, property, Literal('placeholder:node_uri'))
         for property in shape["properties"]:
             self.add_property_to_map(g, property, Literal('placeholder:node_uri'))
-        g.serialize(destination='map.ttl', format='turtle')
+        g.serialize(destination=destination+'map.ttl', format='turtle')
 
     def add_property_to_map(self, graph, property, root):
         # Create a template for the property

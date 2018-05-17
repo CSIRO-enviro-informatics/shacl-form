@@ -1,6 +1,3 @@
-#Borrowed from http://shacl.org/playground/ for testing purposes.
-
-@prefix dash: <http://datashapes.org/dash#> .
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix schema: <http://schema.org/> .
@@ -16,12 +13,10 @@
         sh:path schema:givenName ;
         sh:datatype xsd:string ;
         sh:description "The first name of a person." ;
-        sh:defaultValue "Steve" ;
         sh:name "Given name" ;
         sh:group :NameGroup1 ;
         sh:order 1 ;
         sh:maxLength 20 ;
-        sh:disjoint schema:familyName ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
     ] ;
@@ -32,7 +27,8 @@
         sh:name "Family name" ;
         sh:group :NameGroup1 ;
         sh:order 2 ;
-        sh:pattern "^G" ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
     ] ;
     sh:property [
         sh:path schema:birthDate ;
@@ -51,26 +47,28 @@
         sh:order 2 ;
     ] ;
     sh:property [
-        sh:path  :deathTime ;
-        sh:datatype xsd:time ;
-        sh:group :DateGroup1 ;
-        sh:order 3 ;
-    ] ;
-    sh:property [
         sh:path schema:gender ;
         sh:in ( "male"  "female" ) ;
         sh:order 0 ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
     ] ;
-    sh:node :AddressShape ;
+    sh:property [
+        sh:minCount 1 ;
+        sh:node :AddressShape ;
+    ] ;
     sh:property [
         sh:path foaf:mbox ;
-        sh:minCount 1 ;
+        sh:name "Email Address" ;
+        sh:maxCount 1 ;
     ] ;
     sh:property [
         sh:path :gpa ;
+        sh:description "A number between 1 and 7." ;
         sh:minInclusive 1 ;
         sh:maxInclusive 7 ;
         sh:datatype xsd:integer ;
+        sh:maxCount 1 ;
     ] ;
     sh:property [
         sh:path foaf:phone ;
@@ -78,12 +76,15 @@
     sh:property [
         sh:path :likesCats ;
         sh:datatype xsd:boolean ;
-        sh:equals :likesDogs ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
     ] ;
     sh:property [
         sh:path :likesDogs ;
         sh:datatype xsd:boolean ;
         sh:hasValue true ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
     ] .
 
 :NameGroup1
@@ -96,31 +97,22 @@
     sh:order 2 ;
     rdfs:label "Birth & Death Date" .
 
-:OtherGroup1
-    a sh:PropertyGroup ;
-    rdfs:label "Other" .
-
 :AddressShape
     a sh:NodeShape ;
-    sh:closed true ;
+    sh:path schema:address ;
     sh:property [
-        sh:path schema:address ;
-        sh:node :StreetAddressShape ;
+        sh:path schema:postalCode ;
+        sh:datatype xsd:integer ;
+        sh:minInclusive 10000 ;
+        sh:maxInclusive 99999 ;
         sh:minCount 1 ;
-        sh:property [
-            sh:path schema:postalCode ;
-            sh:datatype xsd:integer ;
-            sh:minInclusive 10000 ;
-            sh:maxInclusive 99999 ;
-            sh:minCount 1 ;
-            sh:maxCount 1 ;
-        ] ;
-    ] .
-
-:StreetAddressShape
-    a sh:NodeShape ;
+        sh:maxCount 1 ;
+        sh:order 1 ;
+    ] ;
     sh:property [
         sh:path schema:streetAddress ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:order 2 ;
     ] .

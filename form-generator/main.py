@@ -7,7 +7,7 @@ def generate_webform(filename, destination):
     if not filename:
         raise Exception('Usage - python main.py <SHACL filename> <optional: result destination>')
     if not destination:
-        destination = '../miniflask/view/templates/'
+        destination = '../miniflask/'
 
     RDF_handler = RDFHandler(filename)
 
@@ -53,15 +53,15 @@ def generate_webform(filename, destination):
             find_paired_properties(shape, property, constraint)
 
     # Put things into template
-    with open(destination + 'form_contents.html', 'w') as f:
+    with open(destination + 'view/templates/form_contents.html', 'w') as f:
         f.write(render_template(form_name, shape))
 
     # Put form heading into template
-    with open(destination + 'form_heading.html', 'w') as f:
+    with open(destination + 'view/templates/form_heading.html', 'w') as f:
         f.write("Create New " + form_name)
 
     # Create map for converting submitted data into RDF
-    RDF_handler.create_rdf_map(shape)
+    RDF_handler.create_rdf_map(shape, destination)
 
 
 def assign_id(property, next_id, parent_id=""):
