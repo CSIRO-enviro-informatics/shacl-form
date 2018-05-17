@@ -32,13 +32,14 @@ def post():
     # Get unique URI of the new node
     # To do: Other URI options
     node_class = map.value(Literal('placeholder:node_uri'), URIRef(RDF.type), None)
-    node_uri = URIRef('http://example.org/ex#' + str(uuid.uuid4()))
+    entry_uuid = str(uuid.uuid4())
+    node_uri = URIRef('http://example.org/ex#' + entry_uuid)
     result.add((node_uri, RDF.type, node_class))
     for (subject, predicate, object) in map:
         if str(subject) == 'placeholder:node_uri' and not predicate == RDF.type:
             insert_entries(map, result, node_uri, predicate, object)
 
-    result.serialize(destination='result.ttl', format='turtle')
+    result.serialize(destination='../entries/' + entry_uuid + '.ttl', format='turtle')
     return Response('test', status=201, mimetype='text/plain')
 
 
