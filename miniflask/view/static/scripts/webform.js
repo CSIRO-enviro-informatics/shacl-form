@@ -142,7 +142,7 @@ var addEntry = function($template) {
     });
     // All entries below or at the minimum number of entries must be required
     if (min_entries != undefined && num_entries <= min_entries)
-        template_copy.children().children().attr('required', 'required');
+        template_copy.children().children().not('[type="checkbox"]').attr('required', 'required');
     // Append our prepared copy of the template to the entries
     entries.append(template_copy.html());
     num_entries++;
