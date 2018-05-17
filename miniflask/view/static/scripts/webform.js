@@ -62,16 +62,16 @@ $.validator.addMethod("data-lessThanEqual", function(value, element, params) {
 
 // Used to automatically add custom rules to relevant elements. Disabled fields are not validated
 $("#form").validate({
-    ignore: ":input[disabled]",
-    "data-equalTo": ":input[data-equalTo]",
-    "data-notEqualTo": ":input[data-notEqualTo]",
-    lessThan: ":input[lessThan]",
-    "data-lessThanEqual": ":input[data-lessThanEqual]",
-    pattern: ":input[pattern]"
+    ignore: "[disabled]",
+    "data-equalTo": "[data-equalTo]",
+    "data-notEqualTo": "[data-notEqualTo]",
+    lessThan: "[lessThan]",
+    "data-lessThanEqual": "[data-lessThanEqual]",
+    pattern: "[pattern]"
 });
 
 // Sets the message for equalTo validation
-$(":input[data-equalTo]").each(function(index) {
+$("[data-equalTo]").each(function(index) {
     $(this).rules("add", {
         messages: {
             "data-equalTo": $.validator.format(
@@ -83,7 +83,7 @@ $(":input[data-equalTo]").each(function(index) {
 });
 
 // Sets the message for notEqualTo validation
-$(":input[data-notEqualTo]").each(function(index) {
+$("[data-notEqualTo]").each(function(index) {
     $(this).rules("add", {
         messages: {
             "data-notEqualTo": $.validator.format(
@@ -95,7 +95,7 @@ $(":input[data-notEqualTo]").each(function(index) {
 });
 
 // Sets the message for lessThan validation
-$(":input[lessThan]").each(function(index) {
+$("[lessThan]").each(function(index) {
     $(this).rules("add", {
         messages: {
             lessThan: $.validator.format(
@@ -105,7 +105,8 @@ $(":input[lessThan]").each(function(index) {
         }
     });
 });
-$(":input[data-lessThanEqual]").each(function(index) {
+// Sets the message for lessThanEqual validation
+$("[data-lessThanEqual]").each(function(index) {
     $(this).rules("add", {
         messages: {
             "data-lessThanEqual": $.validator.format(

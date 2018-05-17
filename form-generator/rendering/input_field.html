@@ -2,7 +2,7 @@
 {{ property["hasValue"] }}
 {%- endif %}
 {%- if "in" in property %}
-<select name="{{ property["id"] }}{% if copy is not none %}-{{ copy }}{% endif %}" data-property-id="{{ property["id"] }}"
+<select name="{{ property["id"] }}{% if copy is not none %}-{{ copy }}{% endif %}" data-property-id="{{ property["id"] }}" data-label="{{ property["name"] }}"
     {%- if disabled==True %} disabled{% endif %}
     {%- if "equals" in property %} data-equalTo="{{ property["equals"] }}"{% endif %}
     {%- if "disjoint" in property %} data-notEqualTo="{{ property["disjoint"] }}"{% endif %}
