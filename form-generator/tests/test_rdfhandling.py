@@ -4,10 +4,6 @@ import pytest
 from rdflib.term import URIRef, Literal
 sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 from rdfhandling import RDFHandler
-import unittest
-
-# Show full diff in unittest
-unittest.util._MAX_LENGTH=2000
 
 
 def test_empty_file():

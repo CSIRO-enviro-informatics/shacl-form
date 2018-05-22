@@ -71,16 +71,18 @@ def generate_webform(filename, destination):
 
 
 def sort_composite_property(property):
+    if not property:
+        return
     if 'property' in property:
         property['property'].sort(key=lambda x: (x['order'] is None, x['order']))
         for p in property['property']:
             sort_composite_property(p)
 
 
-def assign_id(property, next_id, parent_id=""):
+def assign_id(property, next_id, parent_id=None):
     # Assigns the property an ID
     # Additionally, assigns an ID to any property within this property
-    if parent_id:
+    if parent_id is not None:
         property["id"] = str(parent_id) + ":" + str(next_id)
     else:
         property["id"] = next_id
@@ -103,12 +105,12 @@ def find_paired_properties(shape, property, constraint):
         for g in shape["groups"]:
             for p in g["properties"]:
                 result = check_property(p, str(property[constraint]))
-                if result:
+                if result is not None:
                     property[constraint] = result
                     return
         for p in shape["properties"]:
             result = check_property(p, str(property[constraint]))
-            if result:
+            if result is not None:
                 property[constraint] = result
                 return
 
@@ -121,7 +123,7 @@ def check_property(property, path):
     if "property" in property:
         for p in property["property"]:
             result = check_property(p, path)
-            if result:
+            if result is not None:
                 return result
 
 

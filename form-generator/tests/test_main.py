@@ -3,13 +3,107 @@ import os
 import pytest
 sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 import main
+import copy
+
 
 def test_empty_file():
     with pytest.raises(Exception):
         main.generate_webform("inputs/empty_file.ttl", "results/")
+
 
 def test_empty_shape():
     main.generate_webform("inputs/empty_shape.ttl", "results/")
     assert os.path.exists("results/view/templates/form_contents.html")
     assert os.path.getsize("results/view/templates/form_contents.html") == 0
     assert open("results/view/templates/form_heading.html", 'r').read() == 'Create New Person'
+
+
+def test_sort_composite_property_empty():
+    assert main.sort_composite_property(None) is None
+
+
+def test_sort_composite_property_single():
+    # This function changes the structure of its input, make a copy to see whether it changed
+    property = {'path': 'http://xmlns.com/foaf/0.1/phone', 'name': 'Phone Number', 'order': None}
+    result = copy.deepcopy(property)
+    main.sort_composite_property(result)
+    assert result == property
+
+
+def test_sort_composite_property_order():
+    # This function changes the structure of its input, make a copy to see whether it changed
+    # Should order the two properties by their 'order' key
+    property = {'property': [{'order': 2, 'path': 'http://schema.org/streetAddress'},
+                             {'order': 1, 'path': 'http://schema.org/postalCode'}],
+                'path': 'http://schema.org/address',
+                'name': 'Address',
+                'order': None}
+    result = {'property': [{'order': 1, 'path': 'http://schema.org/postalCode'},
+                           {'order': 2, 'path': 'http://schema.org/streetAddress'}],
+                'path': 'http://schema.org/address',
+                'name': 'Address',
+                'order': None}
+    main.sort_composite_property(property)
+    assert property == result
+
+
+def test_assign_id_no_parent_id():
+    property = dict()
+    expected_result = {'id': 0}
+    main.assign_id(property, 0)
+    assert property == expected_result
+
+
+def test_assign_id_parent_id():
+    property = dict()
+    expected_result = {'id': "1:0"}
+    main.assign_id(property, 0, "1")
+    assert property == expected_result
+
+
+def test_assign_id_nested_property():
+    property = {'property': [{}, {}]}
+    expected_result = {'property': [{'id': '0:0'}, {'id': '0:1'}], 'id': 0}
+    main.assign_id(property, 0)
+    assert property == expected_result
+
+
+def test_check_property_match():
+    property = {'path': 'http://schema.org/givenName', 'id': 0}
+    path = 'http://schema.org/givenName'
+    result = main.check_property(property, path)
+    expected_result = 0
+    assert result == expected_result
+
+
+def test_check_property_no_match():
+    property = {'path': 'http://schema.org/familyName', 'id': 0}
+    path = 'http://schema.org/givenName'
+    result = main.check_property(property, path)
+    expected_result = None
+    assert result == expected_result
+
+
+def test_check_property_nested_property_match():
+    property = {'path': 'http://schema.org/familyName', 'property': [{'path': 'http://schema.org/givenName', 'id': 0}]}
+    path = 'http://schema.org/givenName'
+    result = main.check_property(property, path)
+    expected_result = 0
+    assert result == expected_result
+
+
+def test_check_property_nested_property_no_match():
+    property = {'path': 'http://schema.org/familyName', 'property': [{'path': 'http://schema.org/familyName', 'id': 0}]}
+    path = 'http://schema.org/givenName'
+    result = main.check_property(property, path)
+    expected_result = None
+    assert result == expected_result
+
+
+def test_find_paired_properties():
+    shape = {'groups': [], 'properties': [{'path': 'A', 'equals': 'B', 'id': 0, 'property': [{'path': 'B', 'id': 1}]}]}
+    property = {'path': 'A', 'equals': 'B', 'id': 0, 'property': [{'path': 'B', 'id': 1}]}
+    constraint = 'equals'
+    expected_result = {'path': 'A', 'equals': 1, 'id': 0, 'property': [{'path': 'B', 'id': 1}]}
+    main.find_paired_properties(shape, property, constraint)
+    assert property == expected_result
