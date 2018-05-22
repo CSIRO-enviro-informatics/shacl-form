@@ -35,7 +35,7 @@ class RDFHandler:
         Shapes and properties can reference other shapes using the sh:node predicate. Therefore, the root shape is the
         only shape that is not the object of a triple with a predicate of sh:node.
         """
-        shape_uris = self.g.subjects(URIRef(RDF.uri + "type"), URIRef(SHACL + "NodeShape"))
+        shape_uris = list(self.g.subjects(URIRef(RDF.uri + "type"), URIRef(SHACL + "NodeShape")))
         root_uri = None
         if not shape_uris:
             return None

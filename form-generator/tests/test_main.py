@@ -10,6 +10,6 @@ def test_empty_file():
 
 def test_empty_shape():
     main.generate_webform("inputs/empty_shape.ttl", "results/")
-    assert os.path.exists("results/form_contents.html")
-    assert os.path.getsize("results/form_contents.html") == 0
-    assert open("results/form_heading.html", 'r').read() == 'Create New Person'
+    assert os.path.exists("results/view/templates/form_contents.html")
+    assert os.path.getsize("results/view/templates/form_contents.html") == 0
+    assert open("results/view/templates/form_heading.html", 'r').read() == 'Create New Person'
