@@ -4,6 +4,7 @@ import pytest
 from rdflib.term import URIRef, Literal
 sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 from rdfhandling import RDFHandler
+import rdflib
 
 
 def test_empty_file():
@@ -37,6 +38,27 @@ def test_no_path():
         RDF_handler.get_shape()
 
 
+def test_recursion():
+    # Checks to make sure recursion isn't accepted
+    RDF_handler = RDFHandler('inputs/recursion.ttl')
+    with pytest.raises(Exception):
+        RDF_handler.get_shape()
+
+
+def test_implicit_target_class():
+    # Checks to make sure the target class is correctly identified when implicitly declared
+    RDF_handler = RDFHandler('inputs/implicit_target_class.ttl')
+    shape = RDF_handler.get_shape()
+    assert str(shape['target_class']) == 'http://schema.org/Person'
+
+
+def test_missing_group():
+    # Checks to make sure an exception is thrown if a group is referenced but does not exist
+    RDF_handler = RDFHandler('inputs/missing_group.ttl')
+    with pytest.raises(Exception):
+        RDF_handler.get_shape()
+
+
 def test_path():
     # Check the path is read
     expected_path = "http://schema.org/givenName"
@@ -65,7 +87,10 @@ def test_shape():
     constraint_min_test(shape)
     constraint_max_test(shape)
     recursive_properties_test(shape)
+    min_exclusive_test(shape)
+    max_exclusive_test(shape)
     node_test(shape)
+    group_test(shape)
 
 
 def constraint_generic_constraint_test(shape):
@@ -86,6 +111,9 @@ def constraint_name_test(shape):
 
     # Check name generated from URI
     expected_name = "birthDate"
+    groups = shape["groups"]
+    for g in groups:
+        properties.extend(g["properties"])
     for p in properties:
         if p["path"] == "http://schema.org/birthDate":
             assert str(p["name"]) == expected_name
@@ -147,10 +175,38 @@ def constraint_max_test(shape):
 
 def recursive_properties_test(shape):
     # Check that properties within properties are correctly read
-    expected_value = [{'path': 'http://schema.org/streetAddress', 'name': 'streetAddress', 'order': None}]
+    expected_value = [
+        {
+            'node': rdflib.term.URIRef('http://example.org/ex#StreetAddressShape'),
+            'order': rdflib.term.Literal('1', datatype=rdflib.term.URIRef('http://www.w3.org/2001/XMLSchema#integer')),
+            'type': rdflib.term.URIRef('http://www.w3.org/ns/shacl#NodeShape'),
+            'path': 'http://schema.org/streetAddress',
+            'name': 'streetAddress'
+        }, {
+            'path': 'http://schema.org/postalCode',
+            'order': rdflib.term.Literal('2', datatype=rdflib.term.URIRef('http://www.w3.org/2001/XMLSchema#integer')),
+            'name': 'postalCode'}]
+
     for p in shape["properties"]:
-        if p["path"] == "http://schema.org/address":
-            assert p["property"] == expected_value
+        if p['path'] == 'http://schema.org/address':
+            p['property'].sort(key=lambda x: (x['order'] is None, x['order']))
+            assert p['property'] == expected_value
+
+
+def min_exclusive_test(shape):
+    # Check that the minimum is correct when calculated from the minExclusive constraint
+    expected_value = 1
+    for p in shape['properties']:
+        if p['path'] == 'http://example.org/ex#goalGpa':
+            assert p['min'] == expected_value
+
+
+def max_exclusive_test(shape):
+    # Check that the maximum is correct when calculated from the maxExclusive constraint
+    expected_value = 7
+    for p in shape['properties']:
+        if p['path'] == 'http://example.org/ex#goalGpa':
+            assert p['max'] == expected_value
 
 
 def node_test(shape):
@@ -169,12 +225,12 @@ def group_test(shape):
     expected_order = 0
     groups = shape["groups"]
     # Labels, optional
-    assert any(g["label"] is None for g in groups)
+    assert not any(g["label"] is None for g in groups)
     assert any(str(g["label"]) == expected_label for g in groups)
     # Order, optional
-    assert any(g["order"] is None for g in groups)
+    assert not any(g["order"] is None for g in groups)
     assert any(g["order"] == Literal(expected_order) for g in groups)
     # Contained properties
     for g in groups:
-        if g["label"] == expected_label:
+        if str(g["label"]) == expected_label:
             assert any(p["path"] == "http://schema.org/birthDate" for p in g["properties"])

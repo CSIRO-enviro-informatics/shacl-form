@@ -193,6 +193,7 @@ class RDFHandler:
     def add_node(self, root_uri, predicate, object):
         # Adds the contents of the node to the root shape
         # If the node contains a link to another node, use recursion to add nodes at all depths
+        print(predicate, object)
         if str(predicate) == SHACL + "node":
             for (p, o) in self.g.predicate_objects(object):
                 self.add_node(root_uri, p, o)

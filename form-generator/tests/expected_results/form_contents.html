@@ -1,0 +1,107 @@
+<fieldset>
+    <legend>Birth & Death Date</legend>
+        <label>birthDate</label><br />
+        <input data-property-id="0" name="0-0" data-label="birthDate" lessThan="http://schema.org/deathDate"/>
+        <br />
+</fieldset>
+    <label>Given name</label><br />
+    <label><i>The first name of a person.</i></label><br />
+    <div>
+        <div class='template' hidden>
+            <div>
+                <select name="1" data-property-id="1" data-label="Given name" disabled data-equalTo="6"><option value="Steve" selected>Steve</option><option value="Terrence">Terrence</option></select><br />
+            </div>
+        </div>
+        <div class='entries'></div>
+        <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+    </div>
+    <br />
+    <label>likesDogs</label><br />
+    <div>
+        <div class='template' hidden>
+            <div>
+                <input data-property-id="2" name="2" data-label="likesDogs" disabled/>
+            </div>
+        </div>
+        <div class='entries'></div>
+        <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+    </div>
+    <br />
+    <label>gpa</label><br />
+    <div>
+        <div class='template' hidden>
+            <div>
+                <input data-property-id="3" name="3" data-label="gpa" type="number" min="1.0" max="7.0" data-lessThanEqual="8" disabled/>
+            </div>
+        </div>
+        <div class='entries'></div>
+        <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+    </div>
+    <br />
+    <label>address</label><br />
+    <div>
+        <div class='template' hidden>
+            <div>
+                <fieldset data-property-id="4" name="4">
+                    <label>streetAddress</label><br />
+                    <div>
+                        <div class='template' hidden>
+                            <div>
+                                <input data-property-id="4:0" name="4:0" data-label="streetAddress" disabled/>
+                            </div>
+                        </div>
+                        <div class='entries'></div>
+                        <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+                    </div>
+                    <br />
+                </fieldset>
+            </div>
+        </div>
+        <div class='entries'></div>
+        <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+    </div>
+    <br />
+    <label>likesBirds</label><br />
+    <div>
+        <div class='template' hidden>
+            <div>
+                <input data-property-id="5" name="5" data-label="likesBirds" disabled/>
+            </div>
+        </div>
+        <div class='entries'></div>
+        <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+    </div>
+    <br />
+    <label>familyName</label><br /><label><i>Language: en, es</i></label><br />
+    <div>
+        <div class='template' hidden>
+            <div>
+                <input data-property-id="6" name="6" data-label="familyName" type="text" pattern="^G" title="Must match pattern: ^G" value="" disabled/>
+            </div>
+        </div>
+        <div class='entries'></div>
+        <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+    </div>
+    <br />
+    <label>likesCats</label><br />
+    <div>
+        <div class='template' hidden>
+            <div>
+                <input data-property-id="7" name="7" data-label="likesCats" data-notEqualTo="2" disabled/>
+            </div>
+        </div>
+        <div class='entries'></div>
+        <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+    </div>
+    <br />
+    <label>goalGpa</label><br />
+    <div>
+        <div class='template' hidden>
+            <div>
+                <input data-property-id="8" name="8" data-label="goalGpa" type="number" disabled/>
+            </div>
+        </div>
+        <div class='entries'></div>
+        <button type="button" class='add-entry'>Add</button> <button type="button" disabled class='remove-entry'>Remove</button>
+    </div>
+    <br />

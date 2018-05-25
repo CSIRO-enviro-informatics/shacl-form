@@ -1,9 +1,10 @@
 from rdfhandling import RDFHandler
 import sys
 from rendering import render_template
+import os
 
 
-def generate_webform(filename, destination):
+def generate_webform(filename, destination=None):
     if not filename:
         raise Exception('Usage - python main.py <SHACL filename> <optional: result destination>')
     if not destination:
@@ -59,6 +60,8 @@ def generate_webform(filename, destination):
             find_paired_properties(shape, property, constraint)
 
     # Put things into template
+    if not os.path.exists(destination + 'view/templates'):
+        os.makedirs(destination + 'view/templates')
     with open(destination + 'view/templates/form_contents.html', 'w') as f:
         f.write(render_template(form_name, shape))
 

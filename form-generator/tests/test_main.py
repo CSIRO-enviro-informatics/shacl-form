@@ -4,6 +4,17 @@ import pytest
 sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 import main
 import copy
+import shutil
+
+
+def test_no_filename():
+    with pytest.raises(Exception):
+        main.generate_webform(None, None)
+
+
+def test_no_destination():
+    with pytest.raises(Exception):
+        main.generate_webform('test', None)
 
 
 def test_empty_file():
@@ -100,10 +111,37 @@ def test_check_property_nested_property_no_match():
     assert result == expected_result
 
 
-def test_find_paired_properties():
+def test_find_paired_properties_ungrouped():
     shape = {'groups': [], 'properties': [{'path': 'A', 'equals': 'B', 'id': 0, 'property': [{'path': 'B', 'id': 1}]}]}
     property = {'path': 'A', 'equals': 'B', 'id': 0, 'property': [{'path': 'B', 'id': 1}]}
     constraint = 'equals'
     expected_result = {'path': 'A', 'equals': 1, 'id': 0, 'property': [{'path': 'B', 'id': 1}]}
     main.find_paired_properties(shape, property, constraint)
     assert property == expected_result
+
+
+def test_find_paired_properties_grouped():
+    shape = {'groups': [{'properties': [{'path': 'A', 'equals': 'B', 'id': 0, 'property': [{'path': 'B', 'id': 1}]}]}], 'properties': []}
+    property = {'path': 'A', 'equals': 'B', 'id': 0, 'property': [{'path': 'B', 'id': 1}]}
+    constraint = 'equals'
+    expected_result = {'path': 'A', 'equals': 1, 'id': 0, 'property': [{'path': 'B', 'id': 1}]}
+    main.find_paired_properties(shape, property, constraint)
+    assert property == expected_result
+
+
+def test_find_paired_properties_nested():
+    shape = {'groups': [], 'properties': [{'path': 'A', 'id': 0, 'property': [{'path': 'B', 'equals': 'A', 'id': 1}]}]}
+    property = {'path': 'A', 'id': 0, 'property': [{'path': 'B', 'equals': 'A', 'id': 1}]}
+    constraint = 'property'
+    expected_result = {'path': 'A', 'id': 0, 'property': [{'path': 'B', 'equals': 0, 'id': 1}]}
+    main.find_paired_properties(shape, property, constraint)
+    assert property == expected_result
+
+
+def test_shape():
+    # Contents of result can't be verified due to RDF and therefore the HTML result being unordered
+    shutil.rmtree('results')
+    main.generate_webform('inputs/test_shape.ttl', 'results/')
+    assert os.path.exists("results/view/templates/form_contents.html")
+    assert open("results/view/templates/form_heading.html", 'r').read() == 'Create New Person'
+

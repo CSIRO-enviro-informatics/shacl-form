@@ -1,7 +1,7 @@
 {%- macro display_property(property) %}
 {%- include "property.html" %}
 {%- endmacro -%}
-{%- for group in shape["groups"] %}
+{%- for group in shape["groups"] -%}
 <fieldset>
     <legend>{{ group["label"] }}</legend>
     {%- for property in group["properties"] %}
@@ -10,5 +10,5 @@
 </fieldset>
 {%- endfor %}
 {%- for property in shape["properties"] %}
-{{- display_property(property)|indent(8) }}
+{{- display_property(property)|indent(4) }}
 {%- endfor %}

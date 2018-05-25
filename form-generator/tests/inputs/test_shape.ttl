@@ -36,12 +36,7 @@
         sh:minCount 1 ;
         sh:group :DateGroup1 ;
     ] ;
-    sh:property [
-        sh:path schema:address ;
-        sh:property [
-            sh:path schema:streetAddress ;
-        ] ;
-    ] ;
+    sh:node :AddressShape1 ;
     sh:property [
         sh:path :gpa ;
         sh:minInclusive 1 ;
@@ -52,6 +47,8 @@
     sh:property [
         sh:path :goalGpa ;
         sh:datatype xsd:integer ;
+        sh:minExclusive 0 ;
+        sh:maxExclusive 8 ;
     ] ;
     sh:property [
         sh:path :likesCats ;
@@ -75,4 +72,34 @@
     a sh:NodeShape ;
     sh:property [
         sh:path :likesBirds ;
+    ] .
+
+:AddressShape1
+    a sh:NodeShape ;
+    sh:node :AddressShape2 .
+
+:AddressShape2
+    a sh:NodeShape ;
+    sh:node :AddressCountryShape ;
+    sh:property [
+        sh:path schema:address ;
+        sh:property [
+            sh:node :StreetAddressShape ;
+        ] ;
+        sh:property [
+            sh:path schema:postalCode ;
+            sh:order 2 ;
+        ] ;
+    ] .
+
+:StreetAddressShape
+    a sh:NodeShape ;
+    sh:path schema:streetAddress ;
+    sh:order 1 .
+
+:AddressCountryShape
+    a sh:NodeShape ;
+    sh:property [
+        sh:path schema:addressCountry ;
+        sh:order 3 ;
     ] .
