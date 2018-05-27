@@ -4,11 +4,11 @@ from rendering import render_template
 import os
 
 
-def generate_webform(filename, destination=None):
+def generate_webform(filename, destination='../miniflask/'):
     if not filename:
         raise Exception('Usage - python main.py <SHACL filename> <optional: result destination>')
-    if not destination:
-        destination = '../miniflask/'
+    if not os.path.isfile(filename):
+        raise Exception('File does not exist')
 
     RDF_handler = RDFHandler(filename)
 
@@ -74,8 +74,6 @@ def generate_webform(filename, destination=None):
 
 
 def sort_composite_property(property):
-    if not property:
-        return
     if 'property' in property:
         property['property'].sort(key=lambda x: (x['order'] is None, x['order']))
         for p in property['property']:
@@ -132,4 +130,9 @@ def check_property(property, path):
 
 if __name__ == "__main__":
     # File name passed as command-line argument
-    generate_webform(sys.argv[1] if len(sys.argv) >= 2 else None, sys.argv[2] if len(sys.argv) >= 3 else None)
+    if len(sys.argv) >= 3:
+        generate_webform(sys.argv[1], sys.argv[2])
+    elif len(sys.argv) >= 2:
+        generate_webform(sys.argv[1])
+    else:
+        generate_webform(None)

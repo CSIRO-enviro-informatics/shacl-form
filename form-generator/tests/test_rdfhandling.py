@@ -78,7 +78,7 @@ def test_shape():
     shape = RDFHandler("inputs/test_shape.ttl").get_shape()
     # Run the following tests on the test shape to avoid getting it every time
     # They won't be automatically discovered by pytest without the test_ prefix
-    constraint_generic_constraint_test(shape)
+    constraint_generic_test(shape)
     constraint_name_test(shape)
     constraint_order_test(shape)
     constraint_mincount_test(shape)
@@ -86,14 +86,12 @@ def test_shape():
     constraint_languagein_test(shape)
     constraint_min_test(shape)
     constraint_max_test(shape)
-    recursive_properties_test(shape)
-    min_exclusive_test(shape)
-    max_exclusive_test(shape)
+    nested_properties_test(shape)
     node_test(shape)
     group_test(shape)
 
 
-def constraint_generic_constraint_test(shape):
+def constraint_generic_test(shape):
     # Check the desc is read
     expected_desc = "The first name of a person."
     for p in shape["properties"]:
@@ -109,7 +107,7 @@ def constraint_name_test(shape):
         if p["path"] == "http://schema.org/givenName":
             assert str(p["name"]) == expected_name
 
-    # Check name generated from URI
+    # Check name derived from URI
     expected_name = "birthDate"
     groups = shape["groups"]
     for g in groups:
@@ -164,6 +162,12 @@ def constraint_min_test(shape):
         if p["path"] == "http://example.org/ex#gpa":
             assert p["min"] == expected_value
 
+    # Check that the minimum is correct when calculated from the minExclusive constraint
+    expected_value = 1
+    for p in shape['properties']:
+        if p['path'] == 'http://example.org/ex#goalGpa':
+            assert p['min'] == expected_value
+
 
 def constraint_max_test(shape):
     # Check that the min is read
@@ -172,8 +176,14 @@ def constraint_max_test(shape):
         if p["path"] == "http://example.org/ex#gpa":
             assert p["max"] == expected_value
 
+    # Check that the maximum is correct when calculated from the maxExclusive constraint
+    expected_value = 7
+    for p in shape['properties']:
+        if p['path'] == 'http://example.org/ex#goalGpa':
+            assert p['max'] == expected_value
 
-def recursive_properties_test(shape):
+
+def nested_properties_test(shape):
     # Check that properties within properties are correctly read
     expected_value = [
         {
@@ -191,22 +201,6 @@ def recursive_properties_test(shape):
         if p['path'] == 'http://schema.org/address':
             p['property'].sort(key=lambda x: (x['order'] is None, x['order']))
             assert p['property'] == expected_value
-
-
-def min_exclusive_test(shape):
-    # Check that the minimum is correct when calculated from the minExclusive constraint
-    expected_value = 1
-    for p in shape['properties']:
-        if p['path'] == 'http://example.org/ex#goalGpa':
-            assert p['min'] == expected_value
-
-
-def max_exclusive_test(shape):
-    # Check that the maximum is correct when calculated from the maxExclusive constraint
-    expected_value = 7
-    for p in shape['properties']:
-        if p['path'] == 'http://example.org/ex#goalGpa':
-            assert p['max'] == expected_value
 
 
 def node_test(shape):

@@ -12,7 +12,10 @@ $.validator.addMethod("data-equalTo", function(value, element, params) {
         object_value = object.is(":checked");
     else
         object_value = object.val();
-    return this.optional(element) || subject_value == object_value;
+    if ($(element).attr("type") == "checkbox")
+        return subject_value == object_value;
+    else
+        return this.optional(element) || subject_value == object_value;
 }, "Message" );
 $.validator.addMethod("data-notEqualTo", function(value, element, params) {
     var subject_value;
@@ -96,9 +99,10 @@ $("[data-notEqualTo]").each(function(index) {
 
 // Sets the message for lessThan validation
 $("[lessThan]").each(function(index) {
+    console.log("stuff");
     $(this).rules("add", {
         messages: {
-            lessThan: $.validator.format(
+            "lessThan": $.validator.format(
                 "Must be less than {0}",
                 $("[data-property-id=" + $(this).attr("lessThan") + "]").attr("data-label")
             )

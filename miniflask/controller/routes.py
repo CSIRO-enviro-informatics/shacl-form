@@ -4,6 +4,7 @@ from rdflib.util import guess_format
 from rdflib.namespace import RDF, RDFS
 from rdflib.term import URIRef, Literal, BNode
 import uuid
+import os
 
 routes = Blueprint('controller', __name__)
 
@@ -35,6 +36,8 @@ def post():
         if str(subject) == 'placeholder:node_uri' and not predicate == RDF.type:
             insert_entries(map, result, node_uri, predicate, object)
 
+    if not os.path.exists('../entries'):
+        os.makedirs('../entries')
     result.serialize(destination='../entries/' + entry_uuid + '.ttl', format='turtle')
     return render_template('post.html')
 

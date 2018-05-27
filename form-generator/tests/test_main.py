@@ -12,7 +12,7 @@ def test_no_filename():
         main.generate_webform(None, None)
 
 
-def test_no_destination():
+def test_file_exists():
     with pytest.raises(Exception):
         main.generate_webform('test', None)
 
@@ -27,10 +27,6 @@ def test_empty_shape():
     assert os.path.exists("results/view/templates/form_contents.html")
     assert os.path.getsize("results/view/templates/form_contents.html") == 0
     assert open("results/view/templates/form_heading.html", 'r').read() == 'Create New Person'
-
-
-def test_sort_composite_property_empty():
-    assert main.sort_composite_property(None) is None
 
 
 def test_sort_composite_property_single():
@@ -140,7 +136,8 @@ def test_find_paired_properties_nested():
 
 def test_shape():
     # Contents of result can't be verified due to RDF and therefore the HTML result being unordered
-    shutil.rmtree('results')
+    if os.path.exists('results'):
+        shutil.rmtree('results')
     main.generate_webform('inputs/test_shape.ttl', 'results/')
     assert os.path.exists("results/view/templates/form_contents.html")
     assert open("results/view/templates/form_heading.html", 'r').read() == 'Create New Person'
