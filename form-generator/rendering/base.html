@@ -1,6 +1,9 @@
 {%- macro display_property(property) %}
 {%- include "property.html" %}
 {%- endmacro -%}
+{{ '{% extends "form.html" %}' }}
+{{ '{% block form_heading %}' }}Create New {{ form_name }}{{ '{% endblock %}' }}
+{{ '{% block form_contents %}' }}
 {%- for group in shape["groups"] -%}
 <fieldset>
     <legend>{{ group["label"] }}</legend>
@@ -12,3 +15,4 @@
 {%- for property in shape["properties"] %}
 {{- display_property(property)|indent(4) }}
 {%- endfor %}
+{{ '{% endblock %}' }}

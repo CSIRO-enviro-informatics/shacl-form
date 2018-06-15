@@ -16,7 +16,7 @@ def index():
 
 @routes.route('/form')
 def form():
-    return render_template('form.html')
+    return render_template('form_contents.html')
 
 
 @routes.route('/post', methods=['POST'])

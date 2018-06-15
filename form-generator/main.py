@@ -65,10 +65,6 @@ def generate_webform(filename, destination='../miniflask/'):
     with open(destination + 'view/templates/form_contents.html', 'w') as f:
         f.write(render_template(form_name, shape))
 
-    # Put form heading into template
-    with open(destination + 'view/templates/form_heading.html', 'w') as f:
-        f.write("Create New " + form_name)
-
     # Create map for converting submitted data into RDF
     RDF_handler.create_rdf_map(shape, destination)
 

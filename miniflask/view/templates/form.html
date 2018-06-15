@@ -1,9 +1,9 @@
 {% extends "layout.html" %}
-{% block title %}{% include "form_heading.html" %}{% endblock %}
+{% block form_heading %}{% endblock %}
 {% block content %}
-<h1>{% block heading %}{% include "form_heading.html" %}{% endblock %}</h1>
+<h1>{{ self.form_heading() }}</h1>
 <form id="form" action="{{ url_for('controller.post') }}" method="POST">
-    {% include "form_contents.html" %}
+    {% block form_contents %}{% endblock %}
     <input type="submit" value="Submit" />
 </form>
 {% endblock %}
