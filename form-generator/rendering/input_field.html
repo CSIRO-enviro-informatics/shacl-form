@@ -19,16 +19,16 @@
 <input data-property-id="{{ property["id"] }}" name="{{ property["id"] }}{% if copy is not none %}-{{ copy }}{% endif %}" data-label="{{ property["name"] }}"
 {%- if property["path"] == URIs["EMAIL"] %} type="email"
     {%- if required==True %} required{% endif %}
-        {%- if "hasValue" in property %} hidden value="{{ property["hasValue"] }}"
-        {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
-        {%- else %} value=""
-        {%- endif %}
+    {%- if "hasValue" in property %} hidden value="{{ property["hasValue"] }}"
+    {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
+    {%- else %} value=""
+    {%- endif %}
 {%- elif property["path"] == URIs["PHONE_NUMBER"] %} type="tel"
     {%- if required==True %} required{% endif %}
-        {%- if "hasValue" in property %} hidden value="{{ property["hasValue"] }}"
-        {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
-        {%- else %} value=""
-        {%- endif %}
+    {%- if "hasValue" in property %} hidden value="{{ property["hasValue"] }}"
+    {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
+    {%- else %} value=""
+    {%- endif %}
 {%- elif "datatype" in property %}
     {%- if property["datatype"] in URIs["NUMBER"] %} type="number"
         {%- if required==True %} required{% endif %}
@@ -53,14 +53,13 @@
     {%- elif property["datatype"] == URIs["BOOLEAN"] %} type="checkbox"
         {%- if "hasValue" in property and property["hasValue"] == True %} checked hidden
         {%- elif "defaultValue" in property and property["defaultValue"] == True %} checked{%- endif %}
-    {%- else %} type="text"
-        {%- if required==True %} required{% endif %}
-        {%- if "pattern" in property %} pattern="{{ property["pattern"] }}" title="Must match pattern: {{ property["pattern"] }}"{% endif %}
-        {%- if "hasValue" in property %} hidden value="{{ property["hasValue"] }}"
-        {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
-        {%- else %} value=""
-        {%- endif %}
     {%- endif %}
+{%- else %} type="text"
+    {%- if required==True %} required{% endif %}
+    {%- if "pattern" in property %} pattern="{{ property["pattern"] }}" title="Must match pattern: {{ property["pattern"] }}"{% endif %}
+    {%- if "hasValue" in property %} hidden value="{{ property["hasValue"] }}"
+    {%- elif "defaultValue" in property %} value="{{ property["defaultValue"] }}"
+    {%- else %} value=""{%- endif %}
 {%- endif %}
 {#- Stuff that applies no matter the type of input #}
 {%- if "maxLength" in property %} maxlength="{{ property["maxLength"] }}"{% endif %}
