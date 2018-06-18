@@ -5,13 +5,14 @@
 {%- include "entry.html" %}
 {%- endmacro -%}
 
+<p>
 {%- if "maxCount" not in property or property["maxCount"] > 0 %}
-<label>{{ property["name"] }}</label><br />
+<div><label>{{ property["name"] }}</label></div>
 {%- if "description" in property %}
-<label><i>{{ property["description"] }}</i></label><br />
+<div><i>{{ property["description"] }}</i></label></div>
 {%- endif %}
 {%- if "languageIn" in property %}<label><i>Language:
-    {%- for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label><br />
+    {%- for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label>
 {%- endif %}
 {%- if "maxCount" in property and property["maxCount"] == 1 and "minCount" in property and property["minCount"] == 1 %}
     {{- entry(property, disabled=disabled, required=True, copy=0) }}
@@ -29,4 +30,4 @@
 </div>
 {%- endif %}
 {%- endif %}
-<br />
+</p>

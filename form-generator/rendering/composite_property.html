@@ -4,7 +4,7 @@
 
 <fieldset data-property-id="{{ property["id"] }}" name="{{ property["id"] }}{% if copy is not none %}-{{ copy }}{% endif %}">
     {%- if "description" in property %}
-    <label for="{{ property["id"] }}"><i>{{ property["description"] }}</i></label><br />
+        <p><label for="{{ property["id"] }}"><i>{{ property["description"] }}</i></label></p>
     {%- endif %}
     {%- for property in property["property"] %}
         {{- display_property(property, disabled=disabled)|indent(4) }}
