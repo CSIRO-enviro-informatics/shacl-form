@@ -2,7 +2,7 @@ from rdflib.graph import Graph
 from rdflib.term import URIRef, Literal, BNode
 from rdflib.util import guess_format
 from rdflib.collection import Collection
-from rdflib.namespace import RDF, RDFS
+from rdflib.namespace import RDF, RDFS, XSD
 import re
 
 SHACL = "http://www.w3.org/ns/shacl#"
@@ -181,19 +181,19 @@ class RDFHandler:
 
         # Must have a name
         # If the property doesn't have a name label, fall back to the URI of the path.
-        if "name" not in property and "path" in property:
-            property["name"] = re.split("#|/", property["path"])[-1]
+        if 'name' not in property and 'path' in property:
+            property['name'] = re.split('#|/', property['path'])[-1]
 
         # There must be an entry for order even if it is unordered
-        if "order" not in property:
-            property["order"] = None
+        if 'order' not in property:
+            property['order'] = None
 
         return property
 
     def add_node(self, root_uri, predicate, object):
         # Adds the contents of the node to the root shape
         # If the node contains a link to another node, use recursion to add nodes at all depths
-        if str(predicate) == SHACL + "node":
+        if str(predicate) == SHACL + 'node':
             for (p, o) in self.g.predicate_objects(object):
                 self.add_node(root_uri, p, o)
         self.g.add((root_uri, predicate, object))
@@ -205,20 +205,27 @@ class RDFHandler:
         # Create the node associated with all the data entered
         g.add((Literal('placeholder:node_uri'), RDF.type, shape['target_class']))
         # Go through each property and add it
-        for group in shape["groups"]:
-            for property in group["properties"]:
+        for group in shape['groups']:
+            for property in group['properties']:
                 self.add_property_to_map(g, property, Literal('placeholder:node_uri'))
-        for property in shape["properties"]:
+        for property in shape['properties']:
             self.add_property_to_map(g, property, Literal('placeholder:node_uri'))
         g.serialize(destination=destination+'map.ttl', format='turtle')
 
     def add_property_to_map(self, graph, property, root):
-        # Create a template for the property
-        # Recursion may be required
+        # Recursive
         if 'property' in property:
             node = BNode()
             graph.add((root, URIRef(property['path']), node))
             for p in property['property']:
                 self.add_property_to_map(graph, p, node)
         else:
-            graph.add((root, URIRef(property['path']), Literal('placeholder:' + str(property['id']))))
+            if 'datatype' in property:
+                if property['datatype'] == str(XSD.boolean):
+                    graph.add((root, URIRef(property['path']),
+                               Literal('boolean-placeholder:' + str(property['id']))))
+                else:
+                    graph.add((root, URIRef(property['path']),
+                               Literal('placeholder:' + str(property['id']), datatype=property['datatype'])))
+            else:
+                graph.add((root, URIRef(property['path']), Literal('placeholder:' + str(property['id']))))

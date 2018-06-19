@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, Response, request
+from flask import Blueprint, render_template, request
 from rdflib import Graph
 from rdflib.util import guess_format
-from rdflib.namespace import RDF, RDFS
+from rdflib.namespace import RDF, XSD
 from rdflib.term import URIRef, Literal, BNode
 import uuid
 import os
@@ -22,19 +22,19 @@ def form():
 @routes.route('/post', methods=['POST'])
 def post():
     # Get map and result RDF graphs ready
-    map = Graph()
+    rdf_map = Graph()
     result = Graph()
-    result.namespace_manager = map.namespace_manager
-    map.parse('map.ttl', format=guess_format('map.ttl'))
+    result.namespace_manager = rdf_map.namespace_manager
+    rdf_map.parse('map.ttl', format=guess_format('map.ttl'))
     # Get unique URI of the new node
     # To do: Other URI options
-    node_class = map.value(Literal('placeholder:node_uri'), URIRef(RDF.type), None)
+    node_class = rdf_map.value(Literal('placeholder:node_uri'), URIRef(RDF.type), None)
     entry_uuid = str(uuid.uuid4())
     node_uri = URIRef('http://example.org/ex#' + entry_uuid)
     result.add((node_uri, RDF.type, node_class))
-    for (subject, predicate, object) in map:
-        if str(subject) == 'placeholder:node_uri' and not predicate == RDF.type:
-            insert_entries(map, result, node_uri, predicate, object)
+    for (s, p, o) in rdf_map:
+        if str(s) == 'placeholder:node_uri' and not p == RDF.type:
+            insert_entries(rdf_map, result, node_uri, p, o)
 
     if not os.path.exists('../entries'):
         os.makedirs('../entries')
@@ -42,27 +42,31 @@ def post():
     return render_template('post.html')
 
 
-def insert_entries(map, result, node_uri, predicate, object, root_id=None):
+def insert_entries(map, result, node_uri, predicate, o, root_id=None):
     """
     :param map: The RDF file that describes how the data from the form will fit into the RDF entry.
     :param result: The RDF file that will hold the new entry
     :param node_uri: The node that the property will attach to (the subject)
-    :param predicate: The predicate of the property
-    :param object: The object of the property, either a literal or a blank node pointing to more properties
+    :param p: The predicate of the property
+    :param o: The object of the property, either a literal or a blank node pointing to more properties
     :param root_id: Used for property recursion, provides a starting point for IDs to iterate through
     :return:
     """
-    if 'placeholder' in object:
+    if 'placeholder' in o:
         # Simple properties
         if not root_id:
-            root_id = object.split(':')[-1]
+            root_id = o.split(':')[-1]
         copy_id = 0
         found_entry = False
         while True:
             full_id = root_id + '-' + str(copy_id)
             entry = request.form.get(full_id)
+            # If a boolean field is false, it doesn't get sent with the form and there is no entry
+            if o.startswith('boolean'):
+                result.add((node_uri, predicate, Literal(True if entry else False, datatype=XSD.boolean)))
+                break
             if entry:
-                result.add((node_uri, predicate, Literal(entry)))
+                result.add((node_uri, predicate, Literal(entry, datatype=o.datatype)))
                 found_entry = True
                 copy_id += 1
             else:
@@ -70,7 +74,7 @@ def insert_entries(map, result, node_uri, predicate, object, root_id=None):
         return found_entry
     else:
         # Composite properties
-        included_properties = list(map.predicate_objects(object))
+        included_properties = list(map.predicate_objects(o))
         if not root_id:
             if len(included_properties) > 0:
                 root_id = included_properties[0][1].split(':')[-2]
@@ -79,6 +83,7 @@ def insert_entries(map, result, node_uri, predicate, object, root_id=None):
         copy_id = 0
         while True:
             node = BNode()
+            found_entry = False
             for p in included_properties:
                 full_id = root_id + '-' + str(copy_id) + ':' + p[1].split(':')[-1]
                 found_entry = insert_entries(map, result, node, p[0], p[1], full_id)
@@ -87,5 +92,3 @@ def insert_entries(map, result, node_uri, predicate, object, root_id=None):
                 result.add((node_uri, predicate, node))
             else:
                 break
-
-
