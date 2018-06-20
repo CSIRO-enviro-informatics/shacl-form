@@ -3,6 +3,7 @@ from rdflib.util import guess_format
 from rdflib.term import Literal, URIRef, BNode
 import uuid
 
+BASE_URI = 'http://example.org/ex#'
 
 def form_to_rdf(request, map_filename):
     # Get map and result RDF graphs ready
@@ -14,7 +15,7 @@ def form_to_rdf(request, map_filename):
     # To do: Other URI options
     node_class = rdf_map.value(Literal('placeholder:node_uri'), URIRef(RDF.type), None)
     entry_uuid = str(uuid.uuid4())
-    node_uri = URIRef('http://example.org/ex#record/' + entry_uuid)
+    node_uri = URIRef(BASE_URI + entry_uuid)
     result.add((node_uri, RDF.type, node_class))
     for (subject, predicate, o) in rdf_map:
         if str(subject) == 'placeholder:node_uri' and not predicate == RDF.type:
