@@ -1,121 +1,120 @@
 //Custom rules that can be used with any input type
-$.validator.addMethod("data-equalTo", function(value, element, params) {
+$.validator.addMethod('data-equalTo', function(value, element, params) {
     var subject_value;
     var object_value;
-    var object = $("[data-property-id=" + params + "]:not([disabled])");
+    var object = $('[data-property-id=' + params + ']:not([disabled])');
     if (object.length == 0) return true;
-    if ($(element).attr("type") == "checkbox")
-        subject_value = $(element).is(":checked");
+    if ($(element).attr('type') == 'checkbox')
+        subject_value = $(element).is(':checked');
     else
         subject_value = $(element).val();
-    if (object.attr("type") == "checkbox")
-        object_value = object.is(":checked");
+    if (object.attr('type') == 'checkbox')
+        object_value = object.is(':checked');
     else
         object_value = object.val();
-    if ($(element).attr("type") == "checkbox")
+    if ($(element).attr('type') == 'checkbox')
         return subject_value == object_value;
     else
         return this.optional(element) || subject_value == object_value;
-}, "Message" );
-$.validator.addMethod("data-notEqualTo", function(value, element, params) {
+}, 'Message' );
+$.validator.addMethod('data-notEqualTo', function(value, element, params) {
     var subject_value;
     var object_value;
-    var object = $("[data-property-id=" + params + "]:not([disabled])");
+    var object = $('[data-property-id=' + params + ']:not([disabled])');
     if (object.length == 0) return true;
-    if ($(element).attr("type") == "checkbox")
-        subject_value = $(element).is(":checked");
+    if ($(element).attr('type') == 'checkbox')
+        subject_value = $(element).is(':checked');
     else
         subject_value = $(element).val();
-    if (object.attr("type") == "checkbox")
-        object_value = object.is(":checked");
+    if (object.attr('type') == 'checkbox')
+        object_value = object.is(':checked');
     else
         object_value = object.val();
     return this.optional(element) || subject_value != object_value;
-}, "Message" );
-$.validator.addMethod("lessThan", function(value, element, params) {
+}, 'Message' );
+$.validator.addMethod('lessThan', function(value, element, params) {
     var subject_value;
     var object_value;
-    var object = $("[data-property-id=" + params + "]:not([disabled])");
+    var object = $('[data-property-id=' + params + ']:not([disabled])');
     if (object.length == 0) return true;
-    if ($(element).attr("type") == "checkbox")
-        subject_value = $(element).is(":checked");
+    if ($(element).attr('type') == 'checkbox')
+        subject_value = $(element).is(':checked');
     else
         subject_value = $(element).val();
-    if (object.attr("type") == "checkbox")
-        object_value = object.is(":checked");
+    if (object.attr('type') == 'checkbox')
+        object_value = object.is(':checked');
     else
         object_value = object.val();
     return this.optional(element) || subject_value < object_value;
-}, "Message" );
-$.validator.addMethod("data-lessThanEqual", function(value, element, params) {
+}, 'Message' );
+$.validator.addMethod('data-lessThanEqual', function(value, element, params) {
     var subject_value;
     var object_value;
-    var object = $("[data-property-id=" + params + "]:not([disabled])");
+    var object = $('[data-property-id=' + params + ']:not([disabled])');
     if (object.length == 0) return true;
-    if ($(element).attr("type") == "checkbox")
-        subject_value = $(element).is(":checked");
+    if ($(element).attr('type') == 'checkbox')
+        subject_value = $(element).is(':checked');
     else
         subject_value = $(element).val();
-    if (object.attr("type") == "checkbox")
-        object_value = object.is(":checked");
+    if (object.attr('type') == 'checkbox')
+        object_value = object.is(':checked');
     else
         object_value = object.val();
     return this.optional(element) || subject_value <= object_value;
-}, "Message" );
+}, 'Message' );
 
 // Used to automatically add custom rules to relevant elements. Disabled fields are not validated
-$("#form").validate({
-    ignore: "[disabled]",
-    "data-equalTo": "[data-equalTo]",
-    "data-notEqualTo": "[data-notEqualTo]",
-    lessThan: "[lessThan]",
-    "data-lessThanEqual": "[data-lessThanEqual]",
-    pattern: "[pattern]"
+$('#form').validate({
+    ignore: '[disabled]',
+    'data-equalTo': '[data-equalTo]',
+    'data-notEqualTo': '[data-notEqualTo]',
+    lessThan: '[lessThan]',
+    'data-lessThanEqual': '[data-lessThanEqual]',
+    pattern: '[pattern]'
 });
 
 // Sets the message for equalTo validation
-$("[data-equalTo]").each(function(index) {
-    $(this).rules("add", {
+$('[data-equalTo]').each(function(index) {
+    $(this).rules('add', {
         messages: {
-            "data-equalTo": $.validator.format(
-                "Must be equal to {0}",
-                $("[data-property-id=" + $(this).attr("data-equalTo") + "]").attr("data-label")
+            'data-equalTo': $.validator.format(
+                'Must be equal to {0}',
+                $('[data-property-id=' + $(this).attr('data-equalTo') + ']').attr('data-label')
             )
         }
     });
 });
 
 // Sets the message for notEqualTo validation
-$("[data-notEqualTo]").each(function(index) {
-    $(this).rules("add", {
+$('[data-notEqualTo]').each(function(index) {
+    $(this).rules('add', {
         messages: {
-            "data-notEqualTo": $.validator.format(
-                "Must not be equal to {0}",
-                $("[data-property-id=" + $(this).attr("data-notEqualTo") + "]").attr("data-label")
+            'data-notEqualTo': $.validator.format(
+                'Must not be equal to {0}',
+                $('[data-property-id=' + $(this).attr('data-notEqualTo') + ']').attr('data-label')
             )
         }
     });
 });
 
 // Sets the message for lessThan validation
-$("[lessThan]").each(function(index) {
-    console.log("stuff");
-    $(this).rules("add", {
+$('[lessThan]').each(function(index) {
+    $(this).rules('add', {
         messages: {
-            "lessThan": $.validator.format(
-                "Must be less than {0}",
-                $("[data-property-id=" + $(this).attr("lessThan") + "]").attr("data-label")
+            'lessThan': $.validator.format(
+                'Must be less than {0}',
+                $('[data-property-id=' + $(this).attr('lessThan') + ']').attr('data-label')
             )
         }
     });
 });
 // Sets the message for lessThanEqual validation
-$("[data-lessThanEqual]").each(function(index) {
-    $(this).rules("add", {
+$('[data-lessThanEqual]').each(function(index) {
+    $(this).rules('add', {
         messages: {
-            "data-lessThanEqual": $.validator.format(
-                "Must be less than or equal to {0}",
-                $("[data-property-id=" + $(this).attr("data-lessThanEqual") + "]").attr("data-label")
+            'data-lessThanEqual': $.validator.format(
+                'Must be less than or equal to {0}',
+                $('[data-property-id=' + $(this).attr('data-lessThanEqual') + ']').attr('data-label')
             )
         }
     });
@@ -187,3 +186,10 @@ $($('.template').get().reverse()).each(function(){
         addEntry($(this));
     }
 });
+
+$('#form').on('change', ':checkbox', function(){
+    if ($(this).is(':checked'))
+        $(this).next().removeAttr('checked');
+    else
+        $(this).next().attr('checked', 'checked');
+})

@@ -61,11 +61,25 @@ def insert_entries(map, result, node_uri, predicate, o, root_id=None):
         while True:
             full_id = root_id + '-' + str(copy_id)
             entry = request.form.get(full_id)
-            # If a boolean field is false, it doesn't get sent with the form and there is no entry
-            if o.startswith('boolean'):
-                result.add((node_uri, predicate, Literal(True if entry else False, datatype=XSD.boolean)))
-                break
-            if entry:
+            # Datatype of boolean can't be specified the usual way (i.e. "placeholder:1"^^xsd:boolean)
+            # Boolean properties have prefix of 'boolean-' (i.e. "boolean-placeholder:1")
+            if o.startswith('boolean-'):
+                # Unchecked checkboxes in a form aren't submitted with the form
+                # Form has been altered to submit hidden field with prefix 'unchecked:' if a checkbox isn't checked
+                # Normal entry -> True
+                if entry:
+                    result.add((node_uri, predicate, Literal(True, datatype=XSD.boolean)))
+                    found_entry = True
+                    copy_id += 1
+                # Entry with prefix 'unchecked' -> False
+                elif request.form.get('unchecked:' + full_id):
+                    result.add((node_uri, predicate, Literal(False, datatype=XSD.boolean)))
+                    found_entry = True
+                    copy_id += 1
+                # Neither -> No value
+                else:
+                    break
+            elif entry:
                 result.add((node_uri, predicate, Literal(entry, datatype=o.datatype)))
                 found_entry = True
                 copy_id += 1
