@@ -4,9 +4,10 @@ from rendering import render_template
 import os
 
 
-def generate_webform(filename, destination='../miniflask/'):
+def generate_webform(filename, form_destination='../miniflask/view/templates/', map_destination='../miniflask/'):
     if not filename:
-        raise Exception('Usage - python main.py <SHACL filename> <optional: result destination>')
+        raise Exception('Usage - python main.py <SHACL filename> <optional: form destination> '
+                        '<optional: map destination')
     if not os.path.isfile(filename):
         raise Exception('File does not exist')
 
@@ -60,13 +61,13 @@ def generate_webform(filename, destination='../miniflask/'):
             find_paired_properties(shape, property, constraint)
 
     # Put things into template
-    if not os.path.exists(destination + 'view/templates'):
-        os.makedirs(destination + 'view/templates')
-    with open(destination + 'view/templates/form_contents.html', 'w') as f:
+    if not os.path.exists(form_destination):
+        os.makedirs(form_destination)
+    with open(form_destination + 'form_contents.html', 'w') as f:
         f.write(render_template(form_name, shape))
 
     # Create map for converting submitted data into RDF
-    RDF_handler.create_rdf_map(shape, destination)
+    RDF_handler.create_rdf_map(shape, map_destination)
 
 
 def sort_composite_property(property):
@@ -126,8 +127,8 @@ def check_property(property, path):
 
 if __name__ == "__main__":
     # File name passed as command-line argument
-    if len(sys.argv) >= 3:
-        generate_webform(sys.argv[1], sys.argv[2])
+    if len(sys.argv) >= 4:
+        generate_webform(sys.argv[1], sys.argv[2], sys.argv[3])
     elif len(sys.argv) >= 2:
         generate_webform(sys.argv[1])
     else:
