@@ -4,7 +4,7 @@ from rendering import render_template
 import os
 
 
-def generate_webform(filename, form_destination='../miniflask/view/templates/', map_destination='../miniflask/'):
+def generate_webform(filename, form_destination='../miniflask/view/templates', map_destination='../miniflask'):
     if not filename:
         raise Exception('Usage - python main.py <SHACL filename> <optional: form destination> '
                         '<optional: map destination')
@@ -63,7 +63,7 @@ def generate_webform(filename, form_destination='../miniflask/view/templates/', 
     # Put things into template
     if not os.path.exists(form_destination):
         os.makedirs(form_destination)
-    with open(form_destination + 'form_contents.html', 'w') as f:
+    with open(form_destination + '/form_contents.html', 'w') as f:
         f.write(render_template(form_name, shape))
 
     # Create map for converting submitted data into RDF
