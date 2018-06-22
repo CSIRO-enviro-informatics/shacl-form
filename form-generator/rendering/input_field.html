@@ -61,6 +61,7 @@
 {%- else %} type='text'
     {%- if required==True %} required{% endif %}
     {%- if 'pattern' in property %} pattern='{{ property["pattern"] }}' title='Must match pattern: {{ property["pattern"] }}'{% endif %}
+    {%- if 'flags' in property %} flags='{{ property["flags"] }}'{% endif %}
     {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
     {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
     {%- else %} value=''{%- endif %}

@@ -64,13 +64,19 @@ $.validator.addMethod('data-lessThanEqual', function(value, element, params) {
 }, 'Message' );
 
 // Used to automatically add custom rules to relevant elements. Disabled fields are not validated
-$('#form').validate({
+$('#shacl-form').validate({
     ignore: '[disabled]',
     'data-equalTo': '[data-equalTo]',
     'data-notEqualTo': '[data-notEqualTo]',
     lessThan: '[lessThan]',
-    'data-lessThanEqual': '[data-lessThanEqual]',
-    pattern: '[pattern]'
+    'data-lessThanEqual': '[data-lessThanEqual]'
+});
+
+// Combines pattern and modifier flags into a regular expression for each input field
+$('[pattern]').each(function(index) {
+    $(this).rules('add', {
+        pattern: new RegExp($(this).attr('pattern'), $(this).attr('flags'))
+    });
 });
 
 // Sets the message for equalTo validation
@@ -187,9 +193,10 @@ $($('.template').get().reverse()).each(function(){
     }
 });
 
-$('#form').on('change', ':checkbox', function(){
+$('#shacl-form').on('change', ':checkbox', function(){
     if ($(this).is(':checked'))
         $(this).next().removeAttr('checked');
     else
         $(this).next().attr('checked', 'checked');
 })
+

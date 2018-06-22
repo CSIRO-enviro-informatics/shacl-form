@@ -2,7 +2,7 @@
 {% block form_heading %}{% endblock %}
 {% block content %}
 <h1>{{ self.form_heading() }}</h1>
-<form id="form" action="{{ url_for('controller.post') }}" method="POST">
+<form id="shacl-form" action="{{ url_for('controller.post') }}" method="POST">
     {% block form_contents %}{% endblock %}
     <input type="submit" value="Submit" />
 </form>
