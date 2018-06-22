@@ -29,7 +29,7 @@
     {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
     {%- else %} value=''
     {%- endif %}
-{%- elif 'datatype' in property %}
+{%- elif 'datatype' in property and not URIs['STRING'] == property['datatype'] %}
     {%- if property['datatype'] in URIs['NUMBER'] %} type='number'
         {%- if required==True %} required{% endif %}
         {%- if 'min' in property %} min='{{ property["min"] }}'{% endif %}
