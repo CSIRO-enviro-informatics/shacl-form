@@ -210,7 +210,7 @@ class RDFHandler:
                 self.add_property_to_map(g, property, Literal('placeholder:node_uri'))
         for property in shape['properties']:
             self.add_property_to_map(g, property, Literal('placeholder:node_uri'))
-        g.serialize(destination=destination + '/map.ttl', format='turtle')
+        g.serialize(destination=destination, format='turtle')
 
     def add_property_to_map(self, graph, property, root):
         # Recursive

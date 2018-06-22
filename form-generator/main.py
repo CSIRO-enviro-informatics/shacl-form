@@ -61,9 +61,8 @@ def generate_webform(filename, form_destination='../miniflask/view/templates', m
             find_paired_properties(shape, property, constraint)
 
     # Put things into template
-    if not os.path.exists(form_destination):
-        os.makedirs(form_destination)
-    with open(form_destination + '/form_contents.html', 'w') as f:
+    os.makedirs(os.path.dirname(os.path.abspath(form_destination)), exist_ok=True)
+    with open(form_destination, 'w') as f:
         f.write(render_template(form_name, shape))
 
     # Create map for converting submitted data into RDF

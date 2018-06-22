@@ -1,6 +1,7 @@
 import sys
 import os
 import pytest
+import filecmp
 sys.path.append(os.path.realpath(os.path.join(os.path.dirname(__file__), '..')))
 import main
 import copy
@@ -19,14 +20,13 @@ def test_file_exists():
 
 def test_empty_file():
     with pytest.raises(Exception):
-        main.generate_webform("inputs/empty_file.ttl", "results/")
+        main.generate_webform('inputs/empty_file.ttl', form_destination='result.html', map_destination='result.ttl')
 
 
 def test_empty_shape():
-    main.generate_webform("inputs/empty_shape.ttl", "results/")
-    assert os.path.exists("results/view/templates/form_contents.html")
-    assert os.path.getsize("results/view/templates/form_contents.html") == 0
-    assert open("results/view/templates/form_heading.html", 'r').read() == 'Create New Person'
+    main.generate_webform('inputs/empty_shape.ttl', form_destination='result.html', map_destination='result.ttl')
+    assert os.path.exists('result.html')
+    assert filecmp.cmp('result.html', 'expected_results/empty_shape.html')
 
 
 def test_sort_composite_property_single():
@@ -63,8 +63,8 @@ def test_assign_id_no_parent_id():
 
 def test_assign_id_parent_id():
     property = dict()
-    expected_result = {'id': "1:0"}
-    main.assign_id(property, 0, "1")
+    expected_result = {'id': '1:0'}
+    main.assign_id(property, 0, '1')
     assert property == expected_result
 
 
@@ -138,7 +138,6 @@ def test_shape():
     # Contents of result can't be verified due to RDF and therefore the HTML result being unordered
     if os.path.exists('results'):
         shutil.rmtree('results')
-    main.generate_webform('inputs/test_shape.ttl', 'results/')
-    assert os.path.exists("results/view/templates/form_contents.html")
-    assert open("results/view/templates/form_heading.html", 'r').read() == 'Create New Person'
+    main.generate_webform('inputs/test_shape.ttl', form_destination='result.html', map_destination='result.ttl')
+    assert os.path.exists('result.html')
 
