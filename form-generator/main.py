@@ -4,7 +4,8 @@ from rendering import render_template
 import os
 
 
-def generate_webform(filename, form_destination='../miniflask/view/templates', map_destination='../miniflask'):
+def generate_webform(filename, form_destination='../miniflask/view/templates/form_contents.html',
+                     map_destination='../miniflask/map.ttl'):
     if not filename:
         raise Exception('Usage - python main.py <SHACL filename> <optional: form destination> '
                         '<optional: map destination')

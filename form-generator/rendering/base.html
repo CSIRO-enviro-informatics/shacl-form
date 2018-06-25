@@ -4,7 +4,7 @@
 {{ '{% extends "form.html" %}' }}
 {{ '{% block form_heading %}' }}Create New {{ form_name }}{{ '{% endblock %}' }}
 {{ '{% block form_contents %}' }}
-{%- for group in shape["groups"] -%}
+{%- for group in shape["groups"] %}
 <fieldset>
     <legend>{{ group["label"] }}</legend>
     {%- for property in group["properties"] %}
@@ -13,6 +13,6 @@
 </fieldset>
 {%- endfor %}
 {%- for property in shape["properties"] %}
-{{- display_property(property)|indent(4) }}
+{{- display_property(property) }}
 {%- endfor %}
 {{ '{% endblock %}' }}

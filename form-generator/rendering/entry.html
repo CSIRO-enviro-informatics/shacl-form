@@ -4,8 +4,8 @@
 {%- if "property" in property %}
 {{ composite_property(property, disabled=disabled, copy=copy) }}
 {%- else %}
-    {{- input_field(property, disabled=disabled, required=required, copy=copy) }}
+    {{- input_field(property, disabled=disabled, hidden=hidden, required=required, copy=copy) }}
     {%- if "datatype" in property and property["datatype"] == URIs["BOOLEAN"] and "hasValue" not in property %}
-        {{- input_field(property, disabled=disabled, required=required, copy=copy, checkbox_unchecked=True) }}
-    {% endif %}
+        {{- input_field(property, disabled=disabled, hidden=hidden, required=required, copy=copy, checkbox_unchecked=True) }}
+    {%- endif %}
 {%- endif %}
