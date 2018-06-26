@@ -89,11 +89,11 @@ groups appear. The order is as follows:
 
 1. All ordered groups in ascending order
     * (Within each group) All ordered properties in ascending order
-    * (Within each group) All unordered properties in ascending order
+    * (Within each group) All unordered properties
 
 2. All unordered groups
     * (Within each group) All ordered properties in ascending order
-    * (Within each group) All unordered properties in ascending order
+    * (Within each group) All unordered properties
 
 3. All ungrouped ordered properties in ascending order
 4. All ungrouped unordered properties

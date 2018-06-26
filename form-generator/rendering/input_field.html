@@ -11,9 +11,10 @@
     {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
     {%- endif %}
     {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
-    {%- endif %}>
-    {%- if 'hasValue' in property %} hidden><option value='{{ property["hasValue"] }}' selected>{{ property["hasValue"] }}</option>
-    {%- else %}
+    {%- endif %}
+    {%- if 'hasValue' in property %} hidden>
+    <option value='{{ property["hasValue"] }}' selected>{{ property["hasValue"] }}</option>
+    {%- else %}>
         {%- for option in property['in'] %}
         <option value='{{ option }}'
             {%- if 'defaultValue' in property and property['defaultValue'] == option %} selected
@@ -24,13 +25,24 @@
 </select>
 {%- else %}
 <input data-property-id='
-    {%- if checkbox_unchecked == True %}unchecked:{{ property["id"] }}' name='unchecked:{{ property["id"] }}
-    {%- else %}{{ property["id"] }}' name='{{property["id"] }}
-    {%- endif %}
+    {%- if checkbox_unchecked == True %}unchecked:
+    {%- endif %}{{ property["id"] }}' name='
+    {%- if checkbox_unchecked == True %}unchecked:
+    {%- endif %}{{ property["id"] }}
     {%- if copy is not none %}-{{ copy }}
     {%- endif %}' data-label='{{ property["name"] }}'
     {%- if property['path'] == URIs['EMAIL'] %} type='email'
         {%- if required==True %} required
+        {%- endif %}
+        {%- if 'pattern' in property %} pattern='{{ property["pattern"] }}' title='Must match pattern: {{ property["pattern"] }}'
+        {%- endif %}
+        {%- if 'flags' in property %} flags='{{ property["flags"] }}'
+        {%- endif %}
+        {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
+        {%- endif %}
+        {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
+        {%- endif %}
+        {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
         {%- endif %}
         {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
         {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
@@ -38,6 +50,16 @@
         {%- endif %}
     {%- elif property['path'] == URIs['PHONE_NUMBER'] %} type='tel'
         {%- if required==True %} required
+        {%- endif %}
+        {%- if 'pattern' in property %} pattern='{{ property["pattern"] }}' title='Must match pattern: {{ property["pattern"] }}'
+        {%- endif %}
+        {%- if 'flags' in property %} flags='{{ property["flags"] }}'
+        {%- endif %}
+        {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
+        {%- endif %}
+        {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
+        {%- endif %}
+        {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
         {%- endif %}
         {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
         {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
@@ -50,12 +72,24 @@
             {%- endif %}
             {%- if 'max' in property %} max='{{ property["max"] }}'
             {%- endif %}
+            {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
+            {%- endif %}
+            {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
+            {%- endif %}
+            {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
+            {%- endif %}
             {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
             {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
             {%- else %} value=''
             {%- endif %}
         {%- elif property['datatype'] == URIs['DATE'] %} type='date'
             {%- if required==True %} required
+            {%- endif %}
+            {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
+            {%- endif %}
+            {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
+            {%- endif %}
+            {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
             {%- endif %}
             {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
             {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
@@ -64,13 +98,19 @@
         {%- elif property['datatype'] == URIs['TIME'] %} type='time'
             {%- if required==True %} required
             {%- endif %}
+            {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
+            {%- endif %}
+            {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
+            {%- endif %}
+            {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
+            {%- endif %}
             {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
             {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
             {%- else %} value=''
             {%- endif %}
         {%- elif property['datatype'] == URIs['BOOLEAN'] %} type='checkbox'
             {%- if checkbox_unchecked == True %} hidden
-                {%- if 'defaultValue' not in property or property['defaultValue'] == False %} checked
+                {%- if 'defaultValue' not in property or property['defaultValue'] == False or 'hasValue' not in property or property['hasValue']== False %} checked
                 {%- endif %}
             {%- elif 'hasValue' in property and property['hasValue'] == True %} checked hidden
             {%- elif 'defaultValue' in property and property['defaultValue'] == True %} checked
@@ -83,23 +123,25 @@
         {%- endif %}
         {%- if 'flags' in property %} flags='{{ property["flags"] }}'
         {%- endif %}
+        {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
+        {%- endif %}
+        {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
+        {%- endif %}
+        {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
+        {%- endif %}
         {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
         {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
         {%- else %} value=''{%- endif %}
     {%- endif %}
-    {#- Stuff that applies no matter the type of input #}
-    {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
-    {%- endif %}
-    {%- if 'equals' in property %} data-equalTo='{{ property["equals"] }}'
-    {%- endif %}
-    {%- if 'disjoint' in property %} data-notEqualTo='{{ property["disjoint"] }}'
-    {%- endif %}
-    {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
-    {%- endif %}
-    {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
-    {%- endif %}
-    {%- if disabled==True %} disabled
-    {%- endif %}
-    {%- if hidden==True %} hidden
+    {#- Stuff that applies no matter the type of input (doesn't apply to opposite-checkboxes) #}
+    {%- if checkbox_unchecked == False %}
+        {%- if 'equals' in property %} data-equalTo='{{ property["equals"] }}'
+        {%- endif %}
+        {%- if 'disjoint' in property %} data-notEqualTo='{{ property["disjoint"] }}'
+        {%- endif %}
+        {%- if disabled==True %} disabled
+        {%- endif %}
+        {%- if hidden==True %} hidden
+        {%- endif %}
     {%- endif %}/>
 {%- endif %}

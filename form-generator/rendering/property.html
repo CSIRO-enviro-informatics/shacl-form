@@ -6,18 +6,14 @@
 {%- endmacro -%}
 
 {%- if 'hasValue' in property %}
-<p>
-    {{- entry(property, hidden=True)|indent(4) }}
-</p>    
+<div>
+    {{- entry(property, hidden=True, copy=0)|indent(4) }}
+</div>    
 {%- elif "maxCount" not in property or property["maxCount"] > 0 %}
-<p>
-    <div>
-        <label>{{ property["name"] }}</label>
-    </div>
+<div>
+    <div><label>{{ property["name"] }}</label></div>
     {%- if "description" in property %}
-    <div>
-        <i>{{ property["description"] }}</i>
-    </div>
+    <div><i>{{ property["description"] }}</i></div>
     {%- endif %}
     {%- if "languageIn" in property %}<label><i>Language:
         {%- for l in property["languageIn"] %} {{ l }}{{ "," if not loop.last }}{% endfor %}</i></label>
@@ -39,5 +35,5 @@
         <button type='button' class='add-entry'>Add</button> <button type='button' disabled class='remove-entry'>Remove</button>
     </div>
     {%- endif %}
-</p>
+</div>
 {%- endif %}

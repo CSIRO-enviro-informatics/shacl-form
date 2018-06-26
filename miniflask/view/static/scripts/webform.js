@@ -195,8 +195,8 @@ $($('.template').get().reverse()).each(function(){
 
 $('#shacl-form').on('change', ':checkbox', function(){
     if ($(this).is(':checked'))
-        $(this).next().removeAttr('checked');
+        $('[name="unchecked:' + $(this).attr('name') + '"]').removeAttr('checked');
     else
-        $(this).next().attr('checked', 'checked');
+        $('[name="unchecked:' + $(this).attr('name') + '"]').attr('checked', 'checked');
 })
 
