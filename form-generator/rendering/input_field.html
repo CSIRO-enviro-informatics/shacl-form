@@ -12,7 +12,9 @@
     {%- endif %}
     {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
     {%- endif %}
-    {%- if 'hasValue' in property %} hidden>
+    {%- if hidden == True %} hidden
+    {%- endif %}
+    {%- if 'hasValue' in property %}>
     <option value='{{ property["hasValue"] }}' selected>{{ property["hasValue"] }}</option>
     {%- else %}>
         {%- for option in property['in'] %}
@@ -44,7 +46,7 @@
         {%- endif %}
         {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
         {%- endif %}
-        {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
+        {%- if 'hasValue' in property %} value='{{ property["hasValue"] }}'
         {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
         {%- else %} value=''
         {%- endif %}
@@ -61,7 +63,7 @@
         {%- endif %}
         {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
         {%- endif %}
-        {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
+        {%- if 'hasValue' in property %} value='{{ property["hasValue"] }}'
         {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
         {%- else %} value=''
         {%- endif %}
@@ -78,7 +80,7 @@
             {%- endif %}
             {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
             {%- endif %}
-            {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
+            {%- if 'hasValue' in property %} value='{{ property["hasValue"] }}'
             {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
             {%- else %} value=''
             {%- endif %}
@@ -91,7 +93,7 @@
             {%- endif %}
             {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
             {%- endif %}
-            {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
+            {%- if 'hasValue' in property %} value='{{ property["hasValue"] }}'
             {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
             {%- else %} value=''
             {%- endif %}
@@ -104,16 +106,18 @@
             {%- endif %}
             {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
             {%- endif %}
-            {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
+            {%- if 'hasValue' in property %} value='{{ property["hasValue"] }}'
             {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
             {%- else %} value=''
             {%- endif %}
         {%- elif property['datatype'] == URIs['BOOLEAN'] %} type='checkbox'
             {%- if checkbox_unchecked == True %} hidden
-                {%- if 'defaultValue' not in property or property['defaultValue'] == False or 'hasValue' not in property or property['hasValue']== False %} checked
+                {%- if ('defaultValue' in property and property['defaultValue'] == False) 
+                    or ('hasValue' in property and property['hasValue'] == False)
+                    or ('defaultValue' not in property and 'hasValue' not in property) %} checked
                 {%- endif %}
-            {%- elif 'hasValue' in property and property['hasValue'] == True %} checked hidden
-            {%- elif 'defaultValue' in property and property['defaultValue'] == True %} checked
+            {%- elif ('hasValue' in property and property['hasValue'] == True)
+                or ('defaultValue' in property and property['defaultValue'] == True) %} checked
             {%- endif %}
         {%- endif %}
     {%- else %} type='text'
@@ -129,7 +133,7 @@
         {%- endif %}
         {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
         {%- endif %}
-        {%- if 'hasValue' in property %} hidden value='{{ property["hasValue"] }}'
+        {%- if 'hasValue' in property %} value='{{ property["hasValue"] }}'
         {%- elif 'defaultValue' in property %} value='{{ property["defaultValue"] }}'
         {%- else %} value=''{%- endif %}
     {%- endif %}
