@@ -11,6 +11,7 @@
     sh:targetClass schema:Person ;
     sh:property [
         sh:path schema:givenName ;
+        sh:nodeKind sh:Literal ;
         sh:datatype xsd:string ;
         sh:description "The first name of a person. First character must be uppercase." ;
         sh:name "Given name" ;
@@ -24,6 +25,7 @@
     ] ;
     sh:property [
         sh:path schema:familyName ;
+        sh:nodeKind sh:Literal ;
         sh:datatype xsd:string ;
         sh:description "The last name of a person. First character must be uppercase." ;
         sh:name "Family name" ;
