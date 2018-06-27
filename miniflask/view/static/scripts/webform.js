@@ -1,17 +1,20 @@
+// Using val() on a checkbox always returns 'on' regardless of its actual value
+// This function returns the correct value of an input without having to check for a checkbox every time
+var get_value = function(element){
+    if ($(element).attr('type') == 'checkbox')
+        return $(element).is(':checked');
+    else
+        return $(element).val();
+}
+
 //Custom rules that can be used with any input type
 $.validator.addMethod('data-equalTo', function(value, element, params) {
     var subject_value;
     var object_value;
     var object = $('[data-property-id=' + params + ']:not([disabled])');
     if (object.length == 0) return true;
-    if ($(element).attr('type') == 'checkbox')
-        subject_value = $(element).is(':checked');
-    else
-        subject_value = $(element).val();
-    if (object.attr('type') == 'checkbox')
-        object_value = object.is(':checked');
-    else
-        object_value = object.val();
+    subject_value = get_value(element);
+    object_value = get_value(object);
     if ($(element).attr('type') == 'checkbox')
         return subject_value == object_value;
     else
@@ -22,14 +25,8 @@ $.validator.addMethod('data-notEqualTo', function(value, element, params) {
     var object_value;
     var object = $('[data-property-id=' + params + ']:not([disabled])');
     if (object.length == 0) return true;
-    if ($(element).attr('type') == 'checkbox')
-        subject_value = $(element).is(':checked');
-    else
-        subject_value = $(element).val();
-    if (object.attr('type') == 'checkbox')
-        object_value = object.is(':checked');
-    else
-        object_value = object.val();
+    subject_value = get_value(element);
+    object_value = get_value(object);
     return this.optional(element) || subject_value != object_value;
 }, 'Message' );
 $.validator.addMethod('lessThan', function(value, element, params) {
@@ -37,14 +34,8 @@ $.validator.addMethod('lessThan', function(value, element, params) {
     var object_value;
     var object = $('[data-property-id=' + params + ']:not([disabled])');
     if (object.length == 0) return true;
-    if ($(element).attr('type') == 'checkbox')
-        subject_value = $(element).is(':checked');
-    else
-        subject_value = $(element).val();
-    if (object.attr('type') == 'checkbox')
-        object_value = object.is(':checked');
-    else
-        object_value = object.val();
+    subject_value = get_value(element);
+    object_value = get_value(object);
     return this.optional(element) || subject_value < object_value;
 }, 'Message' );
 $.validator.addMethod('data-lessThanEqual', function(value, element, params) {
@@ -52,14 +43,8 @@ $.validator.addMethod('data-lessThanEqual', function(value, element, params) {
     var object_value;
     var object = $('[data-property-id=' + params + ']:not([disabled])');
     if (object.length == 0) return true;
-    if ($(element).attr('type') == 'checkbox')
-        subject_value = $(element).is(':checked');
-    else
-        subject_value = $(element).val();
-    if (object.attr('type') == 'checkbox')
-        object_value = object.is(':checked');
-    else
-        object_value = object.val();
+    subject_value = get_value(element);
+    object_value = get_value(object);
     return this.optional(element) || subject_value <= object_value;
 }, 'Message' );
 
@@ -84,8 +69,9 @@ $('[data-equalTo]').each(function(index) {
     $(this).rules('add', {
         messages: {
             'data-equalTo': $.validator.format(
-                'Must be equal to {0}',
-                $('[data-property-id=' + $(this).attr('data-equalTo') + ']').attr('data-label')
+                'Must be equal to {0} ({1})',
+                $('[data-property-id=' + $(this).attr('data-equalTo') + ']').attr('data-label'),
+                get_value($('[data-property-id=' + $(this).attr('data-equalTo') + ']'))
             )
         }
     });
@@ -96,8 +82,9 @@ $('[data-notEqualTo]').each(function(index) {
     $(this).rules('add', {
         messages: {
             'data-notEqualTo': $.validator.format(
-                'Must not be equal to {0}',
-                $('[data-property-id=' + $(this).attr('data-notEqualTo') + ']').attr('data-label')
+                'Must not be equal to {0} ({1})',
+                $('[data-property-id=' + $(this).attr('data-notEqualTo') + ']').attr('data-label'),
+                get_value($('[data-property-id=' + $(this).attr('data-notEqualTo') + ']'))
             )
         }
     });
@@ -108,8 +95,9 @@ $('[lessThan]').each(function(index) {
     $(this).rules('add', {
         messages: {
             'lessThan': $.validator.format(
-                'Must be less than {0}',
-                $('[data-property-id=' + $(this).attr('lessThan') + ']').attr('data-label')
+                'Must be less than {0} ({1})',
+                $('[data-property-id=' + $(this).attr('lessThan') + ']').attr('data-label'),
+                get_value($('[data-property-id=' + $(this).attr('lessThan') + ']'))
             )
         }
     });
@@ -119,8 +107,9 @@ $('[data-lessThanEqual]').each(function(index) {
     $(this).rules('add', {
         messages: {
             'data-lessThanEqual': $.validator.format(
-                'Must be less than or equal to {0}',
-                $('[data-property-id=' + $(this).attr('data-lessThanEqual') + ']').attr('data-label')
+                'Must be less than or equal to {0} ({1})',
+                $('[data-property-id=' + $(this).attr('data-lessThanEqual') + ']').attr('data-label'),
+                get_value($('[data-property-id=' + $(this).attr('data-lessThanEqual') + ']'))
             )
         }
     });
@@ -168,7 +157,7 @@ var addEntry = function($template) {
     if (max_entries !== undefined && num_entries >= max_entries) $template.parent().children('.add-entry').attr('disabled', 'disabled');
 };
 // Handles everything about removing an entry for a property
-var removeEntry = function($template) {
+var removeEntry = function($template){
     var template_copy = $template.clone()
     var entries = $template.parent().children('.entries');
     var min_entries = template_copy.attr('data-min-entries');
@@ -193,10 +182,14 @@ $($('.template').get().reverse()).each(function(){
     }
 });
 
+// Checkboxes that are unchecked aren't submitted with the form
+// The solution is for every checkbox to have a hidden partner with prefix 'unchecked:', which will submit if the main
+// checkbox is unchecked
+// This event ensures that the hidden checkbox is always checked when the main checkbox is unchecked, and the hidden
+// checkbox is always unchecked when the main checkbox is checked
 $('#shacl-form').on('change', ':checkbox', function(){
     if ($(this).is(':checked'))
         $('[name="unchecked:' + $(this).attr('name') + '"]').removeAttr('checked');
     else
         $('[name="unchecked:' + $(this).attr('name') + '"]').attr('checked', 'checked');
 })
-

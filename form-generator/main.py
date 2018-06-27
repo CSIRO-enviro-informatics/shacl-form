@@ -7,7 +7,7 @@ import os
 def generate_webform(filename, form_destination='../miniflask/view/templates/form_contents.html',
                      map_destination='../miniflask/map.ttl'):
     if not filename:
-        raise Exception('Usage - python main.py <SHACL filename> <optional: form destination> '
+        raise Exception('Usage - python main.py <SHACL file path> <optional: form destination> '
                         '<optional: map destination')
     if not os.path.isfile(filename):
         raise Exception('File does not exist')
