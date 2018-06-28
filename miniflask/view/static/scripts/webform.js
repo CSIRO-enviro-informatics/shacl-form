@@ -50,7 +50,7 @@ $.validator.addMethod('data-lessThanEqual', function(value, element, params) {
 
 // Used to automatically add custom rules to relevant elements. Disabled fields are not validated
 $('#shacl-form').validate({
-    ignore: '[disabled]',
+    ignore: '[disabled], [hidden]',
     'data-equalTo': '[data-equalTo]',
     'data-notEqualTo': '[data-notEqualTo]',
     lessThan: '[lessThan]',
@@ -59,9 +59,8 @@ $('#shacl-form').validate({
 
 // Combines pattern and modifier flags into a regular expression for each input field
 $('[pattern]').each(function(index) {
-    $(this).rules('add', {
-        pattern: new RegExp($(this).attr('pattern'), $(this).attr('flags'))
-    });
+    if ($(this).parents('[hidden]') == 0)
+        $(this).rules('add', { pattern: new RegExp($(this).attr('pattern'), $(this).attr('flags')) });
 });
 
 // Sets the message for equalTo validation
@@ -153,8 +152,10 @@ var addEntry = function($template) {
         });
     }
     // Control Add and Remove buttons
-    if (num_entries > 0 && (min_entries == undefined || num_entries > min_entries)) $template.parent().children('.remove-entry').removeAttr('disabled');
-    if (max_entries !== undefined && num_entries >= max_entries) $template.parent().children('.add-entry').attr('disabled', 'disabled');
+    if (num_entries > 0 && (min_entries == undefined || num_entries > min_entries))
+        $template.parent().children('.remove-entry').removeAttr('disabled');
+    if (max_entries !== undefined && num_entries >= max_entries)
+        $template.parent().children('.add-entry').attr('disabled', 'disabled');
 };
 // Handles everything about removing an entry for a property
 var removeEntry = function($template){
@@ -171,7 +172,8 @@ var removeEntry = function($template){
     entries.children().last().remove();
     num_entries--;
     // Disable Remove button if we reach the minimum number of entries
-    if (num_entries <= min_entries || num_entries <= 0) $template.parent().children('.remove-entry').attr('disabled', 'disabled');
+    if (num_entries <= min_entries || num_entries <= 0)
+        $template.parent().children('.remove-entry').attr('disabled', 'disabled');
 };
 
 // Adds minimum number of fields when form is loaded
@@ -181,6 +183,27 @@ $($('.template').get().reverse()).each(function(){
         addEntry($(this));
     }
 });
+
+// Controls different parts of the form showing up depending on whether the user chooses to add a new node or link to an
+// existing one.
+$('#shacl-form').on('change', ':radio', function(){
+    // Hide other options
+    var nodeKindOptions = $(this).siblings('.nodeKindOption');
+    nodeKindOptions.attr('hidden', 'hidden');
+    // Disable other input fields
+    nodeKindOptions.find('input, select').each(function(){
+        $(this).attr('disabled', 'disabled');
+    })
+    // Reveal the selected option
+    var value = $(this).val()
+    var selectedOption = $(this).siblings('.nodeKindOption-' + $(this).val())
+    selectedOption.removeAttr('hidden');
+    //Enable revealed input fields
+    selectedOption.find('input, select').each(function(){
+        if ($(this).parents('.template').length == 0)
+            $(this).removeAttr('disabled');
+    })
+})
 
 // Checkboxes that are unchecked aren't submitted with the form
 // The solution is for every checkbox to have a hidden partner with prefix 'unchecked:', which will submit if the main

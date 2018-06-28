@@ -139,7 +139,7 @@ class RDFHandler:
                         name + ' value must be an integer: "{value}"'.format(value=value))
 
             # Convert constraints which must be given in string format
-            if name in ['datatype', 'path']:
+            if name in ['datatype', 'path', 'nodeKind']:
                 value = str(value)
 
             # Convert constraints which must be converted from an rdf literal
@@ -192,33 +192,34 @@ class RDFHandler:
         # If sh:nodeKind is not present, an appropriate option will be guessed
         # If nested properties are present -> sh:BlankNodeOrIRI
         # Otherwise -> sh:IRIOrLiteral
+        warning = None
         if 'nodeKind' not in prop:
             prop['nodeKind'] = SHACL + 'BlankNodeOrIRI' if 'property' in prop else SHACL + 'IRIOrLiteral'
         elif str(prop['nodeKind']) not in [SHACL + 'BlankNode', SHACL + 'IRI', SHACL + 'Literal',
                                            SHACL + 'BlankNodeOrIRI', SHACL + 'BlankNodeOrLiteral',
                                            SHACL + 'IRIOrLiteral']:
             default_value = SHACL + 'BlankNodeOrIRI' if 'property' in prop else SHACL + 'IRIOrLiteral'
-            warn('Property "' + prop['name'] + '" has constraint "sh:nodeKind" with invalid value "' + prop['nodeKind']
-                 + '". Replacing with "' + default_value + '".')
+            warning = 'Property "' + prop['name'] + '" has constraint "sh:nodeKind" with invalid value "' + \
+                      prop['nodeKind'] + '". Replacing with "' + default_value + '".'
             prop['nodeKind'] = default_value
         # Make sure there is enough information provided to accommodate the selected option
         else:
-            node_kind = str(prop['nodeKind'])
             # If sh:BlankNode is selected, nested properties should be provided.
-            if node_kind == SHACL + 'BlankNode' and 'property' not in prop:
-                warn('Property "' + prop['name'] +
-                     '" has constraint "sh:nodeKind" with value "sh:BlankNode" but no property shapes are provided. '
-                     'This property will have no input fields.')
+            if prop['nodeKind'] == SHACL + 'BlankNode' and 'property' not in prop:
+                warning = 'Property "' + prop['name'] + '" has constraint "sh:nodeKind" with value "sh:BlankNode" but' \
+                          ' no property shapes are provided. This property will have no input fields.'
             # If sh:BlankNodeOrIRI or sh:BlankNodeOrLiteral are selected, nested properties should be provided for the
             # blank node option
-            if node_kind in [SHACL + 'BlankNodeOrIRI', SHACL + 'BlankNodeOrLiteral'] and 'property' not in prop:
-                warn('Property "' + prop['name'] + '" has constraint "sh:nodeKind" with value "' + node_kind +
-                     '" but no property shapes are provided. If the user selects the "blank node" option, this '
-                     'property will have no input fields.')
+            if prop['nodeKind'] in [SHACL + 'BlankNodeOrIRI', SHACL + 'BlankNodeOrLiteral'] and 'property' not in prop:
+                warning = 'Property "' + prop['name'] + '" has constraint "sh:nodeKind" with value "' + \
+                          prop['nodeKind'] + '" but no property shapes are provided. If the user selects the "blank ' \
+                          'node" option, this property will have no input fields.'
             # If sh:IRI, sh:Literal, or sh:IRIOrLiteral are selected, nested properties will be ignored.
-            elif node_kind in [SHACL + 'Literal', SHACL + 'IRI', SHACL + 'IRIOrLiteral'] and 'property' in prop:
-                warn('Property "' + prop['name'] + '" has constraint "sh:nodeKind" with value "' + node_kind +
-                     '". The property shapes provided in this property will be ignored.')
+            elif prop['nodeKind'] in [SHACL + 'Literal', SHACL + 'IRI', SHACL + 'IRIOrLiteral'] and 'property' in prop:
+                warning = 'Property "' + prop['name'] + '" has constraint "sh:nodeKind" with value "' + \
+                          prop['nodeKind'] + '". The property shapes provided in this property will be ignored.'
+        if warning:
+            warn(warning)
         return prop
 
     def add_node(self, root_uri, predicate, obj):
