@@ -81,7 +81,7 @@ def test_node_kind_blanknode():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty1':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'BlankNode'
 
 
@@ -99,7 +99,7 @@ def test_node_kind_blanknode_without_nested_properties():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'BlankNode'
 
 
@@ -113,7 +113,7 @@ def test_node_kind_iri():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'IRI'
 
 
@@ -131,7 +131,7 @@ def test_node_kind_iri_with_nested_properties():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty1':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'IRI'
 
 
@@ -145,7 +145,7 @@ def test_node_kind_literal():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'Literal'
 
 
@@ -163,7 +163,7 @@ def test_node_kind_literal_with_nested_properties():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty1':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'Literal'
 
 
@@ -177,7 +177,7 @@ def test_node_kind_blanknode_or_iri():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty1':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'BlankNodeOrIRI'
 
 
@@ -196,7 +196,7 @@ def test_node_kind_blanknode_or_iri_without_nested_properties():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'BlankNodeOrIRI'
 
 
@@ -210,7 +210,7 @@ def test_node_kind_blanknode_or_literal():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty1':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'BlankNodeOrLiteral'
 
 
@@ -229,7 +229,7 @@ def test_node_kind_blanknode_or_literal_without_nested_properties():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'BlankNodeOrLiteral'
 
 
@@ -243,7 +243,7 @@ def test_node_kind_iri_or_literal():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'IRIOrLiteral'
 
 
@@ -261,8 +261,64 @@ def test_node_kind_iri_or_literal_with_nested_properties():
     node_kind = None
     for p in shape['properties']:
         if str(p['path']) == 'http://example.org/ex#testProperty1':
-            node_kind = str(p['nodeKind'])
+            node_kind = p['nodeKind']
     assert node_kind == SHACL + 'IRIOrLiteral'
+
+
+def test_node_kind_missing_without_nested_properties():
+    # Check that a property without nested properties is automatically assigned a value of sh:IRIOrLiteral when
+    # sh:nodeKind isn't provided
+    shape = RDFHandler('inputs/node_kind/missing_nodekind_without_nested_properties.ttl').get_shape()
+    node_kind = None
+    for p in shape['properties']:
+        if str(p['path']) == 'http://example.org/ex#testProperty':
+            node_kind = p['nodeKind']
+    assert node_kind == SHACL + 'IRIOrLiteral'
+
+
+def test_node_kind_missing_with_nested_properties():
+    # Check that a property with nested properties is automatically assigned a value of sh:BlankNodeOrIRI when
+    # sh:nodeKind isn't provided
+    shape = RDFHandler('inputs/node_kind/missing_nodekind_with_nested_properties.ttl').get_shape()
+    node_kind = None
+    for p in shape['properties']:
+        if str(p['path']) == 'http://example.org/ex#testProperty1':
+            node_kind = p['nodeKind']
+    assert node_kind == SHACL + 'BlankNodeOrIRI'
+
+
+def test_node_kind_invalid_without_nested_properties():
+    # Check that a property without nested properties is automatically assigned a value of sh:IRIOrLiteral when
+    # sh:nodeKind isn't a permitted value
+    with pytest.warns(UserWarning) as record:
+        shape = RDFHandler('inputs/node_kind/invalid_nodekind_without_nested_properties.ttl').get_shape()
+    node_kind = None
+    for p in shape['properties']:
+        if str(p['path']) == 'http://example.org/ex#testProperty':
+            node_kind = p['nodeKind']
+    assert node_kind == SHACL + 'IRIOrLiteral'
+
+    # Check that a warning is raised
+    assert record[0].message.args[0] == 'Property "testProperty" has constraint "sh:nodeKind" with invalid value ' \
+                                        '"http://www.w3.org/ns/shacl#Invalid". Replacing with ' \
+                                        '"http://www.w3.org/ns/shacl#IRIOrLiteral".'
+
+
+def test_node_kind_invalid_with_nested_properties():
+    # Check that a property with nested properties is automatically assigned a value of sh:BlankNodeOrIRI when
+    # sh:nodeKind isn't a permitted value
+    with pytest.warns(UserWarning) as record:
+        shape = RDFHandler('inputs/node_kind/invalid_nodekind_with_nested_properties.ttl').get_shape()
+    node_kind = None
+    for p in shape['properties']:
+        if str(p['path']) == 'http://example.org/ex#testProperty1':
+            node_kind = p['nodeKind']
+    assert node_kind == SHACL + 'BlankNodeOrIRI'
+
+    # Check that a warning is raised
+    assert record[0].message.args[0] == 'Property "testProperty1" has constraint "sh:nodeKind" with invalid value ' \
+                                        '"http://www.w3.org/ns/shacl#Invalid". Replacing with ' \
+                                        '"http://www.w3.org/ns/shacl#BlankNodeOrIRI".'
 
 
 def test_shape():
