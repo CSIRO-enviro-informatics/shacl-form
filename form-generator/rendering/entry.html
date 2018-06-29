@@ -5,7 +5,7 @@
 {%- include 'IRI_input.html' %}
 {%- endmacro -%}
 {%- if property['nodeKind'] == URIs['BLANK_NODE'] %}
-    {{- composite_property(property, disabled=disabled, copy=copy) }}
+{{ composite_property(property, disabled=disabled, copy=copy) }}
 {%- elif property['nodeKind'] == URIs['IRI'] %}
     {%- include 'IRI_input.html' %}
 {%- elif property['nodeKind'] == URIs['LITERAL'] %}
