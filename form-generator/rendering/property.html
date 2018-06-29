@@ -1,13 +1,12 @@
-{%- macro input_field(property, disabled=False, hidden=False, required=False, copy=0, checkbox_unchecked=False) %}
-{%- include "input_field.html" %}
-{%- endmacro -%}
-{%- macro entry(property, disabled=False, hidden=False, required=False, copy=None) %}
+{%- macro entry(property, disabled=disabled, hidden=hidden) %}
 {%- include 'entry.html' %}
 {%- endmacro -%}
-
+{%- macro input_field(property, disabled=False, hidden=False, checkbox_unchecked=False) %}
+{%- include 'input_field.html' %}
+{%- endmacro -%}
 {%- if 'hasValue' in property %}
 <div>
-    {{- entry(property, hidden=True, copy=0)|indent(4) }}
+    {{- entry(property, hidden=True) }}
 </div>    
 {%- elif 'maxCount' not in property or property['maxCount'] > 0 %}
 <div>
@@ -24,7 +23,7 @@
     {%- if 'minCount' in property %} data-min-entries='{{ property["minCount"] }}'
     {%- endif %}>
         <div>
-            {{- entry(property, disabled=True)|indent(8) }}
+            {{- entry(property, disabled=True)|indent(12) }}
         </div>
     </div>
     <div class='entries'></div>

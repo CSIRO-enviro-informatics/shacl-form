@@ -1,7 +1,5 @@
 <div><i>Please enter the URI of the existing entry.</i></div>
-<input data-label='{{ property["name"] }}' data-property-id='{{ property["id"] }}' name='{{ property["id"] }}
-{%- if copy is not none %}-{{ copy }}
-{%- endif %}' type='text'
+<input data-label='{{ property["name"] }}' data-property-id='{{ property["id"] }}' name='{{ property["id"] }}' type='text'
 {%- if 'pattern' in property %} pattern='{{ property["pattern"] }}' title='Must match pattern: {{ property["pattern"] }}'
 {%- else %} pattern='<?\w+:(\/?\/?)[^\s]+>?' title='Must be in URI format.'
 {%- endif %}
@@ -19,8 +17,6 @@
 {%- if 'equals' in property %} data-equalTo='{{ property["equals"] }}'
 {%- endif %}
 {%- if 'disjoint' in property %} data-notEqualTo='{{ property["disjoint"] }}'
-{%- endif %}
-{%- if required==True %} required
 {%- endif %}
 {%- if disabled==True %} disabled
 {%- endif %}

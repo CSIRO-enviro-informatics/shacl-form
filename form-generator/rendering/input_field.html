@@ -1,8 +1,8 @@
 {%- if 'in' in property %}
-<select name='{{ property["id"] }}
-    {%- if copy is not none %}-{{ copy }}
-    {%- endif %}' data-property-id='{{ property["id"] }}' data-label='{{ property["name"] }}'
-    {%- if disabled==True %} disabled
+<select data-property-id='{{ property["id"] }}' name='{{ property["id"] }}
+    {%- if "hasValue" in property %}-0
+    {%- endif %}' data-label='{{ property["name"] }}'
+    {%- if disabled == True %} disabled
     {%- endif %}
     {%- if 'equals' in property %} data-equalTo='{{ property["equals"] }}'
     {%- endif %}
@@ -26,16 +26,14 @@
     {%- endif %}
 </select>
 {%- else %}
-<input data-property-id='
+<input data-label='{{ property["name"] }}' data-property-id='
     {%- if checkbox_unchecked == True %}unchecked:
     {%- endif %}{{ property["id"] }}' name='
     {%- if checkbox_unchecked == True %}unchecked:
     {%- endif %}{{ property["id"] }}
-    {%- if copy is not none %}-{{ copy }}
-    {%- endif %}' data-label='{{ property["name"] }}'
+    {%- if "hasValue" in property %}-0
+    {%- endif %}'
     {%- if property['path'] == URIs['EMAIL'] %} type='email'
-        {%- if required==True %} required
-        {%- endif %}
         {%- if 'pattern' in property %} pattern='{{ property["pattern"] }}' title='Must match pattern: {{ property["pattern"] }}'
         {%- endif %}
         {%- if 'flags' in property %} flags='{{ property["flags"] }}'
@@ -51,8 +49,6 @@
         {%- else %} value=''
         {%- endif %}
     {%- elif property['path'] == URIs['PHONE_NUMBER'] %} type='tel'
-        {%- if required==True %} required
-        {%- endif %}
         {%- if 'pattern' in property %} pattern='{{ property["pattern"] }}' title='Must match pattern: {{ property["pattern"] }}'
         {%- endif %}
         {%- if 'flags' in property %} flags='{{ property["flags"] }}'
@@ -69,7 +65,6 @@
         {%- endif %}
     {%- elif 'datatype' in property and not URIs['STRING'] == property['datatype'] %}
         {%- if property['datatype'] in URIs['NUMBER'] %} type='number'
-            {%- if required==True %} required{% endif %}
             {%- if 'min' in property %} min='{{ property["min"] }}'
             {%- endif %}
             {%- if 'max' in property %} max='{{ property["max"] }}'
@@ -85,8 +80,6 @@
             {%- else %} value=''
             {%- endif %}
         {%- elif property['datatype'] == URIs['DATE'] %} type='date'
-            {%- if required==True %} required
-            {%- endif %}
             {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
             {%- endif %}
             {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
@@ -98,8 +91,6 @@
             {%- else %} value=''
             {%- endif %}
         {%- elif property['datatype'] == URIs['TIME'] %} type='time'
-            {%- if required==True %} required
-            {%- endif %}
             {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
             {%- endif %}
             {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
@@ -121,8 +112,6 @@
             {%- endif %}
         {%- endif %}
     {%- else %} type='text'
-        {%- if required==True %} required
-        {%- endif %}
         {%- if 'pattern' in property %} pattern='{{ property["pattern"] }}' title='Must match pattern: {{ property["pattern"] }}'
         {%- endif %}
         {%- if 'flags' in property %} flags='{{ property["flags"] }}'

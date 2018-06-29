@@ -1,61 +1,49 @@
-{%- macro composite_property(property, disabled=False, copy=0) %}
+{%- macro composite_property(property, disabled=False) %}
 {%- include 'composite_property.html' %}
 {%- endmacro -%}
-{%- macro IRI_input(property, disabled=False, hidden=False, required=False, copy=0) %}
+{%- macro IRI_input(property, disabled=False, hidden=False) %}
 {%- include 'IRI_input.html' %}
 {%- endmacro -%}
 {%- if property['nodeKind'] == URIs['BLANK_NODE'] %}
-{{ composite_property(property, disabled=disabled, copy=copy) }}
+{{ composite_property(property, disabled=disabled) }}
 {%- elif property['nodeKind'] == URIs['IRI'] %}
-    {%- include 'IRI_input.html' %}
+    {{ IRI_input(property, disabled=disabled, hidden=hidden) }}
 {%- elif property['nodeKind'] == URIs['LITERAL'] %}
-    {{- input_field(property, disabled=disabled, hidden=hidden, required=required, copy=copy) }}
-    {%- if "datatype" in property and property["datatype"] == URIs["BOOLEAN"] %}
-        {{- input_field(property, disabled=disabled, hidden=hidden, required=required, copy=copy, checkbox_unchecked=True) }}
+    {{- input_field(property, disabled=disabled, hidden=hidden) }}
+    {%- if 'datatype' in property and property['datatype'] == URIs['BOOLEAN'] %}
+        {{- input_field(property, disabled=disabled, checkbox_unchecked=True) }}
     {%- endif %}
 {%- elif property['nodeKind'] == URIs['BLANK_NODE_OR_IRI'] %}
-<input type='radio' name='nodeKind:{{ property["id"] }}
-    {%- if copy is not none %}-{{ copy }}
-    {%- endif %}' data-label='{{ property["name"] }}' value='IRI'>Use Existing
-<input type='radio' name='nodeKind:{{ property["id"] }}
-    {%- if copy is not none %}-{{ copy }}
-    {%- endif %}' data-label='{{ property["name"] }}' value='BlankNode'>Add New
+<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='IRI'>Use Existing
+<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='BlankNode'>Add New
 <div hidden class='nodeKindOption nodeKindOption-IRI'>
-    {{ IRI_input(property, disabled=True, copy=copy) }}
+    {{ IRI_input(property, disabled=disabled)|indent(4) }}
 </div>
 <div hidden class='nodeKindOption nodeKindOption-BlankNode'>
-    {{ composite_property(property, disabled=True, copy=copy)|indent(4) }}
+    {{ composite_property(property, disabled=disabled)|indent(4) }}
 </div>
 {%- elif property['nodeKind'] == URIs['BLANK_NODE_OR_LITERAL'] %}
-<input type='radio' name='nodeKind:{{ property["id"] }}
-    {%- if copy is not none %}-{{ copy }}
-    {%- endif %}' data-label='{{ property["name"] }}' value='BlankNode'>Add As Multiple Values
-<input type='radio' name='nodeKind:{{ property["id"] }}
-    {%- if copy is not none %}-{{ copy }}
-    {%- endif %}' data-label='{{ property["name"] }}' value='Literal'>Add As Single Value
+<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='BlankNode'>Add As Multiple Values
+<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='Literal'>Add As Single Value
 <div hidden class='nodeKindOption nodeKindOption-BlankNode'>
-    {{ composite_property(property, disabled=True, copy=copy)|indent(4) }}
+    {{ composite_property(property, disabled=disabled)|indent(4) }}
 </div>
 <div hidden class='nodeKindOption nodeKindOption-Literal'>
-    {{- input_field(property, disabled=disabled, hidden=hidden, required=required, copy=copy)|indent(4) }}
+    {{- input_field(property, disabled=disabled, hidden=hidden)|indent(4) }}
     {%- if "datatype" in property and property["datatype"] == URIs["BOOLEAN"] %}
-        {{- input_field(property, disabled=disabled, hidden=hidden, required=required, copy=copy, checkbox_unchecked=True)|indent(4) }}
+        {{- input_field(property, disabled=disabled, checkbox_unchecked=True)|indent(4) }}
     {%- endif %}
 </div>
 {%- elif property['nodeKind'] == URIs['IRI_OR_LITERAL'] %}
-<input type='radio' name='nodeKind:{{ property["id"] }}
-    {%- if copy is not none %}-{{ copy }}
-    {%- endif %}' data-label='{{ property["name"] }}' value='IRI'>Use Existing
-<input type='radio' name='nodeKind:{{ property["id"] }}
-    {%- if copy is not none %}-{{ copy }}
-    {%- endif %}' data-label='{{ property["name"] }}' value='Literal'>Add New
+<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='IRI'>Use Existing
+<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='Literal'>Add New
 <div hidden class='nodeKindOption nodeKindOption-IRI'>
-    {{ IRI_input(property, disabled=True, copy=copy) }}
+    {{ IRI_input(property, disabled=disabled, hidden=hidden) }}
 </div>
 <div hidden class='nodeKindOption nodeKindOption-Literal'>
-    {{- input_field(property, disabled=disabled, hidden=hidden, required=required, copy=copy)|indent(4) }}
+    {{- input_field(property, disabled=disabled, hidden=hidden)|indent(4) }}
     {%- if "datatype" in property and property["datatype"] == URIs["BOOLEAN"] %}
-        {{- input_field(property, disabled=disabled, hidden=hidden, required=required, copy=copy, checkbox_unchecked=True)|indent(4) }}
+        {{- input_field(property, disabled=disabled, checkbox_unchecked=True)|indent(4) }}
     {%- endif %}
 </div>
 {%- endif %}

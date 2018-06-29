@@ -1,12 +1,12 @@
 {%- macro display_property(property, disabled=False) %}
-{%- include "property.html" %}
+{%- include 'property.html' %}
 {%- endmacro -%}
 
-<fieldset data-property-id="{{ property["id"] }}" name="{{ property["id"] }}{% if copy is not none %}-{{ copy }}{% endif %}">
-    {%- if "description" in property %}
-        <p><label for="{{ property["id"] }}"><i>{{ property["description"] }}</i></label></p>
+<fieldset data-property-id='{{ property["id"] }}' name='{{ property["id"] }}'>
+    {%- if 'description' in property %}
+        <p><label for='{{ property["id"] }}'><i>{{ property["description"] }}</i></label></p>
     {%- endif %}
-    {%- for property in property["property"] %}
+    {%- for property in property['property'] %}
         {{- display_property(property, disabled=disabled)|indent(4) }}
     {%- endfor %}
 </fieldset>
