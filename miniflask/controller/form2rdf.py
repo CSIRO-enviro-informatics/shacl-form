@@ -5,6 +5,7 @@ import uuid
 
 BASE_URI = 'http://example.org/ex#'
 
+
 def form_to_rdf(request, map_filename):
     # Get map and result RDF graphs ready
     rdf_map = Graph()
@@ -82,7 +83,7 @@ def insert_entries(request, rdf_map, result, node_uri, predicate, o, root_id=Non
             found_entry = False
             for p in included_properties:
                 full_id = root_id + '-' + str(copy_id) + ':' + p[1].split(':')[-1]
-                found_entry = insert_entries(rdf_map, result, node, p[0], p[1], full_id)
+                found_entry = insert_entries(request, rdf_map, result, node, p[0], p[1], full_id)
             copy_id += 1
             if found_entry:
                 result.add((node_uri, predicate, node))
