@@ -19,7 +19,13 @@ $.validator.addMethod('data-equalTo', function(value, element, params) {
         return subject_value == object_value;
     else
         return this.optional(element) || subject_value == object_value;
-}, 'Message' );
+}, function(params, element) {
+    return $.validator.format(
+        'Must be equal to {0} ({1})',
+        $('[data-property-id=' + $(element).attr('data-equalTo') + ']').attr('data-label'),
+        get_value($('[data-property-id=' + $(element).attr('data-equalTo') + ']'))
+    );
+});
 $.validator.addMethod('data-notEqualTo', function(value, element, params) {
     var subject_value;
     var object_value;
@@ -28,7 +34,13 @@ $.validator.addMethod('data-notEqualTo', function(value, element, params) {
     subject_value = get_value(element);
     object_value = get_value(object);
     return this.optional(element) || subject_value != object_value;
-}, 'Message' );
+}, function(params, element) {
+    return $.validator.format(
+        'Must not be equal to {0} ({1})',
+        $('[data-property-id=' + $(element).attr('data-notEqualTo') + ']').attr('data-label'),
+        get_value($('[data-property-id=' + $(element).attr('data-notEqualTo') + ']'))
+    );
+});
 $.validator.addMethod('lessThan', function(value, element, params) {
     var subject_value;
     var object_value;
@@ -37,7 +49,13 @@ $.validator.addMethod('lessThan', function(value, element, params) {
     subject_value = get_value(element);
     object_value = get_value(object);
     return this.optional(element) || subject_value < object_value;
-}, 'Message' );
+}, function(params, element) {
+    return $.validator.format(
+        'Must be less than {0} ({1})',
+        $('[data-property-id=' + $(element).attr('lessThan') + ']').attr('data-label'),
+        get_value($('[data-property-id=' + $(element).attr('lessThan') + ']'))
+    );
+});
 $.validator.addMethod('data-lessThanEqual', function(value, element, params) {
     var subject_value;
     var object_value;
@@ -46,7 +64,13 @@ $.validator.addMethod('data-lessThanEqual', function(value, element, params) {
     subject_value = get_value(element);
     object_value = get_value(object);
     return this.optional(element) || subject_value <= object_value;
-}, 'Message' );
+}, function(params, element) {
+    return $.validator.format(
+        'Must be less than or equal to {0} ({1})',
+        $('[data-property-id=' + $(element).attr('data-lessThanEqual') + ']').attr('data-label'),
+        get_value($('[data-property-id=' + $(element).attr('data-lessThanEqual') + ']'))
+    );
+} );
 
 // Used to automatically add custom rules to relevant elements. Disabled fields are not validated
 $('#shacl-form').validate({
@@ -63,57 +87,6 @@ $('[pattern]').each(function(index) {
         $(this).rules('add', { pattern: new RegExp($(this).attr('pattern'), $(this).attr('flags')) });
 });
 
-// Sets the message for equalTo validation
-$('[data-equalTo]').each(function(index) {
-    $(this).rules('add', {
-        messages: {
-            'data-equalTo': $.validator.format(
-                'Must be equal to {0} ({1})',
-                $('[data-property-id=' + $(this).attr('data-equalTo') + ']').attr('data-label'),
-                get_value($('[data-property-id=' + $(this).attr('data-equalTo') + ']'))
-            )
-        }
-    });
-});
-
-// Sets the message for notEqualTo validation
-$('[data-notEqualTo]').each(function(index) {
-    $(this).rules('add', {
-        messages: {
-            'data-notEqualTo': $.validator.format(
-                'Must not be equal to {0} ({1})',
-                $('[data-property-id=' + $(this).attr('data-notEqualTo') + ']').attr('data-label'),
-                get_value($('[data-property-id=' + $(this).attr('data-notEqualTo') + ']'))
-            )
-        }
-    });
-});
-
-// Sets the message for lessThan validation
-$('[lessThan]').each(function(index) {
-    $(this).rules('add', {
-        messages: {
-            'lessThan': $.validator.format(
-                'Must be less than {0} ({1})',
-                $('[data-property-id=' + $(this).attr('lessThan') + ']').attr('data-label'),
-                get_value($('[data-property-id=' + $(this).attr('lessThan') + ']'))
-            )
-        }
-    });
-});
-// Sets the message for lessThanEqual validation
-$('[data-lessThanEqual]').each(function(index) {
-    $(this).rules('add', {
-        messages: {
-            'data-lessThanEqual': $.validator.format(
-                'Must be less than or equal to {0} ({1})',
-                $('[data-property-id=' + $(this).attr('data-lessThanEqual') + ']').attr('data-label'),
-                get_value($('[data-property-id=' + $(this).attr('data-lessThanEqual') + ']'))
-            )
-        }
-    });
-});
-
 // Script for adding multiple entries for a property
 $('body').on('click', '.add-entry', function() {
     addEntry($(this).parent().children('.template').first())
@@ -121,6 +94,7 @@ $('body').on('click', '.add-entry', function() {
 $('body').on('click', '.remove-entry', function() {
     removeEntry($(this).parent().children('.template').first())
 });
+
 // Handles everything about adding an entry for a property
 var addEntry = function($template) {
     var template_copy = $template.clone()
@@ -143,12 +117,10 @@ var addEntry = function($template) {
     entries.append(template_copy.html());
     num_entries++;
     // Enable input fields. Input fields are disabled when copied from the template
-    if ($template.parents('.template').length == 0){
-        entries.find('input, select').each(function(){
-            if ($(this).parents('.template').length == 0)
-                $(this).removeAttr('disabled');
-        });
-    }
+    entries.find('input, select').each(function(){
+        if ($(this).parents('.template').length == 0)
+            $(this).removeAttr('disabled');
+    });
     // Control Add and Remove buttons
     if (num_entries > 0 && (min_entries == undefined || num_entries > min_entries))
         $template.parent().children('.remove-entry').removeAttr('disabled');
@@ -210,7 +182,7 @@ $('#shacl-form').on('change', ':radio', function(){
 // checkbox is always unchecked when the main checkbox is checked
 $('#shacl-form').on('change', ':checkbox', function(){
     if ($(this).is(':checked'))
-        $('[name="unchecked:' + $(this).attr('name') + '"]').removeAttr('checked');
+        $('[name="Unchecked ' + $(this).attr('name') + '"]').removeAttr('checked');
     else
-        $('[name="unchecked:' + $(this).attr('name') + '"]').attr('checked', 'checked');
+        $('[name="Unchecked ' + $(this).attr('name') + '"]').attr('checked', 'checked');
 })
