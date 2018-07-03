@@ -78,7 +78,13 @@ $('#shacl-form').validate({
     'data-equalTo': '[data-equalTo]',
     'data-notEqualTo': '[data-notEqualTo]',
     lessThan: '[lessThan]',
-    'data-lessThanEqual': '[data-lessThanEqual]'
+    'data-lessThanEqual': '[data-lessThanEqual]',
+    errorPlacement: function(error, element) {
+        if (element.attr('type') == 'radio')
+            error.insertAfter(element.next().next());
+        else
+            error.insertAfter(element);
+    }
 });
 
 // Combines pattern and modifier flags into a regular expression for each input field
