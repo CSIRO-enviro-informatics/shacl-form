@@ -50,7 +50,7 @@ $.validator.addMethod('data-lessThanEqual', function(value, element, params) {
 
 // Used to automatically add custom rules to relevant elements. Disabled fields are not validated
 $('#shacl-form').validate({
-    ignore: '[disabled], [hidden]',
+    ignore: '[disabled]',
     'data-equalTo': '[data-equalTo]',
     'data-notEqualTo': '[data-notEqualTo]',
     lessThan: '[lessThan]',
@@ -128,7 +128,7 @@ var addEntry = function($template) {
     var max_entries = template_copy.attr('data-max-entries');
     var min_entries = template_copy.attr('data-min-entries');
     var num_entries = entries.children().length;
-    var root_id = $template.children().children('div').children('[name]').attr('name');
+    var root_id = $template.children().find('[name]').filter('[type!=radio]').attr('name');
     var id = root_id + "-" + entries.children().length;
 
     if (max_entries && num_entries >= max_entries) return; // Return if maximum entries is already reached

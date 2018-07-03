@@ -14,8 +14,8 @@
         {{- input_field(property, disabled=disabled, checkbox_unchecked=True) }}
     {%- endif %}
 {%- elif property['nodeKind'] == URIs['BLANK_NODE_OR_IRI'] %}
-<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='IRI'>Use Existing
-<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='BlankNode'>Add New
+<input type='radio' name='NodeKind {{ property["id"] }}' data-label='{{ property["name"] }}' value='IRI' disabled='disabled'>Use Existing
+<input type='radio' name='NodeKind {{ property["id"] }}' data-label='{{ property["name"] }}' value='BlankNode' disabled='disabled'>Add New
 <div hidden class='nodeKindOption nodeKindOption-IRI'>
     {{ IRI_input(property, disabled=disabled)|indent(4) }}
 </div>
@@ -23,8 +23,8 @@
     {{ composite_property(property, disabled=disabled)|indent(4) }}
 </div>
 {%- elif property['nodeKind'] == URIs['BLANK_NODE_OR_LITERAL'] %}
-<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='BlankNode'>Add As Multiple Values
-<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='Literal'>Add As Single Value
+<input type='radio' name='NodeKind {{ property["id"] }}' data-label='{{ property["name"] }}' value='BlankNode' disabled='disabled'>Add As Multiple Values
+<input type='radio' name='NodeKind {{ property["id"] }}' data-label='{{ property["name"] }}' value='Literal' disabled='disabled'>Add As Single Value
 <div hidden class='nodeKindOption nodeKindOption-BlankNode'>
     {{ composite_property(property, disabled=disabled)|indent(4) }}
 </div>
@@ -35,8 +35,8 @@
     {%- endif %}
 </div>
 {%- elif property['nodeKind'] == URIs['IRI_OR_LITERAL'] %}
-<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='IRI'>Use Existing
-<input type='radio' name='nodeKind:{{ property["id"] }}' data-label='{{ property["name"] }}' value='Literal'>Add New
+<input type='radio' name='NodeKind {{ property["id"] }}' data-label='{{ property["name"] }}' value='IRI' disabled='disabled'>Use Existing
+<input type='radio' name='NodeKind {{ property["id"] }}' data-label='{{ property["name"] }}' value='Literal' disabled='disabled'>Add New
 <div hidden class='nodeKindOption nodeKindOption-IRI'>
     {{ IRI_input(property, disabled=disabled, hidden=hidden) }}
 </div>

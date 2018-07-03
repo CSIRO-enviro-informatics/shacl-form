@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request
+from flask import Blueprint, render_template, request, Response
 import os
 from controller.form2rdf import form_to_rdf
 
@@ -17,7 +17,10 @@ def form():
 
 @routes.route('/post', methods=['POST'])
 def post():
-    node_uri, node_class, result = form_to_rdf(request, 'map.ttl')
+    try:
+        node_uri, node_class, result = form_to_rdf(request, 'map.ttl')
+    except ValueError as e:
+        return Response(str(e))
 
     if not os.path.exists('../entries'):
         os.makedirs('../entries')

@@ -27,10 +27,8 @@
 </select>
 {%- else %}
 <input data-label='{{ property["name"] }}' data-property-id='
-    {%- if checkbox_unchecked == True %}unchecked:
-    {%- endif %}{{ property["id"] }}' name='
-    {%- if checkbox_unchecked == True %}unchecked:
-    {%- endif %}{{ property["id"] }}
+    {%- if checkbox_unchecked == True %}Unchecked {% endif %}{{ property["id"] }}' name='
+    {%- if checkbox_unchecked == True %}Unchecked {% endif %}{{ property["id"] }}
     {%- if "hasValue" in property %}-0
     {%- endif %}'
     {%- if property['path'] == URIs['EMAIL'] %} type='email'

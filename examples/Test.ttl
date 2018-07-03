@@ -38,6 +38,7 @@
     ] ;
     sh:property [
         sh:path schema:birthDate ;
+        sh:nodeKind sh:Literal ;
         sh:name "Birth Date" ;
         sh:datatype xsd:date ;
         sh:lessThanOrEquals schema:deathDate ;
@@ -48,6 +49,7 @@
     ] ;
     sh:property [
         sh:path :birthTime ;
+        sh:nodeKind sh:Literal ;
         sh:name "Time of Birth" ;
         sh:datatype xsd:time ;
         sh:order 2 ;
@@ -57,6 +59,7 @@
     ] ;
     sh:property [
         sh:path schema:deathDate ;
+        sh:nodeKind sh:Literal ;
         sh:datatype xsd:date ;
         sh:maxCount 1 ;
         sh:group :DateGroup1 ;
@@ -64,6 +67,7 @@
     ] ;
     sh:property [
         sh:path schema:gender ;
+        sh:nodeKind sh:Literal ;
         sh:in ( "male"  "female" "other" ) ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
@@ -71,23 +75,27 @@
     ] ;
     sh:property [
         sh:path foaf:mbox ;
+        sh:nodeKind sh:Literal ;
         sh:name "Email Address" ;
         sh:maxCount 1 ;
         sh:order 2 ;
     ] ;
     sh:property [
         sh:path foaf:phone ;
+        sh:nodeKind sh:Literal ;
         sh:name "Phone Number" ;
         sh:maxCount 1 ;
         sh:order 3 ;
     ] ;
     sh:property [
         sh:minCount 1 ;
+        sh:nodeKind sh:BlankNodeOrIRI ;
         sh:order 4 ;
         sh:node :AddressShape ;
     ] ;
     sh:property [
         sh:path :gpa ;
+        sh:nodeKind sh:Literal ;
         sh:name "GPA" ;
         sh:description "A number between 1 and 7." ;
         sh:minInclusive 1 ;
@@ -100,6 +108,7 @@
     ] ;
     sh:property [
         sh:path :goalGpa ;
+        sh:nodeKind sh:Literal ;
         sh:name "Goal GPA" ;
         sh:description "A number between 1 and 7." ;
         sh:minInclusive 1 ;
@@ -111,15 +120,16 @@
     ] ;
     sh:property [
         sh:path :likesDogs ;
+        sh:nodeKind sh:Literal ;
         sh:name "Do you like dogs?" ;
         sh:datatype xsd:boolean ;
-        sh:hasValue true ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
         sh:order 7 ;
     ] ;
     sh:property [
         sh:path :likesCats ;
+        sh:nodeKind sh:Literal ;
         sh:name "Do you like cats?" ;
         sh:datatype xsd:boolean ;
         sh:equals :likesDogs ;
@@ -143,6 +153,7 @@
     sh:name "Address" ;
     sh:property [
         sh:path schema:streetAddress ;
+        sh:nodeKind sh:Literal ;
         sh:name "Street Address" ;
         sh:datatype xsd:string ;
         sh:minCount 1 ;
@@ -151,6 +162,7 @@
     ] ;
     sh:property [
         sh:path schema:postalCode ;
+        sh:nodeKind sh:Literal ;
         sh:name "Postcode" ;
         sh:datatype xsd:integer ;
         sh:minInclusive 10000 ;
