@@ -26,7 +26,7 @@
     {%- if 'minCount' in property %} data-min-entries='{{ property["minCount"] }}'
     {%- endif %}>
         <div>
-            {{- entry(property, disabled=True)|indent(8) }}
+            {{- entry(property, disabled=True)|indent(12) }}
         </div>
     </div>
     <div class='entries'></div>

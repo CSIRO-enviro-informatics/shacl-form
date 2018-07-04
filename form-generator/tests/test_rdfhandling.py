@@ -511,21 +511,25 @@ def constraint_max_test(shape):
 
 def nested_properties_test(shape):
     # Check that properties within properties are correctly read
-    expected_value = [
-        {'node': rdflib.term.URIRef('http://example.org/ex#StreetAddressShape'),
-         'order': rdflib.term.Literal('1', datatype=rdflib.term.URIRef('http://www.w3.org/2001/XMLSchema#integer')),
-         'type': rdflib.term.URIRef('http://www.w3.org/ns/shacl#NodeShape'), 'path': 'http://schema.org/streetAddress',
-         'name': 'streetAddress',
-         'nodeKind': 'http://www.w3.org/ns/shacl#IRIOrLiteral'},
-        {'path': 'http://schema.org/postalCode',
-         'order': rdflib.term.Literal('2', datatype=rdflib.term.URIRef('http://www.w3.org/2001/XMLSchema#integer')),
-         'name': 'postalCode',
-         'nodeKind': 'http://www.w3.org/ns/shacl#IRIOrLiteral'}]
+    expected_value = [{
+            'node': 'http://example.org/ex#StreetAddressShape',
+            'order': '1', 'path': 'http://schema.org/streetAddress',
+            'type': 'http://www.w3.org/ns/shacl#NodeShape',
+            'name': 'streetAddress',
+            'nodeKind': 'http://www.w3.org/ns/shacl#IRIOrLiteral'
+        }, {
+            'order': '2',
+            'path': 'http://schema.org/postalCode',
+            'name': 'postalCode',
+            'nodeKind': 'http://www.w3.org/ns/shacl#IRIOrLiteral'
+        }]
 
+    prop = None
     for p in shape['properties']:
         if p['path'] == 'http://schema.org/address':
             p['property'].sort(key=lambda x: (x['order'] is None, x['order']))
-            assert p['property'] == expected_value
+            prop = p['property']
+    assert prop == expected_value
 
 
 def node_test(shape):

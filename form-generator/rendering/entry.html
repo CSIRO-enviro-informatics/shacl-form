@@ -7,7 +7,7 @@
 {%- if property['nodeKind'] == URIs['BLANK_NODE'] %}
 {{ composite_property(property, disabled=disabled) }}
 {%- elif property['nodeKind'] == URIs['IRI'] %}
-    {{- IRI_input(property, disabled=disabled, hidden=hidden)|indent(4) }}
+    {{- IRI_input(property, disabled=disabled, hidden=hidden) }}
 {%- elif property['nodeKind'] == URIs['LITERAL'] %}
     {{- input_field(property, disabled=disabled, hidden=hidden) }}
     {%- if 'datatype' in property and property['datatype'] == URIs['BOOLEAN'] %}
@@ -18,7 +18,7 @@
 <input type='radio' name='NodeKind {{ property["id"] }}' data-label='{{ property["name"] }}' value='BlankNode' disabled='disabled'>Add New
 <div hidden class='nodeKindOption nodeKindOption-IRI'>
     {%- if 'in' not in property %}<div><i>Please enter as an IRI.</i></div>{% endif %}
-    {{ IRI_input(property, disabled=disabled)|indent(4) }}
+    {{- IRI_input(property, disabled=disabled)|indent(4) }}
 </div>
 <div hidden class='nodeKindOption nodeKindOption-BlankNode'>
     {{ composite_property(property, disabled=disabled)|indent(4) }}
@@ -40,7 +40,7 @@
 <input type='radio' name='NodeKind {{ property["id"] }}' data-label='{{ property["name"] }}' value='Literal' disabled='disabled'>Add New
 <div hidden class='nodeKindOption nodeKindOption-IRI'>
     {%- if 'in' not in property %}<div><i>Please enter as an IRI.</i></div>{% endif %}
-    {{ IRI_input(property, disabled=disabled, hidden=hidden) }}
+    {{- IRI_input(property, disabled=disabled, hidden=hidden)|indent(4) }}
 </div>
 <div hidden class='nodeKindOption nodeKindOption-Literal'>
     {{- input_field(property, disabled=disabled, hidden=hidden)|indent(4) }}

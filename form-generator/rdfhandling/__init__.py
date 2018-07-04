@@ -129,54 +129,50 @@ class RDFHandler:
             # Gets acceptable values for constraints which supply a list
             if name in ['in', 'languageIn']:
                 value = [str(l) for l in list(Collection(self.g, value))]
-
             # Convert constraints which must be given as an int
-            if name in ['minCount', 'maxCount']:
+            elif name in ['minCount', 'maxCount']:
                 try:
                     value = int(value)
                 except ValueError:
                     raise Exception(
                         name + ' value must be an integer: "{value}"'.format(value=value))
-
-            # Convert constraints which must be given in string format
-            if name in ['datatype', 'path', 'nodeKind']:
-                value = str(value)
-
             # Convert constraints which must be converted from an rdf literal
-            if name in ['hasValue', 'defaultValue']:
+            elif name in ['hasValue', 'defaultValue']:
                 value = value.toPython()
-
-            # Consolidate constraints which may be supplied in different ways
-            # minInclusive and minExclusive can be simplified down to one attribute
-            if name == 'minInclusive':
-                name = 'min'
-                value = float(value)
-            elif name == 'minExclusive':
-                name = 'min'
-                value = float(value) + 1
-            if name == 'maxInclusive':
-                name = 'max'
-                value = float(value)
-            elif name == 'maxExclusive':
-                name = 'max'
-                value = float(value) - 1
-
             # Some properties are made up of other properties
             # Handle this with recursion
-            if name == 'property':
+            elif name == 'property':
                 if 'property' in prop:
                     properties = prop['property']
                     properties.append(self.get_property(value))
                     value = properties
                 else:
                     value = [self.get_property(value)]
+            # Consolidate constraints which may be supplied in different ways
+            # minInclusive and minExclusive can be simplified down to one attribute
+            elif name in ['minInclusive', 'minExclusive', 'maxInclusive', 'maxExclusive']:
+                if name == 'minInclusive':
+                    name = 'min'
+                    value = float(value)
+                elif name == 'minExclusive':
+                    name = 'min'
+                    value = float(value) + 1
+                if name == 'maxInclusive':
+                    name = 'max'
+                    value = float(value)
+                elif name == 'maxExclusive':
+                    name = 'max'
+                    value = float(value) - 1
+            # All other constraints should be converted to strings
+            else:
+                value = str(value)
 
             prop[name] = value
 
         # Validate property as a whole
         # Property must have one and only one path
         if 'path' in prop:
-            prop['path'] = str(prop['path'])
+            prop['path'] = prop['path']
         elif path_required:
             raise Exception('Every property must have a path associated with it: ' + uri)
 

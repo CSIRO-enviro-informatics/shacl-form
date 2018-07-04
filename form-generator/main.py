@@ -102,12 +102,12 @@ def find_paired_properties(shape, property, constraint):
     if constraint in ["equals", "disjoint", "lessThan", "lessThanOrEquals"]:
         for g in shape["groups"]:
             for p in g["properties"]:
-                result = check_property(p, str(property[constraint]))
+                result = check_property(p, property[constraint])
                 if result is not None:
                     property[constraint] = result
                     return
         for p in shape["properties"]:
-            result = check_property(p, str(property[constraint]))
+            result = check_property(p, property[constraint])
             if result is not None:
                 property[constraint] = result
                 return
@@ -116,7 +116,7 @@ def find_paired_properties(shape, property, constraint):
 def check_property(property, path):
     # If the property path matches the path being searched for, return the property id
     # Also searches the properties inside this property using recursion
-    if str(property["path"]) == path:
+    if property["path"] == path:
         return property["id"]
     if "property" in property:
         for p in property["property"]:
