@@ -1,0 +1,11 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix : <http://example.org/ex#> .
+
+:TestShape
+    a sh:NodeShape ;
+    sh:targetClass :testClass ;
+    sh:property [
+        sh:path :testProperty ;
+        sh:hasValue "test" ;
+        sh:nodeKind sh:BlankNodeOrLiteral ;
+    ] .

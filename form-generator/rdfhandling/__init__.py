@@ -194,26 +194,47 @@ class RDFHandler:
         # Otherwise -> sh:IRIOrLiteral
         warning = None
         if 'nodeKind' not in prop:
-            prop['nodeKind'] = SHACL + 'BlankNodeOrIRI' if 'property' in prop else SHACL + 'IRIOrLiteral'
-        elif str(prop['nodeKind']) not in [SHACL + 'BlankNode', SHACL + 'IRI', SHACL + 'Literal',
-                                           SHACL + 'BlankNodeOrIRI', SHACL + 'BlankNodeOrLiteral',
-                                           SHACL + 'IRIOrLiteral']:
-            default_value = SHACL + 'BlankNodeOrIRI' if 'property' in prop else SHACL + 'IRIOrLiteral'
+            if 'hasValue' in prop:
+                prop['nodeKind'] = SHACL + 'Literal'
+            else:
+                prop['nodeKind'] = SHACL + 'BlankNodeOrIRI' if 'property' in prop else SHACL + 'IRIOrLiteral'
+        elif prop['nodeKind'] not in [SHACL + 'BlankNode', SHACL + 'IRI', SHACL + 'Literal',
+                                      SHACL + 'BlankNodeOrIRI', SHACL + 'BlankNodeOrLiteral',
+                                      SHACL + 'IRIOrLiteral']:
+            if 'hasValue' in prop:
+                default_value = SHACL + 'Literal'
+            else:
+                default_value = SHACL + 'BlankNodeOrIRI' if 'property' in prop else SHACL + 'IRIOrLiteral'
             warning = 'Property "' + prop['name'] + '" has constraint "sh:nodeKind" with invalid value "' + \
                       prop['nodeKind'] + '". Replacing with "' + default_value + '".'
             prop['nodeKind'] = default_value
         # Make sure there is enough information provided to accommodate the selected option
         else:
+            # If sh:hasValue is present, the user won't be able to choose between nodeKinds, therefore sh:nodeKind can't
+            # be BlankNodeOrIRI, IRIOrLiteral, or BlankNodeOrLiteral
+            if 'hasValue' in prop and prop['nodeKind'] in [SHACL + 'BlankNodeOrIRI', SHACL + 'IRIOrLiteral',
+                                                           SHACL + 'BlankNodeOrLiteral']:
+                if prop['nodeKind'] == SHACL + 'BlankNodeOrIRI':
+                    new_node_kind = SHACL + 'IRI'
+                elif prop['nodeKind'] == SHACL + 'IRIOrLiteral':
+                    new_node_kind = SHACL + 'Literal'
+                elif prop['nodeKind'] == SHACL + 'BlankNodeOrLiteral':
+                    new_node_kind = SHACL + 'Literal'
+                warning = 'Property "' + prop['name'] + '" has constraint "sh:nodeKind" with value "' + \
+                          prop['nodeKind'] + '" which is incompatible with constraint sh:hasValue. Replacing ' \
+                                             'with "' + new_node_kind + '".'
+                prop['nodeKind'] = new_node_kind
             # If sh:BlankNode is selected, nested properties should be provided.
             if prop['nodeKind'] == SHACL + 'BlankNode' and 'property' not in prop:
                 warning = 'Property "' + prop['name'] + '" has constraint "sh:nodeKind" with value "sh:BlankNode" but' \
                           ' no property shapes are provided. This property will have no input fields.'
             # If sh:BlankNodeOrIRI or sh:BlankNodeOrLiteral are selected, nested properties should be provided for the
             # blank node option
-            if prop['nodeKind'] in [SHACL + 'BlankNodeOrIRI', SHACL + 'BlankNodeOrLiteral'] and 'property' not in prop:
+            elif prop['nodeKind'] in [SHACL + 'BlankNodeOrIRI', SHACL + 'BlankNodeOrLiteral'] \
+                    and 'property' not in prop:
                 warning = 'Property "' + prop['name'] + '" has constraint "sh:nodeKind" with value "' + \
-                          prop['nodeKind'] + '" but no property shapes are provided. If the user selects the "blank ' \
-                          'node" option, this property will have no input fields.'
+                          prop['nodeKind'] + '" but no property shapes are provided. If the user selects the ' \
+                          '"blank node" option, this property will have no input fields.'
             # If sh:IRI, sh:Literal, or sh:IRIOrLiteral are selected, nested properties will be ignored.
             elif prop['nodeKind'] in [SHACL + 'Literal', SHACL + 'IRI', SHACL + 'IRIOrLiteral'] and 'property' in prop:
                 warning = 'Property "' + prop['name'] + '" has constraint "sh:nodeKind" with value "' + \

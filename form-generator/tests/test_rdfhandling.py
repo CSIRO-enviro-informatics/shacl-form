@@ -265,6 +265,17 @@ def test_node_kind_iri_or_literal_with_nested_properties():
     assert node_kind == SHACL + 'IRIOrLiteral'
 
 
+def test_node_kind_missing_with_hasvalue_constraint():
+    # Check that a property with a missing sh:nodeKind constraint is automatically assigned a value of sh:Literal when
+    # the sh:hasValue constraint is present
+    shape = RDFHandler('inputs/node_kind/missing_nodekind_with_hasvalue_constraint.ttl').get_shape()
+    node_kind = None
+    for p in shape['properties']:
+        if str(p['path']) == 'http://example.org/ex#testProperty':
+            node_kind = p['nodeKind']
+    assert node_kind == SHACL + 'Literal'
+
+
 def test_node_kind_missing_without_nested_properties():
     # Check that a property without nested properties is automatically assigned a value of sh:IRIOrLiteral when
     # sh:nodeKind isn't provided
@@ -319,6 +330,74 @@ def test_node_kind_invalid_with_nested_properties():
     assert record[0].message.args[0] == 'Property "testProperty1" has constraint "sh:nodeKind" with invalid value ' \
                                         '"http://www.w3.org/ns/shacl#Invalid". Replacing with ' \
                                         '"http://www.w3.org/ns/shacl#BlankNodeOrIRI".'
+
+
+def test_node_kind_invalid_with_hasvalue_constraint():
+    # Check that a property with an invalid sh:nodeKind is automatically assigned a value of sh:Literal when the
+    # sh:hasValue constraint is present
+    with pytest.warns(UserWarning) as record:
+        shape = RDFHandler('inputs/node_kind/invalid_nodekind_with_hasvalue_constraint.ttl').get_shape()
+    node_kind = None
+    for p in shape['properties']:
+        if str(p['path']) == 'http://example.org/ex#testProperty':
+            node_kind = p['nodeKind']
+    assert node_kind == SHACL + 'Literal'
+
+    # Check that a warning is raised
+    assert record[0].message.args[0] == 'Property "testProperty" has constraint "sh:nodeKind" with invalid value ' \
+                                        '"http://www.w3.org/ns/shacl#Invalid". Replacing with ' \
+                                        '"http://www.w3.org/ns/shacl#Literal".'
+
+
+def test_node_blanknode_or_iri_hasvalue():
+    # Check that a property with sh:nodeKind sh:BlankNodeOrIRI is changed to sh:IRI when the sh:hasValue constraint is
+    # present
+    with pytest.warns(UserWarning) as record:
+        shape = RDFHandler('inputs/node_kind/blanknode_or_iri_hasvalue.ttl').get_shape()
+    node_kind = None
+    for p in shape['properties']:
+        if str(p['path']) == 'http://example.org/ex#testProperty':
+            node_kind = p['nodeKind']
+    assert node_kind == SHACL + 'IRI'
+
+    # Check that a warning is raised
+    assert record[0].message.args[0] == 'Property "testProperty" has constraint "sh:nodeKind" with value ' \
+                                        '"http://www.w3.org/ns/shacl#BlankNodeOrIRI" which is incompatible with ' \
+                                        'constraint sh:hasValue. Replacing with "http://www.w3.org/ns/shacl#IRI".'
+
+
+def test_node_iri_or_literal_has_value():
+    # Check that a property with sh:nodeKind sh:IRIOrLiteral is changed to sh:Literal when the sh:hasValue constraint
+    # is present
+    with pytest.warns(UserWarning) as record:
+        shape = RDFHandler('inputs/node_kind/iri_or_literal_hasvalue.ttl').get_shape()
+    node_kind = None
+    for p in shape['properties']:
+        if str(p['path']) == 'http://example.org/ex#testProperty':
+            node_kind = p['nodeKind']
+    assert node_kind == SHACL + 'Literal'
+
+    # Check that a warning is raised
+    assert record[0].message.args[0] == 'Property "testProperty" has constraint "sh:nodeKind" with value ' \
+                                        '"http://www.w3.org/ns/shacl#IRIOrLiteral" which is incompatible with ' \
+                                        'constraint sh:hasValue. Replacing with "http://www.w3.org/ns/shacl#Literal".'
+
+
+def test_node_blanknode_or_literal_has_value():
+    # Check that a property with sh:nodeKind sh:BlankNodeOrLiteral is changed to sh:Literal when the sh:hasValue
+    # constraint is present
+    with pytest.warns(UserWarning) as record:
+        shape = RDFHandler('inputs/node_kind/blanknode_or_literal_hasvalue.ttl').get_shape()
+    node_kind = None
+    for p in shape['properties']:
+        if str(p['path']) == 'http://example.org/ex#testProperty':
+            node_kind = p['nodeKind']
+    assert node_kind == SHACL + 'Literal'
+
+    # Check that a warning is raised
+    assert record[0].message.args[0] == 'Property "testProperty" has constraint "sh:nodeKind" with value ' \
+                                        '"http://www.w3.org/ns/shacl#BlankNodeOrLiteral" which is incompatible with ' \
+                                        'constraint sh:hasValue. Replacing with "http://www.w3.org/ns/shacl#Literal".'
 
 
 def test_shape():

@@ -6,13 +6,16 @@
 {%- endmacro -%}
 {%- if 'hasValue' in property %}
 <div>
-    {{- entry(property, hidden=True) }}
+    {{- input_field(property, hidden=True)|indent(4) }}
 </div>    
 {%- elif 'maxCount' not in property or property['maxCount'] > 0 %}
 <div>
     <div><label>{{ property['name'] }}</label></div>
     {%- if 'description' in property %}
     <div><i>{{ property['description'] }}</i></div>
+    {%- endif %}
+    {%- if 'nodeKind' in property and property['nodeKind'] == URIs['IRI'] and 'in' not in property %}
+    <div><i>Please enter as an IRI.</i></div>
     {%- endif %}
     {%- if 'languageIn' in property %}<label><i>Language:
         {%- for l in property['languageIn'] %} {{ l }}{{ ',' if not loop.last }}{% endfor %}</i></label>
@@ -23,7 +26,7 @@
     {%- if 'minCount' in property %} data-min-entries='{{ property["minCount"] }}'
     {%- endif %}>
         <div>
-            {{- entry(property, disabled=True)|indent(12) }}
+            {{- entry(property, disabled=True)|indent(8) }}
         </div>
     </div>
     <div class='entries'></div>
