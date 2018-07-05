@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, Response
 import os
-from controller.form2rdf import form_to_rdf
+from controller.form2rdf import Form2RDFController
 
 routes = Blueprint('controller', __name__)
 
@@ -17,13 +17,14 @@ def form():
 
 @routes.route('/post', methods=['POST'])
 def post():
+    form2rdf_controller = Form2RDFController('http://example.org/ex#')
     try:
-        node_uri, node_class, result = form_to_rdf(request, 'map.ttl')
+        rdf_result = form2rdf_controller.convert(request, 'map.ttl')
     except ValueError as e:
         return Response(str(e))
 
     if not os.path.exists('../entries'):
         os.makedirs('../entries')
-    result.serialize(destination='result.ttl', format='turtle')
+    rdf_result.serialize(destination='result.ttl', format='turtle')
     return render_template('post.html')
 
