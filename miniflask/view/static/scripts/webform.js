@@ -87,13 +87,18 @@ $('#shacl-form').validate({
     }
 });
 
-// Combines pattern and modifier flags into a regular expression for each input field
-$('[pattern]').each(function(index) {
-    if ($(this).parents('[hidden]') == 0)
-        $(this).rules('add', { pattern: new RegExp($(this).attr('pattern'), $(this).attr('flags')) });
-});
+//Apply pattern constraint to input field
+var addPatternConstraint = function(element){
+    var message = 'Must match pattern: /' +  $(element).attr('data-pattern') + '/'
+    if ($(element).is('[flags]'))
+        message += $(element).attr('flags');
+    $(element).rules('add', {
+        pattern: new RegExp($(element).attr('data-pattern'), $(element).attr('flags')),
+        messages: { pattern: message }
+    });
+}
 
-// Script for adding multiple entries for a property
+// Adds and removes entries when buttons are clicked
 $('body').on('click', '.add-entry', function() {
     addEntry($(this).parent().children('.template').first())
 });
@@ -123,9 +128,13 @@ var addEntry = function($template) {
     entries.append(template_copy.html());
     num_entries++;
     // Enable input fields. Input fields are disabled when copied from the template
+    // Apply pattern constraint if it should have one
     entries.find('input, select').each(function(){
-        if ($(this).parents('.template').length == 0)
+        if ($(this).parents('.template').length == 0){
             $(this).removeAttr('disabled');
+            if ($(this).is('[data-pattern]'))
+                addPatternConstraint($(this))
+        }
     });
     // Control Add and Remove buttons
     if (num_entries > 0 && (min_entries == undefined || num_entries > min_entries))
@@ -133,6 +142,7 @@ var addEntry = function($template) {
     if (max_entries !== undefined && num_entries >= max_entries)
         $template.parent().children('.add-entry').attr('disabled', 'disabled');
 };
+
 // Handles everything about removing an entry for a property
 var removeEntry = function($template){
     var template_copy = $template.clone()

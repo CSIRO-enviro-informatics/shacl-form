@@ -26,8 +26,8 @@
 </select>
 {%- else %}
 <input data-label='{{ property["name"] }}' data-property-id='{{ property["id"] }}' name='{{ property["id"] }}' type='text'
-    {%- if 'pattern' in property %} pattern='{{ property["pattern"] }}' title='Must match pattern: {{ property["pattern"] }}'
-    {%- else %} pattern='<?\w+:(\/?\/?)[^\s]+>?' title='Must be in IRI format.'
+    {%- if 'pattern' in property %} data-pattern='{{ property["pattern"] }}'
+    {%- else %} pattern='<?\w+:(\/?\/?)[^\s]+>?'
     {%- endif %}
     {%- if 'flags' in property %} flags='{{ property["flags"] }}'
     {%- endif %}

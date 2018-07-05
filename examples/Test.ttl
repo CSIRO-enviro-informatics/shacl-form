@@ -19,7 +19,8 @@
         sh:group :NameGroup1 ;
         sh:order 1 ;
         sh:maxLength 20 ;
-        sh:pattern "[A-Z][a-z0-9_-]*" ;
+        sh:minLength 10 ;
+        sh:pattern "[A-Z][a-z]*" ;
         sh:minCount 1 ;
         sh:maxCount 1 ;
     ] ;
@@ -30,7 +31,7 @@
         sh:description "The last name of a person. First character must be uppercase." ;
         sh:name "Family name" ;
         sh:group :NameGroup1 ;
-        sh:pattern "[A-Z][a-z0-9_-]*" ;
+        sh:pattern "[A-Z][a-z]*" ;
         sh:disjoint schema:givenName ;
         sh:order 2 ;
         sh:minCount 1 ;
