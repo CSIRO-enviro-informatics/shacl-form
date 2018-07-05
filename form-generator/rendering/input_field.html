@@ -4,6 +4,10 @@
     {%- endif %}' data-label='{{ property["name"] }}'
     {%- if disabled == True %} disabled
     {%- endif %}
+    {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
+    {%- endif %}
+    {%- if 'minLength' in property %} minlength='{{ property["minLength"] }}'
+    {%- endif %}
     {%- if 'equals' in property %} data-equalTo='{{ property["equals"] }}'
     {%- endif %}
     {%- if 'disjoint' in property %} data-notEqualTo='{{ property["disjoint"] }}'
@@ -38,6 +42,8 @@
         {%- endif %}
         {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
         {%- endif %}
+        {%- if 'minLength' in property %} minlength='{{ property["minLength"] }}'
+        {%- endif %}
         {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
         {%- endif %}
         {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
@@ -52,6 +58,8 @@
         {%- if 'flags' in property %} flags='{{ property["flags"] }}'
         {%- endif %}
         {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
+        {%- endif %}
+        {%- if 'minLength' in property %} minlength='{{ property["minLength"] }}'
         {%- endif %}
         {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
         {%- endif %}
@@ -69,6 +77,8 @@
             {%- endif %}
             {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
             {%- endif %}
+            {%- if 'minLength' in property %} minlength='{{ property["minLength"] }}'
+            {%- endif %}
             {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
             {%- endif %}
             {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
@@ -78,8 +88,6 @@
             {%- else %} value=''
             {%- endif %}
         {%- elif property['datatype'] == URIs['DATE'] %} type='date'
-            {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
-            {%- endif %}
             {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
             {%- endif %}
             {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
@@ -89,8 +97,6 @@
             {%- else %} value=''
             {%- endif %}
         {%- elif property['datatype'] == URIs['TIME'] %} type='time'
-            {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
-            {%- endif %}
             {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
             {%- endif %}
             {%- if 'lessThanOrEquals' in property %} data-lessThanEqual='{{ property["lessThanOrEquals"] }}'
@@ -115,6 +121,8 @@
         {%- if 'flags' in property %} flags='{{ property["flags"] }}'
         {%- endif %}
         {%- if 'maxLength' in property %} maxlength='{{ property["maxLength"] }}'
+        {%- endif %}
+        {%- if 'minLength' in property %} minlength='{{ property["minLength"] }}'
         {%- endif %}
         {%- if 'lessThan' in property %} lessThan='{{ property["lessThan"] }}'
         {%- endif %}
