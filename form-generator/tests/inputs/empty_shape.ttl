@@ -9,4 +9,5 @@
 
 :PersonShape1
     a sh:NodeShape ;
-    sh:targetClass schema:Person .
+    sh:targetClass schema:Person ;
+    sh:closed true .

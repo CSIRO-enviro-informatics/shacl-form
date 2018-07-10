@@ -113,12 +113,12 @@ var addEntry = function($template) {
     var max_entries = template_copy.attr('data-max-entries');
     var min_entries = template_copy.attr('data-min-entries');
     var num_entries = entries.children().length;
-    var root_id = $template.children().find('[name]').filter('[type!=radio]').attr('name');
+    var root_id = $template.children().find('[name]').attr('name').split(' ').pop();
     var id = root_id + "-" + entries.children().length;
 
     if (max_entries && num_entries >= max_entries) return; // Return if maximum entries is already reached
     // Update the ID through all children of this property
-    template_copy.children().find('[name]').each(function(){
+    template_copy.find('[name]').each(function(){
         $(this).attr('name', $(this).attr('name').replace(root_id, id));
     });
     // All entries below or at the minimum number of entries must be required

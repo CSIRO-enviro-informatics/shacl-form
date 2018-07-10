@@ -21,14 +21,16 @@ class Form2RDFController:
         self.rdf_result = Graph()
         self.rdf_result.namespace_manager = self.rdf_map.namespace_manager
         # Get unique URI of the new node
-        root_node_class = self.rdf_map.value(Literal('Placeholder node_uri'), URIRef(RDF.type), None)
+        self.root_node_class = self.rdf_map.value(Literal('Placeholder node_uri'), URIRef(RDF.type), None)
         entry_uuid = str(uuid.uuid4())
         self.root_node = URIRef(self.base_uri + entry_uuid)
-        self.rdf_result.add((self.root_node, RDF.type, root_node_class))
+        self.rdf_result.add((self.root_node, RDF.type, self.root_node_class))
         # Go through each property and search for entries submitted in the form
         for (subject, property_predicate, property_obj) in self.rdf_map:
             if str(subject) == 'Placeholder node_uri' and not property_predicate == RDF.type:
                 self.find_entries_for_property(self.root_node, property_predicate, property_obj)
+        # Also get any custom properties submitted in the form
+        self.find_custom_property_entries(self.root_node)
         return self.rdf_result
 
     def find_entries_for_property(self, subject, predicate, obj, root_id=None):
@@ -155,3 +157,18 @@ class Form2RDFController:
             return True
         else:
             return False
+
+    def find_custom_property_entries(self, root_node):
+        copy_id = 0
+        # Cycles through entries by ID until no more entries are found
+        while True:
+            # Every entry for this property shares a root_id, and has a different copy_id
+            predicate_id = 'Predicate CustomProperty-' + str(copy_id)
+            object_id = 'Object CustomProperty-' + str(copy_id)
+            predicate_entry = self.form_input.get(predicate_id)
+            object_entry = self.form_input.get(object_id)
+            if predicate_entry and object_entry:
+                self.rdf_result.add((root_node, Literal(predicate_entry), Literal(object_entry)))
+                copy_id += 1
+            else:
+                break

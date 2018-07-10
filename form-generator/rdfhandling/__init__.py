@@ -1,5 +1,5 @@
 from rdflib.graph import Graph
-from rdflib.term import URIRef, Literal, BNode
+from rdflib.term import URIRef, Literal
 from rdflib.util import guess_format
 from rdflib.collection import Collection
 from rdflib.namespace import RDF, RDFS, XSD
@@ -70,6 +70,26 @@ class RDFHandler:
             raise Exception('A target class must be specified for shape: ' + root_uri)
 
         """
+        Get the closed status
+        Shapes which are open allow the presence of properties not explicitly defined in the shape
+        Shapes which are closed will only allow explicitly defined properties
+        """
+        is_closed = self.g.value(root_uri, URIRef(SHACL + 'closed'), None)
+        if is_closed is None:
+            shape['closed'] = False
+        else:
+            shape['closed'] = is_closed.toPython()
+
+        """
+        If the shape is closed, get the ignored properties. These properties will be allowed despite the shape
+        being closed and not being defined in their own property shape.
+        """
+        if 'closed' in shape and shape['closed'] is True:
+            shape['ignoredProperties'] = [str(l) for l in list(
+                Collection(self.g, self.g.value(root_uri, URIRef(SHACL + 'ignoredProperties')))
+            )]
+
+        """
         Get the groups
         Some properties belong to groups which determine how they are presented in the form.
         """
@@ -126,7 +146,7 @@ class RDFHandler:
             name = re.split('[#/]', c_uri[0])[-1]
             value = c_uri[1]
 
-            # Gets acceptable values for constraints which supply a list
+            # Get list of values from constraints that supply a list
             if name in ['in', 'languageIn']:
                 value = [str(l) for l in list(Collection(self.g, value))]
             # Convert constraints which must be given as an int

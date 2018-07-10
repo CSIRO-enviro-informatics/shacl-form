@@ -1,18 +1,27 @@
 {%- macro display_property(property) %}
-{%- include "property.html" %}
+{%- include 'property.html' %}
+{%- endmacro -%}
+{%- macro custom_property() %}
+{%- include 'custom_property.html' %}
 {%- endmacro -%}
 {{ '{% extends "form.html" %}' }}
 {{ '{% block form_heading %}' }}Create New {{ form_name }}{{ '{% endblock %}' }}
 {{ '{% block form_contents %}' }}
-{%- for group in shape["groups"] %}
+{%- for group in shape['groups'] %}
 <fieldset>
-    <legend>{{ group["label"] }}</legend>
-    {%- for property in group["properties"] %}
+    <legend>{{ group['label'] }}</legend>
+    {%- for property in group['properties'] %}
     {{- display_property(property)|indent(8) }}
     {%- endfor %}
 </fieldset>
 {%- endfor %}
-{%- for property in shape["properties"] %}
+{%- for property in shape['properties'] %}
 {{- display_property(property) }}
 {%- endfor %}
+{%- if 'closed' not in shape or shape['closed'] == false %}
+<fieldset>
+    <legend>Custom Properties</legend>
+    {{ custom_property()|indent(4) }}
+</fieldset>
+{%- endif %}
 {{ '{% endblock %}' }}
