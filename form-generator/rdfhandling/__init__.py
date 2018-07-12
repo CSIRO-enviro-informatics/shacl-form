@@ -85,9 +85,9 @@ class RDFHandler:
         being closed and not being defined in their own property shape.
         """
         if 'closed' in shape and shape['closed'] is True:
-            shape['ignoredProperties'] = [str(l) for l in list(
-                Collection(self.g, self.g.value(root_uri, URIRef(SHACL + 'ignoredProperties')))
-            )]
+            ignored_properties = self.g.value(root_uri, URIRef(SHACL + 'ignoredProperties'))
+            if ignored_properties:
+                shape['ignoredProperties'] = [str(l) for l in list(Collection(self.g, ignored_properties))]
 
         """
         Get the groups
@@ -272,25 +272,22 @@ class RDFHandler:
         g.namespace_manager = self.g.namespace_manager
         g.bind('sh', SHACL)
         # Create the node associated with all the data entered
-        g.add((Literal('Placeholder node_uri'), RDF.type, shape['target_class']))
+        g.add((Literal('placeholder node_uri'), RDF.type, shape['target_class']))
         # Go through each property and add it
         for group in shape['groups']:
             for prop in group['properties']:
-                self.add_property_to_map(g, prop, Literal('Placeholder node_uri'))
+                self.add_property_to_map(g, prop, Literal('placeholder node_uri'))
         for prop in shape['properties']:
-            self.add_property_to_map(g, prop, Literal('Placeholder node_uri'))
+            self.add_property_to_map(g, prop, Literal('placeholder node_uri'))
         g.serialize(destination=destination, format='turtle')
 
     def add_property_to_map(self, graph, prop, root):
         # Recursive
-        placeholder = re.split('[#/]', prop['nodeKind'])[-1] + ' Placeholder ' + str(prop['id'])
-        datatype = None
+        arguments = 'nodeKind=' + re.split('[#/]', prop['nodeKind'])[-1]
         if 'datatype' in prop:
-            if prop['datatype'] == str(XSD.boolean):
-                placeholder = 'Boolean ' + placeholder
-            else:
-                datatype = prop['datatype']
-        graph.add((root, URIRef(prop['path']), Literal(placeholder, datatype=datatype)))
+            arguments = arguments + ' datatype=' + prop['datatype']
+        placeholder = 'placeholder ' + arguments + ' ' + str(prop['id'])
+        graph.add((root, URIRef(prop['path']), Literal(placeholder)))
         if 'property' in prop:
             for p in prop['property']:
-                self.add_property_to_map(graph, p, Literal(placeholder, datatype=datatype))
+                self.add_property_to_map(graph, p, Literal(placeholder))

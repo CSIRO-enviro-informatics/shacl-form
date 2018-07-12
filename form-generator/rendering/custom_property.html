@@ -1,8 +1,28 @@
 <div>
     <div class='template' hidden>
         <div>
-            <span><label>Predicate </label><input type='text' name='Predicate CustomProperty' disabled/></span>
-            <span><label>Object </label><input type='text' name='Object CustomProperty' disabled/></span>
+            <div>
+                <div><label>Predicate </label></div>
+                <input type='radio' name='NodeKind Predicate CustomProperty' value='IRI' disabled='disabled'>Enter as IRI
+                <input type='radio' name='NodeKind Predicate CustomProperty' value='Literal' disabled='disabled'>Enter as string
+                <div hidden class='nodeKindOption nodeKindOption-IRI'>
+                    <input name='Predicate CustomProperty' type='text' pattern='<?\w+:(\/?\/?)[^\s]+>?' disabled='disabled'/>
+                </div>
+                <div hidden class='nodeKindOption nodeKindOption-Literal'>
+                    <input name='Predicate CustomProperty' type='text' disabled/>
+                </div>
+            </div>
+            <div>
+                <div><label>Object </label></div>
+                <input type='radio' name='NodeKind Object CustomProperty' value='IRI' disabled='disabled'>Enter as IRI
+                <input type='radio' name='NodeKind Object CustomProperty' value='Literal' disabled='disabled'>Enter as string
+                <div hidden class='nodeKindOption nodeKindOption-IRI'>
+                    <input name='Object CustomProperty' type='text' pattern='<?\w+:(\/?\/?)[^\s]+>?' disabled='disabled'/>
+                </div>
+                <div hidden class='nodeKindOption nodeKindOption-Literal'>
+                    <input name='Object CustomProperty' type='text' disabled/>
+                </div>
+            </div>
         </div>
     </div>
     <div class='entries'></div>
