@@ -126,14 +126,7 @@ class Form2RDFController:
     def add_iri_entry(self, subject, predicate, entry_id):
         entry = self.form_input.get(entry_id)
         if entry:
-            # Remove enclosing <>
-            if entry.startswith('<'):
-                entry = entry.strip('<>')
-            # Ensure URI is valid
-            for char in '<>" {}|\\^`':
-                if char in entry:  # Invalid URI
-                    raise ValueError('Invalid URI: ' + entry)
-            self.rdf_result.add((subject, predicate, URIRef(entry)))
+            self.rdf_result.add((subject, predicate, URIRef(self.validate_iri(entry))))
             return True
         else:
             return False
@@ -157,25 +150,34 @@ class Form2RDFController:
         copy_id = 0
         # Cycles through entries by ID until no more entries are found
         while True:
-            predicate = self.get_custom_property_element('Predicate', copy_id)
-            obj = self.get_custom_property_element('Object', copy_id)
-            if predicate is not None and obj is not None:
-                self.rdf_result.add((root_node, Literal(predicate), Literal(obj)))
-                copy_id += 1
-            else:
+            predicate_id = 'Predicate CustomProperty-' + str(copy_id)
+            predicate = self.form_input.get(predicate_id)
+            type_selection_id = 'Object Type CustomProperty-' + str(copy_id)
+            type_selection = self.form_input.get(type_selection_id)
+            obj_id = 'Object CustomProperty-' + str(copy_id)
+            obj = self.form_input.get(obj_id)
+            if predicate is None or type_selection is None or obj is None:
                 break
+            predicate = URIRef(self.validate_iri(predicate))
+            if type_selection == 'IRI':
+                obj = URIRef(self.validate_iri(obj))
+            elif type_selection == 'Boolean':
+                if obj == 'True' or obj == 'true' or obj == '1':
+                    obj = Literal(obj, datatype=XSD.boolean)
+            else:
+                obj = Literal(obj, datatype=XSD.string)
+            self.rdf_result.add((root_node, predicate, obj))
+            copy_id += 1
 
-    def get_custom_property_element(self, element_name, copy_id):
-        element_id = element_name + ' CustomProperty-' + str(copy_id)
-        node_kind_selection = self.get_node_kind_selection('IRIOrLiteral', element_id)
-        element = self.form_input.get(element_id)
-        if node_kind_selection == 'IRI':
-            if element is not None:
-                # Remove enclosing <>
-                if element.startswith('<'):
-                    entry = element.strip('<>')
-                # Ensure URI is valid
-                for char in '<>" {}|\\^`':
-                    if char in element:  # Invalid URI
-                        raise ValueError('Invalid URI: ' + entry)
-        return element
+    @staticmethod
+    def validate_iri(iri):
+        if iri is None:
+            return
+        # Remove enclosing <>
+        if iri.startswith('<'):
+            iri = iri.strip('<>')
+        # Ensure URI is valid
+        for char in '<>" {}|\\^`':
+            if char in iri:  # Invalid URI
+                raise ValueError('Invalid URI: ' + iri)
+        return iri
