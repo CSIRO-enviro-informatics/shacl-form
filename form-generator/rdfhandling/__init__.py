@@ -191,9 +191,7 @@ class RDFHandler:
 
         # Validate property as a whole
         # Property must have one and only one path
-        if 'path' in prop:
-            prop['path'] = prop['path']
-        elif path_required:
+        if 'path' not in prop and path_required:
             raise Exception('Every property must have a path associated with it: ' + uri)
 
         # Must have a name

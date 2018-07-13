@@ -9,7 +9,8 @@
 :PersonShape1
     a sh:NodeShape ;
     sh:targetClass schema:Person ;
-    sh:closed false ;
+    sh:closed true ;
+    sh:ignoredProperties (rdf:type) ;
     sh:property [
         sh:path schema:givenName ;
         sh:nodeKind sh:Literal ;

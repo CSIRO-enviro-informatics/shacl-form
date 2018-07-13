@@ -22,13 +22,18 @@ class Form2RDFController:
         self.rdf_result = Graph()
         self.rdf_result.namespace_manager = self.rdf_map.namespace_manager
         # Get unique URI of the new node
-        self.root_node_class = self.rdf_map.value(Literal('placeholder node_uri'), URIRef(RDF.type), None)
+        candidate_root_classes = self.rdf_map.objects(Literal('placeholder node_uri'), URIRef(RDF.type))
+        for candidate in candidate_root_classes:
+            if 'placeholder' not in candidate:
+                self.root_node_class = candidate
+        if self.root_node_class is None:
+            raise Exception('No root node class specified in ' + map_filename)
         entry_uuid = str(uuid.uuid4())
         self.root_node = URIRef(self.base_uri + entry_uuid)
         self.rdf_result.add((self.root_node, RDF.type, self.root_node_class))
         # Go through each property and search for entries submitted in the form
         for (subject, property_predicate, property_obj) in self.rdf_map:
-            if str(subject) == 'placeholder node_uri' and not property_predicate == RDF.type:
+            if str(subject) == 'placeholder node_uri' and 'placeholder' in property_obj:
                 self.add_entries_for_property(self.root_node, property_predicate, property_obj)
         # Also get any custom properties submitted in the form
         self.add_custom_property_entries(self.root_node)
