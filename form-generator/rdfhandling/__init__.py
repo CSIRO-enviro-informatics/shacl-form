@@ -2,7 +2,7 @@ from rdflib.graph import Graph
 from rdflib.term import URIRef, Literal
 from rdflib.util import guess_format
 from rdflib.collection import Collection
-from rdflib.namespace import RDF, RDFS, XSD
+from rdflib.namespace import RDF, RDFS
 from warnings import warn
 import re
 
@@ -17,9 +17,9 @@ class RDFHandler:
         Target class
         Properties associated with the shape
     """
-    def __init__(self, file_name):
+    def __init__(self, file):
         self.g = Graph()
-        self.g.parse(file_name, format=guess_format(file_name))
+        self.g.parse(file, format=guess_format(file.filename))
 
     def get_shape(self):
         # Will hold the target class, groups, and ungrouped properties
