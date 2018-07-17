@@ -4,7 +4,7 @@ with open('../README.md', 'r') as fh:
     long_description = fh.read()
 
 setuptools.setup(
-    name='shacl_form',
+    name='shaclform',
     version='1.0',
     author='Laura Guillory',
     author_email='laura.guillory@csiro.au',

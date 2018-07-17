@@ -1,1 +1,1 @@
-name = 'shacl_form'
+name = 'shaclform'
