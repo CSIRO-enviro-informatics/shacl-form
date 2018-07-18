@@ -5,8 +5,8 @@ import os
 import re
 
 
-def generate_webform(file, form_destination='../miniflask/view/templates/form_contents.html',
-                     map_destination='../miniflask/map.ttl'):
+def generate_form(file, form_destination='../miniflask/view/templates/form_contents.html',
+                  map_destination='../miniflask/map.ttl'):
     # Get shape
     rdf_handler = RDFHandler(file)
     shape = rdf_handler.get_shape()
@@ -136,13 +136,15 @@ def check_property(prop, path):
 
 if __name__ == "__main__":
     # File name passed as command-line argument
-    if len(sys.argv) <= 2:
+    if len(sys.argv) < 2:
         raise Exception('Usage - python main.py <SHACL file path> <optional: form destination> '
                         '<optional: map destination')
     file_path = sys.argv[1]
     if not os.path.isfile(file_path):
         raise Exception('File does not exist')
     if len(sys.argv) >= 4:
-        generate_webform(file_path, sys.argv[2], sys.argv[3])
+        with open(file_path) as f:
+            generate_form(f, sys.argv[2], sys.argv[3])
     elif len(sys.argv) >= 2:
-        generate_webform(file_path)
+        with open(file_path) as f:
+            generate_form(f)

@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, Response
 import os
-from controller.form2rdf import Form2RDFController
+from form2rdf import Form2RDFController
 
 routes = Blueprint('controller', __name__)
 

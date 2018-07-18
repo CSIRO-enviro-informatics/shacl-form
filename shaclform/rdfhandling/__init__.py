@@ -19,7 +19,8 @@ class RDFHandler:
     """
     def __init__(self, file):
         self.g = Graph()
-        self.g.parse(file, format=guess_format(file.filename))
+        self.g.parse(file, format=guess_format(file.name))
+        file.close()
 
     def get_shape(self):
         # Will hold the target class, groups, and ungrouped properties

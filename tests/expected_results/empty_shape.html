@@ -1,0 +1,32 @@
+{% extends "form.html" %}
+{% block form_heading %}Create New Person{% endblock %}
+{% block form_contents %}
+<fieldset>
+    <legend>Custom Properties</legend>
+    <div>
+        <div class='template' hidden>
+            <div>
+                <div>
+                    <div><label>Predicate</label></div>
+                    <div><i>Please enter as an IRI.</i></div>
+                    <input name='Predicate CustomProperty' type='text' pattern='<?\w+:(\/?\/?)[^\s]+>?' disabled/>
+                </div>
+                <div>
+                    <div><label>Object</label></div>
+                    <input name='Object CustomProperty' type='text' disabled/>
+                    <div>
+                        Enter as...
+                        <select name='Object Type CustomProperty'>
+                            <option value='IRI'>IRI</option>
+                            <option value='String'>String</option>
+                            <option value='Boolean'>Boolean</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class='entries'></div>
+        <button type='button' class='add-entry'>Add</button> <button type='button' disabled class='remove-entry'>Remove</button>
+    </div>
+</fieldset>
+{% endblock %}
