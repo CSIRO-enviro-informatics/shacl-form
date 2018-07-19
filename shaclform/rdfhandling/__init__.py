@@ -17,10 +17,13 @@ class RDFHandler:
         Target class
         Properties associated with the shape
     """
-    def __init__(self, file):
+    def __init__(self, shape):
         self.g = Graph()
-        self.g.parse(file, format=guess_format(file.name))
-        file.close()
+        if type(shape) is Graph:
+            self.g = shape
+        else:
+            self.g.parse(shape, format=guess_format(shape.name))
+        shape.close()
 
     def get_shape(self):
         # Will hold the target class, groups, and ungrouped properties

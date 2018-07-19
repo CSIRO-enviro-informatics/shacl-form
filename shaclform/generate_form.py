@@ -1,14 +1,14 @@
-from rdfhandling import RDFHandler
+from shaclform.rdfhandling import RDFHandler
 import sys
-from rendering import render_template
+from shaclform.rendering import render_template
 import os
 import re
 
 
-def generate_form(file, form_destination='../miniflask/view/templates/form_contents.html',
+def generate_form(shape, form_destination='../miniflask/view/templates/form_contents.html',
                   map_destination='../miniflask/map.ttl'):
     # Get shape
-    rdf_handler = RDFHandler(file)
+    rdf_handler = RDFHandler(shape)
     shape = rdf_handler.get_shape()
 
     # Check that the file contained a shape
