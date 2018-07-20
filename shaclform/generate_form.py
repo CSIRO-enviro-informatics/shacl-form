@@ -7,6 +7,12 @@ import re
 
 def generate_form(shape, form_destination='../miniflask/view/templates/form_contents.html',
                   map_destination='../miniflask/map.ttl'):
+    """
+    :param shape: An RDF Graph or a file-like object that can be read.
+    :param form_destination: Where the HTML file containing the form should be placed
+    :param map_destination: Where the Turtle file containing the Shape RDF map should be placed
+    :return:
+    """
     # Get shape
     rdf_handler = RDFHandler(shape)
     shape = rdf_handler.get_shape()
