@@ -1,5 +1,4 @@
-jinja2
 pytest
 pytest-cov
 rdflib
-flask
+jinja2

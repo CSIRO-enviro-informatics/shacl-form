@@ -13,6 +13,7 @@ setuptools.setup(
     long_description_content_type='text/markdown',
     url='https://github.com/CSIRO-enviro-informatics/shacl-form',
     packages=setuptools.find_packages(),
+    install_requires=['rdflib'],
     classifiers=(
         'Programming Language :: Python :: 3',
         'Operating System :: OS Independent',
