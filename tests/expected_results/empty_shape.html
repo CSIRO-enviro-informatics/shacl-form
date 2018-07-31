@@ -30,3 +30,6 @@
     </div>
 </fieldset>
 {% endblock %}
+{% block prefill %}
+<script id="prefill" type="application/json">{% if prefill %}{{ prefill|tojson|safe }}{% endif %}</script>
+{% endblock %}

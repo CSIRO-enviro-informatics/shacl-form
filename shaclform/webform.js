@@ -224,7 +224,11 @@ var removeEntry = function($template){
 };
 
 // Adds minimum number of fields when form is loaded
-var prefill = JSON.parse($('#prefill').html());
+try {
+    var prefill = JSON.parse($('#shacl-form-prefill').html());
+} catch(err) {
+    var prefill = []
+}
 $($('.template').get().reverse()).each(function(){
     var min_entries = $(this).attr('data-min-entries');
     var max_entries = $(this).attr('data-max-entries');

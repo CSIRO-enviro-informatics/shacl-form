@@ -8,7 +8,7 @@ import re
 class Form2RDFController:
     def __init__(self, base_uri=None, root_node=None):
         self.base_uri = base_uri
-        self.root_node = URIRef(root_node)
+        self.root_node = URIRef(root_node) if root_node else None
         if not base_uri and not root_node:
             raise ValueError('base_uri or root_node must be provided.')
         self.form_input = None
