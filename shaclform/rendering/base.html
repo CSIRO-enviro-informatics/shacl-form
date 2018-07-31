@@ -26,5 +26,5 @@
 {%- endif %}
 {{ '{% endblock %}' }}
 {{ '{% block prefill %}' }}
-{{ '<script id="prefill" type="application/json">{% if prefill %}{{ prefill|tojson|safe }}{% endif %}</script>' }}
+{{ '<script id="shacl-form-prefill" type="application/json">{% if prefill %}{{ prefill|tojson|safe }}{% endif %}</script>' }}
 {{ '{% endblock %}' }}
