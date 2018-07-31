@@ -69,8 +69,8 @@ def generate_form(shape, form_destination='../miniflask/view/templates/form_cont
 
     # Put things into template
     os.makedirs(os.path.dirname(os.path.abspath(form_destination)), exist_ok=True)
-    with open(form_destination, 'w') as f:
-        f.write(render_template(form_name, shape))
+    with open(form_destination, 'w') as file:
+        file.write(render_template(form_name, shape))
 
     # Create map for converting submitted data into RDF
     rdf_handler.create_rdf_map(shape, map_destination)

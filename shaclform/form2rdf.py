@@ -6,12 +6,14 @@ import re
 
 
 class Form2RDFController:
-    def __init__(self, base_uri):
+    def __init__(self, base_uri=None, root_node=None):
         self.base_uri = base_uri
+        self.root_node = URIRef(root_node)
+        if not base_uri and not root_node:
+            raise ValueError('base_uri or root_node must be provided.')
         self.form_input = None
         self.rdf_map = None
         self.rdf_result = None
-        self.root_node = None
         self.root_node_class = None
 
     def convert(self, form_input, map_filename):
@@ -21,15 +23,15 @@ class Form2RDFController:
         self.rdf_map.parse(map_filename, format=guess_format(map_filename))
         self.rdf_result = Graph()
         self.rdf_result.namespace_manager = self.rdf_map.namespace_manager
-        # Get unique URI of the new node
-        candidate_root_classes = self.rdf_map.objects(Literal('placeholder node_uri'), URIRef(RDF.type))
-        for candidate in candidate_root_classes:
-            if 'placeholder' not in candidate:
-                self.root_node_class = candidate
+        # Find node class
+        for possible_root_node_class in self.rdf_map.objects(Literal('placeholder node_uri'), URIRef(RDF.type)):
+            if 'placeholder' not in possible_root_node_class:
+                self.root_node_class = possible_root_node_class
         if self.root_node_class is None:
             raise Exception('No root node class specified in ' + map_filename)
-        entry_uuid = str(uuid.uuid4())
-        self.root_node = URIRef(self.base_uri + entry_uuid)
+        # Use provided URI or generate unique URI of the new node
+        if not self.root_node:
+            self.root_node = URIRef(self.base_uri + str(uuid.uuid4()))
         self.rdf_result.add((self.root_node, RDF.type, self.root_node_class))
         # Go through each property and search for entries submitted in the form
         for (subject, property_predicate, property_obj) in self.rdf_map:
